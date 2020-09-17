@@ -1,0 +1,71 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+# Borland C++ 5.5
+
+# optimizations
+
+# maximize speed
+CFLAGS="$CFLAGS -O2"
+
+case $CPU in
+    pentium)
+        # optimize for Pentium and Athlon
+        CPU_OPT="-5"
+    ;;
+
+    pentiumpro)
+        # optimize for Pentium Pro, Pentium II and Pentium III
+        CPU_OPT="-6"
+    ;;
+esac
+
+# __stdcall
+#CPU_OPT="$CPU_OPT -ps"
+# __fastcall
+#CPU_OPT="$CPU_OPT -pr"
+
+CFLAGS="$CFLAGS $CPU_OPT"
+
+# multithreaded
+CFLAGS="$CFLAGS -tWM"
+
+# stop on warning
+CFLAGS="$CFLAGS -w!"
+
+# disable logo
+CFLAGS="$CFLAGS -q"
+
+
+# precompiled headers
+CORE_DEPS="$CORE_DEPS $RP_OBJS/rp_config.csm"
+RP_PCH="$RP_OBJS/rp_config.csm"
+RP_BUILD_PCH="-H=$RP_OBJS/rp_config.csm"
+RP_USE_PCH="-Hu -H=$RP_OBJS/rp_config.csm"
+
+
+# Win32 GUI mode application
+#LINK="\$(CC) -laa"
+
+
+# the resource file
+RP_RES="$RP_OBJS/rap.res"
+RP_RCC="brcc32 -fo$RP_OBJS/rap.res \$(CORE_INCS) $RP_WIN32_RC"
+# the pragma allows to link the resource file using bcc32 and
+# to avoid the direct ilink32 calling and the c0w32.obj's WinMain/main problem
+RP_PRAGMA="#pragma resource \"$RP_OBJS/rap.res\""
+
+
+rp_include_opt="-I"
+rp_objout="-o"
+rp_binout="-e"
+rp_objext="obj"
+
+rp_long_start='@&&|
+	'
+rp_long_end='|'
+
+rp_regex_dirsep='\\'
+rp_dirsep="\\"

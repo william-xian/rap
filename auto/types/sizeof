@@ -1,0 +1,76 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+echo $rp_n "checking for $rp_type size ...$rp_c"
+
+cat << END >> $RP_AUTOCONF_ERR
+
+----------------------------------------
+checking for $rp_type size
+
+END
+
+rp_size=
+
+cat << END > $RP_AUTOTEST.c
+
+#include <sys/types.h>
+#include <sys/time.h>
+$RP_INCLUDE_UNISTD_H
+#include <signal.h>
+#include <stdio.h>
+#include <sys/resource.h>
+$RP_INCLUDE_INTTYPES_H
+$RP_INCLUDE_AUTO_CONFIG_H
+
+int main(void) {
+    printf("%d", (int) sizeof($rp_type));
+    return 0;
+}
+
+END
+
+
+rp_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS \
+          -o $RP_AUTOTEST $RP_AUTOTEST.c $RP_LD_OPT $rp_feature_libs"
+
+eval "$rp_test >> $RP_AUTOCONF_ERR 2>&1"
+
+
+if [ -x $RP_AUTOTEST ]; then
+    rp_size=`$RP_AUTOTEST`
+    echo " $rp_size bytes"
+fi
+
+
+case $rp_size in
+    4)
+        rp_max_value=2147483647
+        rp_max_len='(sizeof("-2147483648") - 1)'
+    ;;
+
+    8)
+        rp_max_value=9223372036854775807LL
+        rp_max_len='(sizeof("-9223372036854775808") - 1)'
+    ;;
+
+    *)
+        echo
+        echo "$0: error: can not detect $rp_type size"
+
+        echo "----------"    >> $RP_AUTOCONF_ERR
+        cat $RP_AUTOTEST.c  >> $RP_AUTOCONF_ERR
+        echo "----------"    >> $RP_AUTOCONF_ERR
+        echo $rp_test       >> $RP_AUTOCONF_ERR
+        echo "----------"    >> $RP_AUTOCONF_ERR
+
+        rm -rf $RP_AUTOTEST*
+
+        exit 1
+esac
+
+
+rm -rf $RP_AUTOTEST*
+

@@ -1,0 +1,165 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+    rp_feature="libxslt"
+    rp_feature_name=
+    rp_feature_run=no
+    rp_feature_incs="#include <libxml/parser.h>
+                      #include <libxml/tree.h>
+                      #include <libxslt/xslt.h>
+                      #include <libxslt/xsltInternals.h>
+                      #include <libxslt/transform.h>
+                      #include <libxslt/xsltutils.h>"
+    rp_feature_path="/usr/include/libxml2"
+    rp_feature_libs="-lxml2 -lxslt"
+    rp_feature_test="xmlParserCtxtPtr    ctxt = NULL;
+                      xsltStylesheetPtr   sheet = NULL;
+                      xmlDocPtr           doc = NULL;
+                      xmlParseChunk(ctxt, NULL, 0, 0);
+                      xsltApplyStylesheet(sheet, doc, NULL);"
+    . auto/feature
+
+
+if [ $rp_found = no ]; then
+
+    # FreeBSD port
+
+    rp_feature="libxslt in /usr/local/"
+    rp_feature_path="/usr/local/include/libxml2 /usr/local/include"
+
+    if [ $RP_RPATH = YES ]; then
+        rp_feature_libs="-R/usr/local/lib -L/usr/local/lib -lxml2 -lxslt"
+    else
+        rp_feature_libs="-L/usr/local/lib -lxml2 -lxslt"
+    fi
+
+    . auto/feature
+fi
+
+
+if [ $rp_found = no ]; then
+
+    # NetBSD port
+
+    rp_feature="libxslt in /usr/pkg/"
+    rp_feature_path="/usr/pkg/include/libxml2 /usr/pkg/include"
+
+    if [ $RP_RPATH = YES ]; then
+        rp_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lxml2 -lxslt"
+    else
+        rp_feature_libs="-L/usr/pkg/lib -lxml2 -lxslt"
+    fi
+
+    . auto/feature
+fi
+
+
+if [ $rp_found = no ]; then
+
+    # MacPorts
+
+    rp_feature="libxslt in /opt/local/"
+    rp_feature_path="/opt/local/include/libxml2 /opt/local/include"
+
+    if [ $RP_RPATH = YES ]; then
+        rp_feature_libs="-R/opt/local/lib -L/opt/local/lib -lxml2 -lxslt"
+    else
+        rp_feature_libs="-L/opt/local/lib -lxml2 -lxslt"
+    fi
+
+    . auto/feature
+fi
+
+
+if [ $rp_found = yes ]; then
+
+    CORE_INCS="$CORE_INCS $rp_feature_path"
+
+    if [ $USE_LIBXSLT = YES ]; then
+        CORE_LIBS="$CORE_LIBS $rp_feature_libs"
+    fi
+
+    RP_LIB_LIBXSLT=$rp_feature_libs
+
+else
+
+cat << END
+
+$0: error: the HTTP XSLT module requires the libxml2/libxslt
+libraries. You can either do not enable the module or install the libraries.
+
+END
+
+    exit 1
+fi
+
+
+    rp_feature="libexslt"
+    rp_feature_name=RP_HAVE_EXSLT
+    rp_feature_run=no
+    rp_feature_incs="#include <libexslt/exslt.h>"
+    rp_feature_path="/usr/include/libxml2"
+    rp_feature_libs="-lexslt"
+    rp_feature_test="exsltRegisterAll();"
+    . auto/feature
+
+if [ $rp_found = no ]; then
+
+    # FreeBSD port
+
+    rp_feature="libexslt in /usr/local/"
+    rp_feature_path="/usr/local/include/libxml2 /usr/local/include"
+
+    if [ $RP_RPATH = YES ]; then
+        rp_feature_libs="-R/usr/local/lib -L/usr/local/lib -lexslt"
+    else
+        rp_feature_libs="-L/usr/local/lib -lexslt"
+    fi
+
+    . auto/feature
+fi
+
+
+if [ $rp_found = no ]; then
+
+    # NetBSD port
+
+    rp_feature="libexslt in /usr/pkg/"
+    rp_feature_path="/usr/pkg/include/libxml2 /usr/local/include"
+
+    if [ $RP_RPATH = YES ]; then
+        rp_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lexslt"
+    else
+        rp_feature_libs="-L/usr/pkg/lib -lexslt"
+    fi
+
+    . auto/feature
+fi
+
+
+if [ $rp_found = no ]; then
+
+    # MacPorts
+
+    rp_feature="libexslt in /opt/local/"
+    rp_feature_path="/opt/local/include/libxml2 /opt/local/include"
+
+    if [ $RP_RPATH = YES ]; then
+        rp_feature_libs="-R/opt/local/lib -L/opt/local/lib -lexslt"
+    else
+        rp_feature_libs="-L/opt/local/lib -lexslt"
+    fi
+
+    . auto/feature
+fi
+
+
+if [ $rp_found = yes ]; then
+    if [ $USE_LIBXSLT = YES ]; then
+        CORE_LIBS="$CORE_LIBS -lexslt"
+    fi
+
+    RP_LIB_LIBXSLT="$RP_LIB_LIBXSLT -lexslt"
+fi

@@ -1,0 +1,12 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+cat << END >> $RP_AUTO_CONFIG_H
+
+#ifndef $have
+#define $have  0
+#endif
+
+END

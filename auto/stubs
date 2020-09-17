@@ -1,0 +1,8 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+have=RP_SUPPRESS_WARN . auto/have
+
+have=RP_SMP . auto/have

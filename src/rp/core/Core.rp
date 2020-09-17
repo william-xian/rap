@@ -1,0 +1,12 @@
+
+
+deed[x64] Core {
+	typedef unsigned char byte;
+	typedef unsigned char uchar;
+	typedef unsigned short uint2;
+	typedef unsigned int uint4;
+	typedef unsigned long uint8;
+	typedef short int2;
+	typedef int int4;
+	typedef long int8;
+}

@@ -1,0 +1,16 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+    cat << END                                            >> $RP_MAKEFILE
+
+$RP_LIBATOMIC/src/libatomic_ops.a:	$RP_LIBATOMIC/Makefile
+	cd $RP_LIBATOMIC && \$(MAKE)
+
+$RP_LIBATOMIC/Makefile:	$RP_MAKEFILE
+	cd $RP_LIBATOMIC \\
+	&& if [ -f Makefile ]; then \$(MAKE) distclean; fi \\
+	&& ./configure
+
+END

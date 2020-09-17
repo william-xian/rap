@@ -1,0 +1,11 @@
+package rp.core;
+
+class String {
+	readable size:uint4;
+	capacity:uint4;
+	readable data:char*;
+
+	callable substr(start:uint4,end:unit4):String* {
+		return Heap.use(this,start,end);
+	}
+}

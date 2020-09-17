@@ -1,0 +1,218 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+if [ $USE_PERL != NO ]; then
+
+    cat << END                                                >> $RP_MAKEFILE
+
+install_perl_modules:
+	cd $RP_OBJS/src/http/modules/perl && \$(MAKE) install
+END
+
+    RP_INSTALL_PERL_MODULES=install_perl_modules
+
+fi
+
+
+case ".$RP_SBIN_PATH" in
+    ./*)
+    ;;
+
+    *)
+        RP_SBIN_PATH=$RP_PREFIX/$RP_SBIN_PATH
+    ;;
+esac
+
+
+case ".$RP_MODULES_PATH" in
+    ./*)
+    ;;
+
+    *)
+        RP_MODULES_PATH=$RP_PREFIX/$RP_MODULES_PATH
+    ;;
+esac
+
+RP_MODULES_PATH=`dirname $RP_MODULES_PATH/.`
+
+
+case ".$RP_CONF_PATH" in
+    ./*)
+    ;;
+
+    *)
+        RP_CONF_PATH=$RP_PREFIX/$RP_CONF_PATH
+    ;;
+esac
+
+
+RP_CONF_PREFIX=`dirname $RP_CONF_PATH`
+
+
+case ".$RP_PID_PATH" in
+    ./*)
+    ;;
+
+    *)
+        RP_PID_PATH=$RP_PREFIX/$RP_PID_PATH
+    ;;
+esac
+
+
+case ".$RP_ERROR_LOG_PATH" in
+    ./* | .)
+    ;;
+
+    *)
+        RP_ERROR_LOG_PATH=$RP_PREFIX/$RP_ERROR_LOG_PATH
+    ;;
+esac
+
+
+case ".$RP_HTTP_LOG_PATH" in
+    ./*)
+    ;;
+
+    *)
+        RP_HTTP_LOG_PATH=$RP_PREFIX/$RP_HTTP_LOG_PATH
+    ;;
+esac
+
+
+if test -f man/rap.8 ; then
+    RP_MAN=man/rap.8
+else
+    RP_MAN=docs/man/rap.8
+fi
+
+if test -d html ; then
+    RP_HTML=html
+else
+    RP_HTML=docs/html
+fi
+
+cat << END                                                    >> $RP_MAKEFILE
+
+manpage:	$RP_OBJS/rap.8
+
+$RP_OBJS/rap.8:	$RP_MAN $RP_AUTO_CONFIG_H
+	sed -e "s|%%PREFIX%%|$RP_PREFIX|" \\
+		-e "s|%%PID_PATH%%|$RP_PID_PATH|" \\
+		-e "s|%%CONF_PATH%%|$RP_CONF_PATH|" \\
+		-e "s|%%ERROR_LOG_PATH%%|${RP_ERROR_LOG_PATH:-stderr}|" \\
+		< $RP_MAN > \$@
+
+install:	build $RP_INSTALL_PERL_MODULES
+	test -d '\$(DESTDIR)$RP_PREFIX' || mkdir -p '\$(DESTDIR)$RP_PREFIX'
+
+	test -d '\$(DESTDIR)`dirname "$RP_SBIN_PATH"`' \\
+		|| mkdir -p '\$(DESTDIR)`dirname "$RP_SBIN_PATH"`'
+	test ! -f '\$(DESTDIR)$RP_SBIN_PATH' \\
+		|| mv '\$(DESTDIR)$RP_SBIN_PATH' \\
+			'\$(DESTDIR)$RP_SBIN_PATH.old'
+	cp $RP_OBJS/rap '\$(DESTDIR)$RP_SBIN_PATH'
+
+	test -d '\$(DESTDIR)$RP_CONF_PREFIX' \\
+		|| mkdir -p '\$(DESTDIR)$RP_CONF_PREFIX'
+
+	cp conf/koi-win '\$(DESTDIR)$RP_CONF_PREFIX'
+	cp conf/koi-utf '\$(DESTDIR)$RP_CONF_PREFIX'
+	cp conf/win-utf '\$(DESTDIR)$RP_CONF_PREFIX'
+
+	test -f '\$(DESTDIR)$RP_CONF_PREFIX/mime.types' \\
+		|| cp conf/mime.types '\$(DESTDIR)$RP_CONF_PREFIX'
+	cp conf/mime.types '\$(DESTDIR)$RP_CONF_PREFIX/mime.types.default'
+
+	test -f '\$(DESTDIR)$RP_CONF_PREFIX/fastcgi_params' \\
+		|| cp conf/fastcgi_params '\$(DESTDIR)$RP_CONF_PREFIX'
+	cp conf/fastcgi_params \\
+		'\$(DESTDIR)$RP_CONF_PREFIX/fastcgi_params.default'
+
+	test -f '\$(DESTDIR)$RP_CONF_PREFIX/fastcgi.conf' \\
+		|| cp conf/fastcgi.conf '\$(DESTDIR)$RP_CONF_PREFIX'
+	cp conf/fastcgi.conf '\$(DESTDIR)$RP_CONF_PREFIX/fastcgi.conf.default'
+
+	test -f '\$(DESTDIR)$RP_CONF_PREFIX/uwsgi_params' \\
+		|| cp conf/uwsgi_params '\$(DESTDIR)$RP_CONF_PREFIX'
+	cp conf/uwsgi_params \\
+		'\$(DESTDIR)$RP_CONF_PREFIX/uwsgi_params.default'
+
+	test -f '\$(DESTDIR)$RP_CONF_PREFIX/scgi_params' \\
+		|| cp conf/scgi_params '\$(DESTDIR)$RP_CONF_PREFIX'
+	cp conf/scgi_params \\
+		'\$(DESTDIR)$RP_CONF_PREFIX/scgi_params.default'
+
+	test -f '\$(DESTDIR)$RP_CONF_PATH' \\
+		|| cp conf/rap.conf '\$(DESTDIR)$RP_CONF_PATH'
+	cp conf/rap.conf '\$(DESTDIR)$RP_CONF_PREFIX/rap.conf.default'
+
+	test -d '\$(DESTDIR)`dirname "$RP_PID_PATH"`' \\
+		|| mkdir -p '\$(DESTDIR)`dirname "$RP_PID_PATH"`'
+
+	test -d '\$(DESTDIR)`dirname "$RP_HTTP_LOG_PATH"`' \\
+		|| mkdir -p '\$(DESTDIR)`dirname "$RP_HTTP_LOG_PATH"`'
+
+	test -d '\$(DESTDIR)$RP_PREFIX/html' \\
+		|| cp -R $RP_HTML '\$(DESTDIR)$RP_PREFIX'
+END
+
+
+if test -n "$RP_ERROR_LOG_PATH"; then
+    cat << END                                                >> $RP_MAKEFILE
+
+	test -d '\$(DESTDIR)`dirname "$RP_ERROR_LOG_PATH"`' \\
+		|| mkdir -p '\$(DESTDIR)`dirname "$RP_ERROR_LOG_PATH"`'
+END
+
+fi
+
+
+if test -n "$DYNAMIC_MODULES"; then
+    cat << END                                                >> $RP_MAKEFILE
+
+	test -d '\$(DESTDIR)$RP_MODULES_PATH' \\
+		|| mkdir -p '\$(DESTDIR)$RP_MODULES_PATH'
+END
+
+fi
+
+
+for rp_module in $DYNAMIC_MODULES
+do
+    rp_module=$rp_module$rp_modext
+
+    cat << END                                                >> $RP_MAKEFILE
+
+	test ! -f '\$(DESTDIR)$RP_MODULES_PATH/$rp_module' \\
+		|| mv '\$(DESTDIR)$RP_MODULES_PATH/$rp_module' \\
+			'\$(DESTDIR)$RP_MODULES_PATH/$rp_module.old'
+	cp $RP_OBJS/$rp_module '\$(DESTDIR)$RP_MODULES_PATH/$rp_module'
+END
+
+done
+
+
+# create Makefile
+
+cat << END >> Makefile
+
+build:
+	\$(MAKE) -f $RP_MAKEFILE
+
+install:
+	\$(MAKE) -f $RP_MAKEFILE install
+
+modules:
+	\$(MAKE) -f $RP_MAKEFILE modules
+
+upgrade:
+	$RP_SBIN_PATH -t
+
+	kill -USR2 \`cat $RP_PID_PATH\`
+	sleep 1
+	test -f $RP_PID_PATH.oldbin
+
+	kill -QUIT \`cat $RP_PID_PATH.oldbin\`
+END

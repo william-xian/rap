@@ -1,0 +1,116 @@
+#!/bin/sh
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+LC_ALL=C
+export LC_ALL
+
+. auto/options
+. auto/init
+. auto/sources
+
+test -d $RP_OBJS || mkdir -p $RP_OBJS
+
+echo > $RP_AUTO_HEADERS_H
+echo > $RP_AUTOCONF_ERR
+
+echo "#define RP_CONFIGURE \"$RP_CONFIGURE\"" > $RP_AUTO_CONFIG_H
+
+
+if [ $RP_DEBUG = YES ]; then
+    have=RP_DEBUG . auto/have
+fi
+
+
+if test -z "$RP_PLATFORM"; then
+    echo "checking for OS"
+
+    RP_SYSTEM=`uname -s 2>/dev/null`
+    RP_RELEASE=`uname -r 2>/dev/null`
+    RP_MACHINE=`uname -m 2>/dev/null`
+
+    echo " + $RP_SYSTEM $RP_RELEASE $RP_MACHINE"
+
+    RP_PLATFORM="$RP_SYSTEM:$RP_RELEASE:$RP_MACHINE";
+
+    case "$RP_SYSTEM" in
+        MINGW32_* | MINGW64_* | MSYS_*)
+            RP_PLATFORM=win32
+        ;;
+    esac
+
+else
+    echo "building for $RP_PLATFORM"
+    RP_SYSTEM=$RP_PLATFORM
+fi
+
+. auto/cc/conf
+
+if [ "$RP_PLATFORM" != win32 ]; then
+    . auto/headers
+fi
+
+. auto/os/conf
+
+if [ "$RP_PLATFORM" != win32 ]; then
+    . auto/unix
+fi
+
+. auto/threads
+. auto/modules
+. auto/lib/conf
+
+case ".$RP_PREFIX" in
+    .)
+        RP_PREFIX=${RP_PREFIX:-/usr/local/rap}
+        have=RP_PREFIX value="\"$RP_PREFIX/\"" . auto/define
+    ;;
+
+    .!)
+        RP_PREFIX=
+    ;;
+
+    *)
+        have=RP_PREFIX value="\"$RP_PREFIX/\"" . auto/define
+    ;;
+esac
+
+if [ ".$RP_CONF_PREFIX" != "." ]; then
+    have=RP_CONF_PREFIX value="\"$RP_CONF_PREFIX/\"" . auto/define
+fi
+
+have=RP_SBIN_PATH value="\"$RP_SBIN_PATH\"" . auto/define
+have=RP_CONF_PATH value="\"$RP_CONF_PATH\"" . auto/define
+have=RP_PID_PATH value="\"$RP_PID_PATH\"" . auto/define
+have=RP_LOCK_PATH value="\"$RP_LOCK_PATH\"" . auto/define
+have=RP_ERROR_LOG_PATH value="\"$RP_ERROR_LOG_PATH\"" . auto/define
+
+have=RP_HTTP_LOG_PATH value="\"$RP_HTTP_LOG_PATH\"" . auto/define
+have=RP_HTTP_CLIENT_TEMP_PATH value="\"$RP_HTTP_CLIENT_TEMP_PATH\""
+. auto/define
+have=RP_HTTP_PROXY_TEMP_PATH value="\"$RP_HTTP_PROXY_TEMP_PATH\""
+. auto/define
+have=RP_HTTP_FASTCGI_TEMP_PATH value="\"$RP_HTTP_FASTCGI_TEMP_PATH\""
+. auto/define
+have=RP_HTTP_UWSGI_TEMP_PATH value="\"$RP_HTTP_UWSGI_TEMP_PATH\""
+. auto/define
+have=RP_HTTP_SCGI_TEMP_PATH value="\"$RP_HTTP_SCGI_TEMP_PATH\""
+. auto/define
+
+. auto/make
+. auto/lib/make
+. auto/install
+
+# STUB
+. auto/stubs
+
+have=RP_USER value="\"$RP_USER\"" . auto/define
+have=RP_GROUP value="\"$RP_GROUP\"" . auto/define
+
+if [ ".$RP_BUILD" != "." ]; then
+    have=RP_BUILD value="\"$RP_BUILD\"" . auto/define
+fi
+
+. auto/summary

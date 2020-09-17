@@ -1,0 +1,672 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+echo "creating $RP_MAKEFILE"
+
+mkdir -p $RP_OBJS/src/core $RP_OBJS/src/event $RP_OBJS/src/event/modules \
+         $RP_OBJS/src/os/unix $RP_OBJS/src/os/win32 \
+         $RP_OBJS/src/http $RP_OBJS/src/http/v2 $RP_OBJS/src/http/modules \
+         $RP_OBJS/src/http/modules/perl \
+         $RP_OBJS/src/mail \
+         $RP_OBJS/src/stream \
+         $RP_OBJS/src/misc
+
+
+rp_objs_dir=$RP_OBJS$rp_regex_dirsep
+rp_use_pch=`echo $RP_USE_PCH | sed -e "s/\//$rp_regex_dirsep/g"`
+
+
+cat << END                                                     > $RP_MAKEFILE
+
+CC =	$CC
+CFLAGS = $CFLAGS
+CPP =	$CPP
+LINK =	$LINK
+
+END
+
+
+if test -n "$RP_PERL_CFLAGS"; then
+    echo RP_PERL_CFLAGS = $RP_PERL_CFLAGS                   >> $RP_MAKEFILE
+    echo RP_PM_CFLAGS = $RP_PM_CFLAGS                       >> $RP_MAKEFILE
+    echo RP_PM_LDFLAGS = $RP_PM_LDFLAGS                     >> $RP_MAKEFILE
+fi
+
+
+# ALL_INCS, required by the addons and by OpenWatcom C precompiled headers
+
+rp_incs=`echo $CORE_INCS $RP_OBJS $HTTP_INCS $MAIL_INCS $STREAM_INCS\
+    | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont$rp_include_opt\1/g" \
+          -e "s/\//$rp_regex_dirsep/g"`
+
+cat << END                                                    >> $RP_MAKEFILE
+
+ALL_INCS = $rp_include_opt$rp_incs
+
+END
+
+
+rp_all_srcs="$CORE_SRCS"
+
+
+# the core dependencies and include paths
+
+rp_deps=`echo $CORE_DEPS $RP_AUTO_CONFIG_H $RP_PCH \
+    | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
+          -e "s/\//$rp_regex_dirsep/g"`
+
+rp_incs=`echo $CORE_INCS $RP_OBJS \
+    | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont$rp_include_opt\1/g" \
+          -e "s/\//$rp_regex_dirsep/g"`
+
+cat << END                                                    >> $RP_MAKEFILE
+
+CORE_DEPS = $rp_deps
+
+
+CORE_INCS = $rp_include_opt$rp_incs
+
+END
+
+
+# the http dependencies and include paths
+
+if [ $HTTP = YES ]; then
+
+    rp_all_srcs="$rp_all_srcs $HTTP_SRCS"
+
+    rp_deps=`echo $HTTP_DEPS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
+              -e "s/\//$rp_regex_dirsep/g"`
+
+    rp_incs=`echo $HTTP_INCS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont$rp_include_opt\1/g" \
+              -e "s/\//$rp_regex_dirsep/g"`
+
+    cat << END                                                >> $RP_MAKEFILE
+
+HTTP_DEPS = $rp_deps
+
+
+HTTP_INCS = $rp_include_opt$rp_incs
+
+END
+
+fi
+
+
+# the mail dependencies and include paths
+
+if [ $MAIL != NO ]; then
+
+    if [ $MAIL = YES ]; then
+        rp_all_srcs="$rp_all_srcs $MAIL_SRCS"
+    fi
+
+    rp_deps=`echo $MAIL_DEPS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
+              -e "s/\//$rp_regex_dirsep/g"`
+
+    rp_incs=`echo $MAIL_INCS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont$rp_include_opt\1/g" \
+              -e "s/\//$rp_regex_dirsep/g"`
+
+    cat << END                                                >> $RP_MAKEFILE
+
+MAIL_DEPS = $rp_deps
+
+
+MAIL_INCS = $rp_include_opt$rp_incs
+
+END
+
+fi
+
+
+# the stream dependencies and include paths
+
+if [ $STREAM != NO ]; then
+
+    if [ $STREAM = YES ]; then
+        rp_all_srcs="$rp_all_srcs $STREAM_SRCS"
+    fi
+
+    rp_deps=`echo $STREAM_DEPS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
+              -e "s/\//$rp_regex_dirsep/g"`
+
+    rp_incs=`echo $STREAM_INCS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont$rp_include_opt\1/g" \
+              -e "s/\//$rp_regex_dirsep/g"`
+
+    cat << END                                                >> $RP_MAKEFILE
+
+STREAM_DEPS = $rp_deps
+
+
+STREAM_INCS = $rp_include_opt$rp_incs
+
+END
+
+fi
+
+
+rp_all_srcs="$rp_all_srcs $MISC_SRCS"
+
+
+if test -n "$RP_ADDON_SRCS$DYNAMIC_MODULES"; then
+
+cat << END                                                >> $RP_MAKEFILE
+
+ADDON_DEPS = \$(CORE_DEPS) $RP_ADDON_DEPS
+
+END
+
+fi
+
+
+# rap
+
+rp_all_srcs=`echo $rp_all_srcs | sed -e "s/\//$rp_regex_dirsep/g"`
+
+for rp_src in $RP_ADDON_SRCS
+do
+    rp_obj="addon/`basename \`dirname $rp_src\``"
+
+    test -d $RP_OBJS/$rp_obj || mkdir -p $RP_OBJS/$rp_obj
+
+    rp_obj=`echo $rp_obj/\`basename $rp_src\` \
+        | sed -e "s/\//$rp_regex_dirsep/g"`
+
+    rp_all_srcs="$rp_all_srcs $rp_obj"
+done
+
+rp_all_objs=`echo $rp_all_srcs \
+    | sed -e "s#\([^ ]*\.\)cpp#$RP_OBJS\/\1$rp_objext#g" \
+          -e "s#\([^ ]*\.\)cc#$RP_OBJS\/\1$rp_objext#g" \
+          -e "s#\([^ ]*\.\)c#$RP_OBJS\/\1$rp_objext#g" \
+          -e "s#\([^ ]*\.\)S#$RP_OBJS\/\1$rp_objext#g"`
+
+rp_modules_c=`echo $RP_MODULES_C | sed -e "s/\//$rp_regex_dirsep/g"`
+
+rp_modules_obj=`echo $rp_modules_c | sed -e "s/\(.*\.\)c/\1$rp_objext/"`
+
+
+if test -n "$RP_RES"; then
+   rp_res=$RP_RES
+else
+   rp_res="$RP_RC $RP_ICONS"
+   rp_rcc=`echo $RP_RCC | sed -e "s/\//$rp_regex_dirsep/g"`
+fi
+
+rp_deps=`echo $rp_all_objs $rp_modules_obj $rp_res $LINK_DEPS \
+    | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
+          -e "s/\//$rp_regex_dirsep/g"`
+
+rp_objs=`echo $rp_all_objs $rp_modules_obj \
+    | sed -e "s/  *\([^ ][^ ]*\)/$rp_long_regex_cont\1/g" \
+          -e "s/\//$rp_regex_dirsep/g"`
+
+rp_libs=
+if test -n "$RP_LD_OPT$CORE_LIBS"; then
+    rp_libs=`echo $RP_LD_OPT $CORE_LIBS \
+        | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`
+fi
+
+rp_link=${CORE_LINK:+`echo $CORE_LINK \
+    | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`}
+
+rp_main_link=${MAIN_LINK:+`echo $MAIN_LINK \
+    | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`}
+
+
+cat << END                                                    >> $RP_MAKEFILE
+
+build:	binary modules manpage
+
+binary:	$RP_OBJS${rp_dirsep}rap$rp_binext
+
+$RP_OBJS${rp_dirsep}rap$rp_binext:	$rp_deps$rp_spacer
+	\$(LINK) $rp_long_start$rp_binout$RP_OBJS${rp_dirsep}rap$rp_binext$rp_long_cont$rp_objs$rp_libs$rp_link$rp_main_link
+	$rp_rcc
+$rp_long_end
+
+modules:
+END
+
+
+# rp_modules.c
+
+if test -n "$RP_PCH"; then
+    rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+else
+    rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) \$(CORE_INCS)"
+fi
+
+cat << END                                                    >> $RP_MAKEFILE
+
+$rp_modules_obj:	\$(CORE_DEPS)$rp_cont$rp_modules_c
+	$rp_cc$rp_tab$rp_objout$rp_modules_obj$rp_tab$rp_modules_c$RP_AUX
+
+END
+
+
+# the core sources
+
+for rp_src in $CORE_SRCS
+do
+    rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
+    rp_obj=`echo $rp_src \
+        | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
+              -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
+              -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
+              -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+
+    cat << END                                                >> $RP_MAKEFILE
+
+$rp_obj:	\$(CORE_DEPS)$rp_cont$rp_src
+	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+
+END
+
+done
+
+
+# the http sources
+
+if [ $HTTP = YES ]; then
+
+    if test -n "$RP_PCH"; then
+        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+    else
+        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) \$(CORE_INCS) \$(HTTP_INCS)"
+        rp_perl_cc="\$(CC) $rp_compile_opt \$(RP_PERL_CFLAGS)"
+        rp_perl_cc="$rp_perl_cc \$(CORE_INCS) \$(HTTP_INCS)"
+    fi
+
+    for rp_source in $HTTP_SRCS
+    do
+        rp_src=`echo $rp_source | sed -e "s/\//$rp_regex_dirsep/g"`
+        rp_obj=`echo $rp_src \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+
+        if [ $rp_source = src/http/modules/perl/rp_http_perl_module.c ]; then
+
+            cat << END                                        >> $RP_MAKEFILE
+
+$rp_obj:	\$(CORE_DEPS) \$(HTTP_DEPS)$rp_cont$rp_src
+	$rp_perl_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+
+END
+        else
+
+            cat << END                                        >> $RP_MAKEFILE
+
+$rp_obj:	\$(CORE_DEPS) \$(HTTP_DEPS)$rp_cont$rp_src
+	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+
+END
+
+        fi
+     done
+
+fi
+
+
+# the mail sources
+
+if [ $MAIL = YES ]; then
+
+    if test -n "$RP_PCH"; then
+        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+    else
+        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) \$(CORE_INCS) \$(MAIL_INCS)"
+    fi
+
+    for rp_src in $MAIL_SRCS
+    do
+        rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
+        rp_obj=`echo $rp_src \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+
+        cat << END                                            >> $RP_MAKEFILE
+
+$rp_obj:	\$(CORE_DEPS) \$(MAIL_DEPS)$rp_cont$rp_src
+	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+
+END
+     done
+
+fi
+
+
+# the stream sources
+
+if [ $STREAM = YES ]; then
+
+    if test -n "$RP_PCH"; then
+        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+    else
+        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) \$(CORE_INCS) \$(STREAM_INCS)"
+    fi
+
+    for rp_src in $STREAM_SRCS
+    do
+        rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
+        rp_obj=`echo $rp_src \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+
+        cat << END                                            >> $RP_MAKEFILE
+
+$rp_obj:	\$(CORE_DEPS) \$(STREAM_DEPS)$rp_cont$rp_src
+	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+
+END
+     done
+
+fi
+
+
+# the misc sources
+
+if test -n "$MISC_SRCS"; then
+
+    rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+
+    for rp_src in $MISC_SRCS
+    do
+        rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
+        rp_obj=`echo $rp_src \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+
+        cat << END                                            >> $RP_MAKEFILE
+
+$rp_obj:	\$(CORE_DEPS) $rp_cont$rp_src
+	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+
+END
+     done
+
+fi
+
+
+# the addons sources
+
+if test -n "$RP_ADDON_SRCS"; then
+
+    rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+
+    for rp_src in $RP_ADDON_SRCS
+    do
+        rp_obj="addon/`basename \`dirname $rp_src\``"
+
+        rp_obj=`echo $rp_obj/\`basename $rp_src\` \
+            | sed -e "s/\//$rp_regex_dirsep/g"`
+
+        rp_obj=`echo $rp_obj \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+
+        rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
+
+        cat << END                                            >> $RP_MAKEFILE
+
+$rp_obj:	\$(ADDON_DEPS)$rp_cont$rp_src
+	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+
+END
+     done
+
+fi
+
+
+# the addons config.make
+
+if test -n "$RP_ADDONS$DYNAMIC_ADDONS"; then
+
+    for rp_addon_dir in $RP_ADDONS $DYNAMIC_ADDONS
+    do
+        if test -f $rp_addon_dir/config.make; then
+            . $rp_addon_dir/config.make
+        fi
+    done
+fi
+
+
+# Win32 resource file
+
+if test -n "$RP_RES"; then
+
+    rp_res=`echo "$RP_RES:	$RP_RC $RP_ICONS" \
+                 | sed -e "s/\//$rp_regex_dirsep/g"`
+    rp_rcc=`echo $RP_RCC | sed -e "s/\//$rp_regex_dirsep/g"`
+
+    cat << END                                                >> $RP_MAKEFILE
+
+$rp_res
+	$rp_rcc
+
+END
+
+fi
+
+
+# the precompiled headers
+
+if test -n "$RP_PCH"; then
+    echo "#include <rp_config.h>" > $RP_OBJS/rp_pch.c
+
+    rp_pch="src/core/rp_config.h $OS_CONFIG $RP_OBJS/rp_auto_config.h"
+    rp_pch=`echo "$RP_PCH:	$rp_pch" | sed -e "s/\//$rp_regex_dirsep/g"`
+
+    rp_src="\$(CC) \$(CFLAGS) $RP_BUILD_PCH $rp_compile_opt \$(ALL_INCS)"
+    rp_src="$rp_src $rp_objout$RP_OBJS/rp_pch.obj $RP_OBJS/rp_pch.c"
+    rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
+
+    cat << END                                                >> $RP_MAKEFILE
+
+$rp_pch
+	$rp_src
+
+END
+
+fi
+
+
+# dynamic modules
+
+if test -n "$RP_PCH"; then
+    rp_cc="\$(CC) $rp_compile_opt $rp_pic_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+else
+    rp_cc="\$(CC) $rp_compile_opt $rp_pic_opt \$(CFLAGS) \$(ALL_INCS)"
+    rp_perl_cc="\$(CC) $rp_compile_opt $rp_pic_opt \$(RP_PERL_CFLAGS)"
+    rp_perl_cc="$rp_perl_cc \$(ALL_INCS)"
+fi
+
+for rp_module in $DYNAMIC_MODULES
+do
+    eval rp_module_srcs="\$${rp_module}_SRCS"
+    eval eval rp_module_libs="\\\"\$${rp_module}_LIBS\\\""
+
+    eval rp_module_modules="\$${rp_module}_MODULES"
+    eval rp_module_order="\$${rp_module}_ORDER"
+
+    rp_modules_c=$RP_OBJS/${rp_module}_modules.c
+
+    cat << END                                    > $rp_modules_c
+
+#include <rp_config.h>
+#include <rp_core.h>
+
+END
+
+    for mod in $rp_module_modules
+    do
+        echo "extern rp_module_t  $mod;"         >> $rp_modules_c
+    done
+
+    echo                                          >> $rp_modules_c
+    echo 'rp_module_t *rp_modules[] = {'        >> $rp_modules_c
+
+    for mod in $rp_module_modules
+    do
+        echo "    &$mod,"                         >> $rp_modules_c
+    done
+
+    cat << END                                    >> $rp_modules_c
+    NULL
+};
+
+END
+
+    echo 'char *rp_module_names[] = {'           >> $rp_modules_c
+
+    for mod in $rp_module_modules
+    do
+        echo "    \"$mod\","                      >> $rp_modules_c
+    done
+
+    cat << END                                    >> $rp_modules_c
+    NULL
+};
+
+END
+
+    echo 'char *rp_module_order[] = {'           >> $rp_modules_c
+
+    for mod in $rp_module_order
+    do
+        echo "    \"$mod\","                      >> $rp_modules_c
+    done
+
+    cat << END                                    >> $rp_modules_c
+    NULL
+};
+
+END
+
+    rp_modules_c=`echo $rp_modules_c | sed -e "s/\//$rp_regex_dirsep/g"`
+
+    rp_modules_obj=`echo $rp_modules_c \
+        | sed -e "s/\(.*\.\)c/\1$rp_objext/"`
+
+    rp_module_objs=
+    for rp_src in $rp_module_srcs
+    do
+        case "$rp_src" in
+            src/*)
+                rp_obj=$rp_src
+                ;;
+            *)
+                rp_obj="addon/`basename \`dirname $rp_src\``"
+                mkdir -p $RP_OBJS/$rp_obj
+                rp_obj="$rp_obj/`basename $rp_src`"
+                ;;
+        esac
+
+        rp_module_objs="$rp_module_objs $rp_obj"
+    done
+
+    rp_module_objs=`echo $rp_module_objs \
+        | sed -e "s#\([^ ]*\.\)cpp#$RP_OBJS\/\1$rp_objext#g" \
+              -e "s#\([^ ]*\.\)cc#$RP_OBJS\/\1$rp_objext#g" \
+              -e "s#\([^ ]*\.\)c#$RP_OBJS\/\1$rp_objext#g" \
+              -e "s#\([^ ]*\.\)S#$RP_OBJS\/\1$rp_objext#g"`
+
+    rp_deps=`echo $rp_module_objs $rp_modules_obj $LINK_DEPS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
+              -e "s/\//$rp_regex_dirsep/g"`
+
+    rp_objs=`echo $rp_module_objs $rp_modules_obj \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rp_long_regex_cont\1/g" \
+              -e "s/\//$rp_regex_dirsep/g"`
+
+    rp_obj=$RP_OBJS$rp_dirsep$rp_module$rp_modext
+
+    if [ "$RP_PLATFORM" = win32 ]; then
+        rp_module_libs="$CORE_LIBS $rp_module_libs"
+    fi
+
+    rp_libs=
+    if test -n "$RP_LD_OPT$rp_module_libs"; then
+        rp_libs=`echo $RP_LD_OPT $rp_module_libs \
+            | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`
+    fi
+
+    rp_link=${CORE_LINK:+`echo $CORE_LINK \
+        | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`}
+
+    rp_module_link=${MODULE_LINK:+`echo $MODULE_LINK \
+        | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`}
+
+
+    cat << END                                            >> $RP_MAKEFILE
+
+modules:	$rp_obj
+
+$rp_obj:	$rp_deps$rp_spacer
+	\$(LINK) $rp_long_start$rp_binout$rp_obj$rp_long_cont$rp_objs$rp_libs$rp_link$rp_module_link
+$rp_long_end
+
+$rp_modules_obj:	\$(CORE_DEPS)$rp_cont$rp_modules_c
+	$rp_cc$rp_tab$rp_objout$rp_modules_obj$rp_tab$rp_modules_c$RP_AUX
+
+END
+
+    for rp_source in $rp_module_srcs
+    do
+        case "$rp_source" in
+            src/*)
+                rp_obj=`echo $rp_source | sed -e "s/\//$rp_regex_dirsep/g"`
+                ;;
+            *)
+                rp_obj="addon/`basename \`dirname $rp_source\``"
+                rp_obj=`echo $rp_obj/\`basename $rp_source\` \
+                    | sed -e "s/\//$rp_regex_dirsep/g"`
+                ;;
+        esac
+
+        rp_obj=`echo $rp_obj \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+
+        rp_src=`echo $rp_source | sed -e "s/\//$rp_regex_dirsep/g"`
+
+        if [ $rp_source = src/http/modules/perl/rp_http_perl_module.c ]; then
+
+            cat << END                                        >> $RP_MAKEFILE
+
+$rp_obj:	\$(ADDON_DEPS)$rp_cont$rp_src
+	$rp_perl_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+
+END
+        else
+
+            cat << END                                        >> $RP_MAKEFILE
+
+$rp_obj:	\$(ADDON_DEPS)$rp_cont$rp_src
+	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+
+END
+
+        fi
+    done
+done

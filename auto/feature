@@ -1,0 +1,123 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+echo $rp_n "checking for $rp_feature ...$rp_c"
+
+cat << END >> $RP_AUTOCONF_ERR
+
+----------------------------------------
+checking for $rp_feature
+
+END
+
+rp_found=no
+
+if test -n "$rp_feature_name"; then
+    rp_have_feature=`echo $rp_feature_name \
+                   | tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ`
+fi
+
+if test -n "$rp_feature_path"; then
+    for rp_temp in $rp_feature_path; do
+        rp_feature_inc_path="$rp_feature_inc_path -I $rp_temp"
+    done
+fi
+
+cat << END > $RP_AUTOTEST.c
+
+#include <sys/types.h>
+$RP_INCLUDE_UNISTD_H
+$rp_feature_incs
+
+int main(void) {
+    $rp_feature_test;
+    return 0;
+}
+
+END
+
+
+rp_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS $rp_feature_inc_path \
+          -o $RP_AUTOTEST $RP_AUTOTEST.c $RP_TEST_LD_OPT $rp_feature_libs"
+
+rp_feature_inc_path=
+
+eval "/bin/sh -c \"$rp_test\" >> $RP_AUTOCONF_ERR 2>&1"
+
+
+if [ -x $RP_AUTOTEST ]; then
+
+    case "$rp_feature_run" in
+
+        yes)
+            # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+            if /bin/sh -c $RP_AUTOTEST >> $RP_AUTOCONF_ERR 2>&1; then
+                echo " found"
+                rp_found=yes
+
+                if test -n "$rp_feature_name"; then
+                    have=$rp_have_feature . auto/have
+                fi
+
+            else
+                echo " found but is not working"
+            fi
+        ;;
+
+        value)
+            # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+            if /bin/sh -c $RP_AUTOTEST >> $RP_AUTOCONF_ERR 2>&1; then
+                echo " found"
+                rp_found=yes
+
+                cat << END >> $RP_AUTO_CONFIG_H
+
+#ifndef $rp_feature_name
+#define $rp_feature_name  `$RP_AUTOTEST`
+#endif
+
+END
+            else
+                echo " found but is not working"
+            fi
+        ;;
+
+        bug)
+            # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+            if /bin/sh -c $RP_AUTOTEST >> $RP_AUTOCONF_ERR 2>&1; then
+                echo " not found"
+
+            else
+                echo " found"
+                rp_found=yes
+
+                if test -n "$rp_feature_name"; then
+                    have=$rp_have_feature . auto/have
+                fi
+            fi
+        ;;
+
+        *)
+            echo " found"
+            rp_found=yes
+
+            if test -n "$rp_feature_name"; then
+                have=$rp_have_feature . auto/have
+            fi
+        ;;
+
+    esac
+
+else
+    echo " not found"
+
+    echo "----------"    >> $RP_AUTOCONF_ERR
+    cat $RP_AUTOTEST.c  >> $RP_AUTOCONF_ERR
+    echo "----------"    >> $RP_AUTOCONF_ERR
+    echo $rp_test       >> $RP_AUTOCONF_ERR
+    echo "----------"    >> $RP_AUTOCONF_ERR
+fi
+
+rm -rf $RP_AUTOTEST*

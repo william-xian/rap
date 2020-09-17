@@ -1,0 +1,13 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+rp_include="unistd.h";      . auto/include
+rp_include="inttypes.h";    . auto/include
+rp_include="limits.h";      . auto/include
+rp_include="sys/filio.h";   . auto/include
+rp_include="sys/param.h";   . auto/include
+rp_include="sys/mount.h";   . auto/include
+rp_include="sys/statvfs.h"; . auto/include
+rp_include="crypt.h";       . auto/include

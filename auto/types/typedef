@@ -1,0 +1,82 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+echo $rp_n "checking for $rp_type ...$rp_c"
+
+cat << END >> $RP_AUTOCONF_ERR
+
+----------------------------------------
+checking for $rp_type
+
+END
+
+rp_found=no
+
+for rp_try in $rp_type $rp_types
+do
+
+    cat << END > $RP_AUTOTEST.c
+
+#include <sys/types.h>
+#include <signal.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <netinet/in.h>
+$RP_INCLUDE_INTTYPES_H
+
+int main(void) {
+    $rp_try i = 0;
+    return (int) i;
+}
+
+END
+
+    rp_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS \
+              -o $RP_AUTOTEST $RP_AUTOTEST.c $RP_LD_OPT $rp_feature_libs"
+
+    eval "$rp_test >> $RP_AUTOCONF_ERR 2>&1"
+
+    if [ -x $RP_AUTOTEST ]; then
+        if [ $rp_try = $rp_type ]; then
+            echo " found"
+            rp_found=yes
+        else
+            echo ", $rp_try used"
+            rp_found=$rp_try
+        fi
+    fi
+
+    if [ $rp_found = no ]; then
+        if [ $rp_try = $rp_type ]; then
+            echo $rp_n " $rp_try not found$rp_c"
+        else
+            echo $rp_n ", $rp_try not found$rp_c"
+        fi
+
+        echo "----------"    >> $RP_AUTOCONF_ERR
+        cat $RP_AUTOTEST.c  >> $RP_AUTOCONF_ERR
+        echo "----------"    >> $RP_AUTOCONF_ERR
+        echo $rp_test       >> $RP_AUTOCONF_ERR
+        echo "----------"    >> $RP_AUTOCONF_ERR
+    fi
+
+    rm -rf $RP_AUTOTEST*
+
+    if [ $rp_found != no ]; then
+        break
+    fi
+done
+
+if [ $rp_found = no ]; then
+    echo
+    echo "$0: error: can not define $rp_type"
+
+    exit 1
+fi
+
+if [ $rp_found != yes ]; then
+    echo "typedef $rp_found  $rp_type;"   >> $RP_AUTO_CONFIG_H
+fi

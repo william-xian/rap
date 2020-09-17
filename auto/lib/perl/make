@@ -1,0 +1,46 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+cat << END                                                    >> $RP_MAKEFILE
+
+$RP_OBJS/src/http/modules/perl/rp_http_perl_module.o: \\
+		$RP_OBJS/$rp_perl_module
+
+$RP_OBJS/$rp_perl_module: \\
+		\$(CORE_DEPS) \$(HTTP_DEPS) \\
+		src/http/modules/perl/rp_http_perl_module.h \\
+		$RP_OBJS/src/http/modules/perl/Makefile
+	cd $RP_OBJS/src/http/modules/perl && \$(MAKE)
+
+	rm -rf $RP_OBJS/install_perl
+
+
+$RP_OBJS/src/http/modules/perl/Makefile: \\
+		$RP_AUTO_CONFIG_H \\
+		src/core/rap.h \\
+		src/http/modules/perl/Makefile.PL \\
+		src/http/modules/perl/rap.pm \\
+		src/http/modules/perl/rap.xs \\
+		src/http/modules/perl/typemap
+	grep 'define RAP_VERSION' src/core/rap.h \\
+		| sed -e 's/^.*"\(.*\)".*/\1/' > \\
+		$RP_OBJS/src/http/modules/perl/version
+	sed "s/%%VERSION%%/\`cat $RP_OBJS/src/http/modules/perl/version\`/" \\
+		src/http/modules/perl/rap.pm > \\
+		$RP_OBJS/src/http/modules/perl/rap.pm
+	cp -p src/http/modules/perl/rap.xs $RP_OBJS/src/http/modules/perl/
+	cp -p src/http/modules/perl/typemap $RP_OBJS/src/http/modules/perl/
+	cp -p src/http/modules/perl/Makefile.PL $RP_OBJS/src/http/modules/perl/
+
+	cd $RP_OBJS/src/http/modules/perl \\
+		&& RP_PM_CFLAGS="\$(RP_PM_CFLAGS) -g $RP_CC_OPT" \\
+			RP_PM_LDFLAGS="$RP_LD_OPT \$(RP_PM_LDFLAGS)" \\
+			RP_INCS="$CORE_INCS $RP_OBJS $HTTP_INCS" \\
+			RP_DEPS="\$(CORE_DEPS) \$(HTTP_DEPS)" \\
+		$RP_PERL Makefile.PL \\
+			LIB=$RP_PERL_MODULES \\
+			INSTALLSITEMAN3DIR=$RP_PERL_MODULES_MAN
+
+END

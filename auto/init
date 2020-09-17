@@ -1,0 +1,51 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Rap, Inc.
+
+
+RP_MAKEFILE=$RP_OBJS/Makefile
+RP_MODULES_C=$RP_OBJS/rp_modules.c
+
+RP_AUTO_HEADERS_H=$RP_OBJS/rp_auto_headers.h
+RP_AUTO_CONFIG_H=$RP_OBJS/rp_auto_config.h
+
+RP_AUTOTEST=$RP_OBJS/autotest
+RP_AUTOCONF_ERR=$RP_OBJS/autoconf.err
+
+# STUBs
+RP_ERR=$RP_OBJS/autoconf.err
+MAKEFILE=$RP_OBJS/Makefile
+
+
+RP_PCH=
+RP_USE_PCH=
+
+
+# check the echo's "-n" option and "\c" capability
+
+if echo "test\c" | grep c >/dev/null; then
+
+    if echo -n test | grep n >/dev/null; then
+        rp_n=
+        rp_c=
+
+    else
+        rp_n=-n
+        rp_c=
+    fi
+
+else
+    rp_n=
+    rp_c='\c'
+fi
+
+
+# create Makefile
+
+cat << END > Makefile
+
+default:	build
+
+clean:
+	rm -rf Makefile $RP_OBJS
+END
