@@ -3,7 +3,7 @@ RapC,是一种能够翻译成C语言的高级语言易用性内存安全的语�
 
 ### 1. 函数就是闭包，分为有名函数和无名函数
 
-public <R:int2,int4,int7>  R function_name(arg1:<T1:int2,int4>;arg2:int4) {body}
+function_name(arg1:<T1:int2,int4>,arg2:int4):<R:int2,int4,int7> {body}
 
 ### 2. 基本数据类型，bool，char，int， float，int，float是自定义长度数据类型
 
@@ -12,11 +12,12 @@ package rp.utils;
 
 import {Meta} rp.meta;
 import {std} rp.c.std;
-public|deed|final TypeName <T:int2,int4;R:string,char,…> :supertype,interfaceA,…{
-public name:R;
-public brithday:T;
-public age():R{};
-init(){}
+
+writeable|readable deed|class TypeName <T:int2,int4;R:string,char,…> :supertype,interfaceA,…{
+	readable name:R;
+	writeable brithday:T;
+	callable age():R{};
+	init(){}
 }
 
 ### 4. 条件编译， 条件编译只能作用在契约上并且是文件级别的。
@@ -100,6 +101,7 @@ p8-->B7(B# can:1,has:0, ref:1)-->C7(C# can:1,has:0, ref:1)-->A7
 函数注释
 函数说明
 
+any 用于透传翻译, 保留C语言预编译,如: #ifdef #endif #ifndef #define 等保留
 
 
 

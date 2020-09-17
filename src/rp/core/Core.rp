@@ -1,6 +1,8 @@
 
-
 deed[x64] Core {
+	readable version:unit4;
+
+#ifdef x64
 	typedef unsigned char byte;
 	typedef unsigned char uchar;
 	typedef unsigned short uint2;
@@ -9,4 +11,5 @@ deed[x64] Core {
 	typedef short int2;
 	typedef int int4;
 	typedef long int8;
+#endif
 }
