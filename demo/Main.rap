@@ -1,17 +1,45 @@
+package demo;
 
-
-import {stdio} rp.c.stdio;
-import {Vector} rp.utils;
-
+import rap.core{Heap,Meta};
+import rap.c.std{Output,Time};
 
 class Main {
+    callable main(args:string[]) {
+        v:Viewer = Person:new();
+        Output:printf("%s",v);
+    }
+}
 
-	callable main(args:String[]):int4 {
-
-		stdio:printf("Hello %s!","Guy!");
-		let vec = Vector<int4>:init();
-		vec.add(1);
-		return 0;
-	}
+class Person<T:int2,int4;R:string>:Viewer {
+    readable name:R;
+    writeable brithday:T;
+    callable age():T throws Exception {
+        if(brithday == null) {
+            throw Exception:new("brithday is null.");
+        }
+        return Time:now() - brithday;
+    };
+    callable new():Person {
+        return this;
+    };
+    callable toString():string {
+        r:string;
+        try {
+            r = string:format("I am %s, I'm %d years old.", name, age());
+        } catch(e:Exception) {
+            r = string:format("I am %s.", name);
+        } finally {
+        }
+        return r;
+    }
+}
+/*
+ * 
+ */
+deed Viewer {
+    const MALE:int2  = 1;
+    const FEMALE:int2  = 2;
+    const MALE_NAME = "name";
+    toString():string;
 }
 

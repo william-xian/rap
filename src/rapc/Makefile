@@ -1,11 +1,11 @@
 
 
-C_ARGS=-lpcre
-headers=rapc.h
-sources=rapc.c
+C_ARGS=-lpcre -DDebug
+INC=rapc.h
+SRC=rapc.c
 
-build: $(headers) $(sources)
+build: $(INC) $(SRC)
 	gcc -o rapc $(C_ARGS) $^
 
 run: build
-	./rapc
+	./rapc ../../demo/Main.rap

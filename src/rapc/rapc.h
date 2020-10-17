@@ -9,6 +9,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
+#include<assert.h>
 #include<pcre.h>
 
 #define rp_a_(T) \
@@ -87,5 +88,10 @@ string* string_new(const char* src) {
 	return p;
 }
 
+#define log_d(...) printf("%s:%d D ",__FILE__,__LINE__);printf(__VA_ARGS__);printf("\n");
+#define log_i(...) printf("%s:%d",__FILE__,__LINE__);printf(__VA_ARGS__);printf("\n");
+#define log_w(fmt, args...) printf(fmt,##arg);
+#define log_e(fmt, args...) printf(fmt,##arg);
+ 
 #endif /* _RPC_H */
 
