@@ -16,7 +16,7 @@
 typedef struct { \
 	int capacity; \
 	int size; \
-	T *pAddr; \
+	T *data; \
 } rap_a_##T;\
 \
 rap_a_##T * rap_a_new_##T\
@@ -24,14 +24,14 @@ rap_a_##T * rap_a_new_##T\
 	rap_a_##T *arr = malloc(sizeof(rap_a_int));\
 	arr->size = 0;\
 	arr->capacity = capcaity;\
-	arr->pAddr = (void*)malloc(sizeof(T)*arr->capacity); \
+	arr->data = (void*)malloc(sizeof(T)*arr->capacity); \
 	return arr;\
 }\
 void rap_a_init_##T\
 (rap_a_##T arr,int capcaity) { \
 	arr.size = 0;\
 	arr.capacity = capcaity;\
-	arr.pAddr = (void*)malloc(sizeof(T)*arr.capacity); \
+	arr.data = (void*)malloc(sizeof(T)*arr.capacity); \
 }\
 void rap_a_push_##T\
 (rap_a_##T *arr, T value) { \
@@ -40,12 +40,12 @@ void rap_a_push_##T\
 	}\
 	if(arr->size  == arr->capacity){\
 		T *newSpace = malloc(sizeof(T) * arr->capacity*2);\
-		memcpy(newSpace, arr->pAddr, arr->capacity  * sizeof(T));\
-		free(arr->pAddr);\
+		memcpy(newSpace, arr->data, arr->capacity  * sizeof(T));\
+		free(arr->data);\
 		arr->capacity = arr->capacity * 2;\
-		arr->pAddr = newSpace;\
+		arr->data = newSpace;\
 	}\
-	arr->pAddr[arr->size] = value;\
+	arr->data[arr->size] = value;\
 	arr->size++;\
 }\
 void rap_a_push_n_##T\
@@ -55,20 +55,20 @@ void rap_a_push_n_##T\
 	}\
 	if(arr->size+n  >= arr->capacity){\
 		T *newSpace = malloc(sizeof(T) * arr->capacity*2);\
-		memcpy(newSpace, arr->pAddr, arr->capacity  * sizeof(T));\
-		free(arr->pAddr);\
+		memcpy(newSpace, arr->data, arr->capacity  * sizeof(T));\
+		free(arr->data);\
 		arr->capacity = arr->capacity * 2;\
-		arr->pAddr = newSpace;\
+		arr->data = newSpace;\
 	}\
-	for(int i =0;i < n; i++) arr->pAddr[arr->size++] = *(value++);\
+	for(int i =0;i < n; i++) arr->data[arr->size++] = *(value++);\
 }\
 \
 void rap_a_free_##T(rap_a_##T *arr) {\
 	if(arr == NULL){\
 		return;\
 	}\
-	if(arr->pAddr != NULL){\
-		free(arr->pAddr);\
+	if(arr->data != NULL){\
+		free(arr->data);\
 	}\
 	free(arr);\
 }
@@ -84,7 +84,7 @@ string* string_new(const char* src) {
 	string *p = rap_a_new_char(len+1);
 	p->size = len;
 	p->capacity = len+1;
-	strcpy(p->pAddr,src);
+	strcpy(p->data,src);
 	return p;
 }
 
