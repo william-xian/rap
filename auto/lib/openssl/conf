@@ -8,8 +8,8 @@ if [ $OPENSSL != NONE ]; then
     case "$CC" in
 
         cl | bcc32)
-            have=RP_OPENSSL . auto/have
-            have=RP_SSL . auto/have
+            have=RAP_OPENSSL . auto/have
+            have=RAP_SSL . auto/have
 
             CFLAGS="$CFLAGS -DNO_SYS_TYPES_H"
 
@@ -33,17 +33,17 @@ if [ $OPENSSL != NONE ]; then
         ;;
 
         *)
-            have=RP_OPENSSL . auto/have
-            have=RP_SSL . auto/have
+            have=RAP_OPENSSL . auto/have
+            have=RAP_SSL . auto/have
 
             CORE_INCS="$CORE_INCS $OPENSSL/.openssl/include"
             CORE_DEPS="$CORE_DEPS $OPENSSL/.openssl/include/openssl/ssl.h"
             CORE_LIBS="$CORE_LIBS $OPENSSL/.openssl/lib/libssl.a"
             CORE_LIBS="$CORE_LIBS $OPENSSL/.openssl/lib/libcrypto.a"
-            CORE_LIBS="$CORE_LIBS $RP_LIBDL"
-            CORE_LIBS="$CORE_LIBS $RP_LIBPTHREAD"
+            CORE_LIBS="$CORE_LIBS $RAP_LIBDL"
+            CORE_LIBS="$CORE_LIBS $RAP_LIBPTHREAD"
 
-            if [ "$RP_PLATFORM" = win32 ]; then
+            if [ "$RAP_PLATFORM" = win32 ]; then
                 CORE_LIBS="$CORE_LIBS -lgdi32 -lcrypt32 -lws2_32"
             fi
         ;;
@@ -51,77 +51,77 @@ if [ $OPENSSL != NONE ]; then
 
 else
 
-    if [ "$RP_PLATFORM" != win32 ]; then
+    if [ "$RAP_PLATFORM" != win32 ]; then
 
         OPENSSL=NO
 
-        rp_feature="OpenSSL library"
-        rp_feature_name="RP_OPENSSL"
-        rp_feature_run=no
-        rp_feature_incs="#include <openssl/ssl.h>"
-        rp_feature_path=
-        rp_feature_libs="-lssl -lcrypto $RP_LIBDL $RP_LIBPTHREAD"
-        rp_feature_test="SSL_CTX_set_options(NULL, 0)"
+        rap_feature="OpenSSL library"
+        rap_feature_name="RAP_OPENSSL"
+        rap_feature_run=no
+        rap_feature_incs="#include <openssl/ssl.h>"
+        rap_feature_path=
+        rap_feature_libs="-lssl -lcrypto $RAP_LIBDL $RAP_LIBPTHREAD"
+        rap_feature_test="SSL_CTX_set_options(NULL, 0)"
         . auto/feature
 
-        if [ $rp_found = no ]; then
+        if [ $rap_found = no ]; then
 
             # FreeBSD port
 
-            rp_feature="OpenSSL library in /usr/local/"
-            rp_feature_path="/usr/local/include"
+            rap_feature="OpenSSL library in /usr/local/"
+            rap_feature_path="/usr/local/include"
 
-            if [ $RP_RPATH = YES ]; then
-                rp_feature_libs="-R/usr/local/lib -L/usr/local/lib -lssl -lcrypto"
+            if [ $RAP_RPATH = YES ]; then
+                rap_feature_libs="-R/usr/local/lib -L/usr/local/lib -lssl -lcrypto"
             else
-                rp_feature_libs="-L/usr/local/lib -lssl -lcrypto"
+                rap_feature_libs="-L/usr/local/lib -lssl -lcrypto"
             fi
 
-            rp_feature_libs="$rp_feature_libs $RP_LIBDL $RP_LIBPTHREAD"
+            rap_feature_libs="$rap_feature_libs $RAP_LIBDL $RAP_LIBPTHREAD"
 
             . auto/feature
         fi
 
-        if [ $rp_found = no ]; then
+        if [ $rap_found = no ]; then
 
             # NetBSD port
 
-            rp_feature="OpenSSL library in /usr/pkg/"
-            rp_feature_path="/usr/pkg/include"
+            rap_feature="OpenSSL library in /usr/pkg/"
+            rap_feature_path="/usr/pkg/include"
 
-            if [ $RP_RPATH = YES ]; then
-                rp_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lssl -lcrypto"
+            if [ $RAP_RPATH = YES ]; then
+                rap_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lssl -lcrypto"
             else
-                rp_feature_libs="-L/usr/pkg/lib -lssl -lcrypto"
+                rap_feature_libs="-L/usr/pkg/lib -lssl -lcrypto"
             fi
 
-            rp_feature_libs="$rp_feature_libs $RP_LIBDL $RP_LIBPTHREAD"
+            rap_feature_libs="$rap_feature_libs $RAP_LIBDL $RAP_LIBPTHREAD"
 
             . auto/feature
         fi
 
-        if [ $rp_found = no ]; then
+        if [ $rap_found = no ]; then
 
             # MacPorts
 
-            rp_feature="OpenSSL library in /opt/local/"
-            rp_feature_path="/opt/local/include"
+            rap_feature="OpenSSL library in /opt/local/"
+            rap_feature_path="/opt/local/include"
 
-            if [ $RP_RPATH = YES ]; then
-                rp_feature_libs="-R/opt/local/lib -L/opt/local/lib -lssl -lcrypto"
+            if [ $RAP_RPATH = YES ]; then
+                rap_feature_libs="-R/opt/local/lib -L/opt/local/lib -lssl -lcrypto"
             else
-                rp_feature_libs="-L/opt/local/lib -lssl -lcrypto"
+                rap_feature_libs="-L/opt/local/lib -lssl -lcrypto"
             fi
 
-            rp_feature_libs="$rp_feature_libs $RP_LIBDL $RP_LIBPTHREAD"
+            rap_feature_libs="$rap_feature_libs $RAP_LIBDL $RAP_LIBPTHREAD"
 
             . auto/feature
         fi
 
-        if [ $rp_found = yes ]; then
-            have=RP_SSL . auto/have
-            CORE_INCS="$CORE_INCS $rp_feature_path"
-            CORE_LIBS="$CORE_LIBS $rp_feature_libs"
+        if [ $rap_found = yes ]; then
+            have=RAP_SSL . auto/have
+            CORE_INCS="$CORE_INCS $rap_feature_path"
+            CORE_LIBS="$CORE_LIBS $rap_feature_libs"
             OPENSSL=YES
         fi
     fi

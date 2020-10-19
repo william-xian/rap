@@ -3,49 +3,49 @@
 # Copyright (C) Rap, Inc.
 
 
-case $rp_module_type in
-    HTTP_*) rp_var=HTTP ;;
-    *)      rp_var=$rp_module_type ;;
+case $rap_module_type in
+    HTTP_*) rap_var=HTTP ;;
+    *)      rap_var=$rap_module_type ;;
 esac
 
 
-if [ "$rp_module_link" = DYNAMIC ]; then
+if [ "$rap_module_link" = DYNAMIC ]; then
 
-    for rp_module in $rp_module_name; do
+    for rap_module in $rap_module_name; do
         # extract the first name
         break
     done
 
-    DYNAMIC_MODULES="$DYNAMIC_MODULES $rp_module"
-    eval ${rp_module}_SRCS=\"$rp_module_srcs\"
+    DYNAMIC_MODULES="$DYNAMIC_MODULES $rap_module"
+    eval ${rap_module}_SRCS=\"$rap_module_srcs\"
 
-    eval ${rp_module}_MODULES=\"$rp_module_name\"
+    eval ${rap_module}_MODULES=\"$rap_module_name\"
 
-    if [ -z "$rp_module_order" -a \
-         \( "$rp_module_type" = "HTTP_FILTER" \
-         -o "$rp_module_type" = "HTTP_AUX_FILTER" \) ]
+    if [ -z "$rap_module_order" -a \
+         \( "$rap_module_type" = "HTTP_FILTER" \
+         -o "$rap_module_type" = "HTTP_AUX_FILTER" \) ]
     then
-        eval ${rp_module}_ORDER=\"$rp_module_name \
-                                   rp_http_copy_filter_module\"
+        eval ${rap_module}_ORDER=\"$rap_module_name \
+                                   rap_http_copy_filter_module\"
     else
-        eval ${rp_module}_ORDER=\"$rp_module_order\"
+        eval ${rap_module}_ORDER=\"$rap_module_order\"
     fi
 
-    if test -n "$rp_module_incs"; then
-        CORE_INCS="$CORE_INCS $rp_module_incs"
+    if test -n "$rap_module_incs"; then
+        CORE_INCS="$CORE_INCS $rap_module_incs"
     fi
 
-    if test -n "$rp_module_deps"; then
-        RP_ADDON_DEPS="$RP_ADDON_DEPS $rp_module_deps"
+    if test -n "$rap_module_deps"; then
+        RAP_ADDON_DEPS="$RAP_ADDON_DEPS $rap_module_deps"
     fi
 
     libs=
-    for lib in $rp_module_libs
+    for lib in $rap_module_libs
     do
         case $lib in
 
             LIBXSLT | LIBGD | GEOIP | PERL)
-                libs="$libs \$RP_LIB_$lib"
+                libs="$libs \$RAP_LIB_$lib"
 
                 if eval [ "\$USE_${lib}" = NO ] ; then
                     eval USE_${lib}=DYNAMIC
@@ -66,24 +66,24 @@ if [ "$rp_module_link" = DYNAMIC ]; then
 
         esac
     done
-    eval ${rp_module}_LIBS=\'$libs\'
+    eval ${rap_module}_LIBS=\'$libs\'
 
-elif [ "$rp_module_link" = YES ]; then
+elif [ "$rap_module_link" = YES ]; then
 
-    eval ${rp_module_type}_MODULES=\"\$${rp_module_type}_MODULES \
-                                      $rp_module_name\"
+    eval ${rap_module_type}_MODULES=\"\$${rap_module_type}_MODULES \
+                                      $rap_module_name\"
 
-    eval ${rp_var}_SRCS=\"\$${rp_var}_SRCS $rp_module_srcs\"
+    eval ${rap_var}_SRCS=\"\$${rap_var}_SRCS $rap_module_srcs\"
 
-    if test -n "$rp_module_incs"; then
-        eval ${rp_var}_INCS=\"\$${rp_var}_INCS $rp_module_incs\"
+    if test -n "$rap_module_incs"; then
+        eval ${rap_var}_INCS=\"\$${rap_var}_INCS $rap_module_incs\"
     fi
 
-    if test -n "$rp_module_deps"; then
-        eval ${rp_var}_DEPS=\"\$${rp_var}_DEPS $rp_module_deps\"
+    if test -n "$rap_module_deps"; then
+        eval ${rap_var}_DEPS=\"\$${rap_var}_DEPS $rap_module_deps\"
     fi
 
-    for lib in $rp_module_libs
+    for lib in $rap_module_libs
     do
         case $lib in
 
@@ -102,22 +102,22 @@ elif [ "$rp_module_link" = YES ]; then
         esac
     done
 
-elif [ "$rp_module_link" = ADDON ]; then
+elif [ "$rap_module_link" = ADDON ]; then
 
-    eval ${rp_module_type}_MODULES=\"\$${rp_module_type}_MODULES \
-                                      $rp_module_name\"
+    eval ${rap_module_type}_MODULES=\"\$${rap_module_type}_MODULES \
+                                      $rap_module_name\"
 
-    RP_ADDON_SRCS="$RP_ADDON_SRCS $rp_module_srcs"
+    RAP_ADDON_SRCS="$RAP_ADDON_SRCS $rap_module_srcs"
 
-    if test -n "$rp_module_incs"; then
-        eval ${rp_var}_INCS=\"\$${rp_var}_INCS $rp_module_incs\"
+    if test -n "$rap_module_incs"; then
+        eval ${rap_var}_INCS=\"\$${rap_var}_INCS $rap_module_incs\"
     fi
 
-    if test -n "$rp_module_deps"; then
-        RP_ADDON_DEPS="$RP_ADDON_DEPS $rp_module_deps"
+    if test -n "$rap_module_deps"; then
+        RAP_ADDON_DEPS="$RAP_ADDON_DEPS $rap_module_deps"
     fi
 
-    for lib in $rp_module_libs
+    for lib in $rap_module_libs
     do
         case $lib in
 

@@ -45,10 +45,10 @@ if [ $USE_GEOIP != NO ]; then
     . auto/lib/geoip/conf
 fi
 
-if [ $RP_GOOGLE_PERFTOOLS = YES ]; then
+if [ $RAP_GOOGLE_PERFTOOLS = YES ]; then
     . auto/lib/google-perftools/conf
 fi
 
-if [ $RP_LIBATOMIC != NO ]; then
+if [ $RAP_LIBATOMIC != NO ]; then
     . auto/lib/libatomic/conf
 fi

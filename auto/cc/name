@@ -3,18 +3,18 @@
 # Copyright (C) Rap, Inc.
 
 
-if [ "$RP_PLATFORM" != win32 ]; then
+if [ "$RAP_PLATFORM" != win32 ]; then
 
-    rp_feature="C compiler"
-    rp_feature_name=
-    rp_feature_run=yes
-    rp_feature_incs=
-    rp_feature_path=
-    rp_feature_libs=
-    rp_feature_test=
+    rap_feature="C compiler"
+    rap_feature_name=
+    rap_feature_run=yes
+    rap_feature_incs=
+    rap_feature_path=
+    rap_feature_libs=
+    rap_feature_test=
     . auto/feature
 
-    if [ $rp_found = no ]; then
+    if [ $rap_found = no ]; then
         echo
         echo $0: error: C compiler $CC is not found
         echo
@@ -25,46 +25,46 @@ fi
 
 
 if [ "$CC" = cl ]; then
-    RP_CC_NAME=msvc
+    RAP_CC_NAME=msvc
     echo " + using Microsoft Visual C++ compiler"
 
 elif [ "$CC" = wcl386 ]; then
-    RP_CC_NAME=owc
+    RAP_CC_NAME=owc
     echo " + using Open Watcom C compiler"
 
 elif [ "$CC" = bcc32 ]; then
-    RP_CC_NAME=bcc
+    RAP_CC_NAME=bcc
     echo " + using Borland C++ compiler"
 
 elif `$CC -V 2>&1 | grep '^Intel(R) C' >/dev/null 2>&1`; then
-    RP_CC_NAME=icc
+    RAP_CC_NAME=icc
     echo " + using Intel C++ compiler"
 
 elif `$CC -v 2>&1 | grep 'gcc version' >/dev/null 2>&1`; then
-    RP_CC_NAME=gcc
+    RAP_CC_NAME=gcc
     echo " + using GNU C compiler"
 
 elif `$CC -v 2>&1 | grep 'clang version' >/dev/null 2>&1`; then
-    RP_CC_NAME=clang
+    RAP_CC_NAME=clang
     echo " + using Clang C compiler"
 
 elif `$CC -v 2>&1 | grep 'LLVM version' >/dev/null 2>&1`; then
-    RP_CC_NAME=clang
+    RAP_CC_NAME=clang
     echo " + using Clang C compiler"
 
 elif `$CC -V 2>&1 | grep 'Sun C' >/dev/null 2>&1`; then
-    RP_CC_NAME=sunc
+    RAP_CC_NAME=sunc
     echo " + using Sun C compiler"
 
 elif `$CC -V 2>&1 | grep '^Compaq C' >/dev/null 2>&1`; then
-    RP_CC_NAME=ccc
+    RAP_CC_NAME=ccc
     echo " + using Compaq C compiler"
 
 elif `$CC -V 2>&1 | grep '^aCC: ' >/dev/null 2>&1`; then
-    RP_CC_NAME=acc
+    RAP_CC_NAME=acc
     echo " + using HP aC++ compiler"
 
 else
-    RP_CC_NAME=unknown
+    RAP_CC_NAME=unknown
 
 fi

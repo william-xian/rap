@@ -40,10 +40,10 @@ CFLAGS="$CFLAGS -q"
 
 
 # precompiled headers
-CORE_DEPS="$CORE_DEPS $RP_OBJS/rp_config.csm"
-RP_PCH="$RP_OBJS/rp_config.csm"
-RP_BUILD_PCH="-H=$RP_OBJS/rp_config.csm"
-RP_USE_PCH="-Hu -H=$RP_OBJS/rp_config.csm"
+CORE_DEPS="$CORE_DEPS $RAP_OBJS/rap_config.csm"
+RAP_PCH="$RAP_OBJS/rap_config.csm"
+RAP_BUILD_PCH="-H=$RAP_OBJS/rap_config.csm"
+RAP_USE_PCH="-Hu -H=$RAP_OBJS/rap_config.csm"
 
 
 # Win32 GUI mode application
@@ -51,21 +51,21 @@ RP_USE_PCH="-Hu -H=$RP_OBJS/rp_config.csm"
 
 
 # the resource file
-RP_RES="$RP_OBJS/rap.res"
-RP_RCC="brcc32 -fo$RP_OBJS/rap.res \$(CORE_INCS) $RP_WIN32_RC"
+RAP_RES="$RAP_OBJS/rap.res"
+RAP_RCC="brcc32 -fo$RAP_OBJS/rap.res \$(CORE_INCS) $RAP_WIN32_RC"
 # the pragma allows to link the resource file using bcc32 and
 # to avoid the direct ilink32 calling and the c0w32.obj's WinMain/main problem
-RP_PRAGMA="#pragma resource \"$RP_OBJS/rap.res\""
+RAP_PRAGMA="#pragma resource \"$RAP_OBJS/rap.res\""
 
 
-rp_include_opt="-I"
-rp_objout="-o"
-rp_binout="-e"
-rp_objext="obj"
+rap_include_opt="-I"
+rap_objout="-o"
+rap_binout="-e"
+rap_objext="obj"
 
-rp_long_start='@&&|
+rap_long_start='@&&|
 	'
-rp_long_end='|'
+rap_long_end='|'
 
-rp_regex_dirsep='\\'
-rp_dirsep="\\"
+rap_regex_dirsep='\\'
+rap_dirsep="\\"

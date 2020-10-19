@@ -3,23 +3,23 @@
 # Copyright (C) Rap, Inc.
 
 
-if [ $RP_LIBATOMIC != YES ]; then
+if [ $RAP_LIBATOMIC != YES ]; then
 
-    have=RP_HAVE_LIBATOMIC . auto/have
-    CORE_INCS="$CORE_INCS $RP_LIBATOMIC/src"
-    LINK_DEPS="$LINK_DEPS $RP_LIBATOMIC/src/libatomic_ops.a"
-    CORE_LIBS="$CORE_LIBS $RP_LIBATOMIC/src/libatomic_ops.a"
+    have=RAP_HAVE_LIBATOMIC . auto/have
+    CORE_INCS="$CORE_INCS $RAP_LIBATOMIC/src"
+    LINK_DEPS="$LINK_DEPS $RAP_LIBATOMIC/src/libatomic_ops.a"
+    CORE_LIBS="$CORE_LIBS $RAP_LIBATOMIC/src/libatomic_ops.a"
 
 else
 
-    rp_feature="atomic_ops library"
-    rp_feature_name=RP_HAVE_LIBATOMIC
-    rp_feature_run=yes
-    rp_feature_incs="#define AO_REQUIRE_CAS
+    rap_feature="atomic_ops library"
+    rap_feature_name=RAP_HAVE_LIBATOMIC
+    rap_feature_run=yes
+    rap_feature_incs="#define AO_REQUIRE_CAS
                       #include <atomic_ops.h>"
-    rp_feature_path=
-    rp_feature_libs="-latomic_ops"
-    rp_feature_test="long  n = 0;
+    rap_feature_path=
+    rap_feature_libs="-latomic_ops"
+    rap_feature_test="long  n = 0;
                       if (!AO_compare_and_swap(&n, 0, 1))
                           return 1;
                       if (AO_fetch_and_add(&n, 1) != 1)
@@ -29,8 +29,8 @@ else
                       AO_nop();"
     . auto/feature
 
-    if [ $rp_found = yes ]; then
-        CORE_LIBS="$CORE_LIBS $rp_feature_libs"
+    if [ $rap_found = yes ]; then
+        CORE_LIBS="$CORE_LIBS $rap_feature_libs"
     else
 
 cat << END

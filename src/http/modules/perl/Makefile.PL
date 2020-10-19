@@ -13,20 +13,20 @@ WriteMakefile(
     ABSTRACT_FROM     => 'rap.pm',     # retrieve abstract from module
     AUTHOR            => 'Igor Sysoev',
 
-    CCFLAGS           => "$ENV{RP_PM_CFLAGS}",
+    CCFLAGS           => "$ENV{RAP_PM_CFLAGS}",
     OPTIMIZE          => '-O',
 
-    LDDLFLAGS         => "$ENV{RP_PM_LDFLAGS}",
+    LDDLFLAGS         => "$ENV{RAP_PM_LDFLAGS}",
 
     INC               => join(" ", map {
                              m#^/# ? "-I $_" : "-I ../../../../../$_"
-                         } (split /\s+/, $ENV{RP_INCS})),
+                         } (split /\s+/, $ENV{RAP_INCS})),
 
     depend => {
         'rap.c'     => join(" ", map {
                              m#^/# ? $_ : "../../../../../$_"
-                         } (split(/\s+/, $ENV{RP_DEPS}),
-                            "src/http/modules/perl/rp_http_perl_module.h"))
+                         } (split(/\s+/, $ENV{RAP_DEPS}),
+                            "src/http/modules/perl/rap_http_perl_module.h"))
     },
 
     PM => {

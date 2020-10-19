@@ -5,36 +5,36 @@
 
 help=no
 
-RP_PREFIX=
-RP_SBIN_PATH=
-RP_MODULES_PATH=
-RP_CONF_PREFIX=
-RP_CONF_PATH=
-RP_ERROR_LOG_PATH=
-RP_PID_PATH=
-RP_LOCK_PATH=
-RP_USER=
-RP_GROUP=
-RP_BUILD=
+RAP_PREFIX=
+RAP_SBIN_PATH=
+RAP_MODULES_PATH=
+RAP_CONF_PREFIX=
+RAP_CONF_PATH=
+RAP_ERROR_LOG_PATH=
+RAP_PID_PATH=
+RAP_LOCK_PATH=
+RAP_USER=
+RAP_GROUP=
+RAP_BUILD=
 
 CC=${CC:-cc}
 CPP=
-RP_OBJS=objs
+RAP_OBJS=objs
 
-RP_DEBUG=NO
-RP_CC_OPT=
-RP_LD_OPT=
+RAP_DEBUG=NO
+RAP_CC_OPT=
+RAP_LD_OPT=
 CPU=NO
 
-RP_RPATH=NO
+RAP_RPATH=NO
 
-RP_TEST_BUILD_DEVPOLL=NO
-RP_TEST_BUILD_EVENTPORT=NO
-RP_TEST_BUILD_EPOLL=NO
-RP_TEST_BUILD_SOLARIS_SENDFILEV=NO
+RAP_TEST_BUILD_DEVPOLL=NO
+RAP_TEST_BUILD_EVENTPORT=NO
+RAP_TEST_BUILD_EPOLL=NO
+RAP_TEST_BUILD_SOLARIS_SENDFILEV=NO
 
-RP_PLATFORM=
-RP_WINE=
+RAP_PLATFORM=
+RAP_WINE=
 
 EVENT_FOUND=NO
 
@@ -43,16 +43,16 @@ EVENT_POLL=NO
 
 USE_THREADS=NO
 
-RP_FILE_AIO=NO
+RAP_FILE_AIO=NO
 
 HTTP=YES
 
-RP_HTTP_LOG_PATH=
-RP_HTTP_CLIENT_TEMP_PATH=
-RP_HTTP_PROXY_TEMP_PATH=
-RP_HTTP_FASTCGI_TEMP_PATH=
-RP_HTTP_UWSGI_TEMP_PATH=
-RP_HTTP_SCGI_TEMP_PATH=
+RAP_HTTP_LOG_PATH=
+RAP_HTTP_CLIENT_TEMP_PATH=
+RAP_HTTP_PROXY_TEMP_PATH=
+RAP_HTTP_FASTCGI_TEMP_PATH=
+RAP_HTTP_UWSGI_TEMP_PATH=
+RAP_HTTP_SCGI_TEMP_PATH=
 
 HTTP_CACHE=YES
 HTTP_CHARSET=YES
@@ -132,11 +132,11 @@ STREAM_SSL_PREREAD=NO
 
 DYNAMIC_MODULES=
 
-RP_ADDONS=
-RP_ADDON_DEPS=
+RAP_ADDONS=
+RAP_ADDON_DEPS=
 DYNAMIC_ADDONS=
 
-RP_COMPAT=NO
+RAP_COMPAT=NO
 
 USE_PCRE=NO
 PCRE=NONE
@@ -153,20 +153,20 @@ ZLIB_OPT=
 ZLIB_ASM=NO
 
 USE_PERL=NO
-RP_PERL=perl
+RAP_PERL=perl
 
 USE_LIBXSLT=NO
 USE_LIBGD=NO
 USE_GEOIP=NO
 
-RP_GOOGLE_PERFTOOLS=NO
-RP_CPP_TEST=NO
+RAP_GOOGLE_PERFTOOLS=NO
+RAP_CPP_TEST=NO
 
-RP_LIBATOMIC=NO
+RAP_LIBATOMIC=NO
 
-RP_CPU_CACHE_LINE=
+RAP_CPU_CACHE_LINE=
 
-RP_POST_CONF_MSG=
+RAP_POST_CONF_MSG=
 
 opt=
 
@@ -182,21 +182,21 @@ do
     case "$option" in
         --help)                          help=yes                   ;;
 
-        --prefix=)                       RP_PREFIX="!"             ;;
-        --prefix=*)                      RP_PREFIX="$value"        ;;
-        --sbin-path=*)                   RP_SBIN_PATH="$value"     ;;
-        --modules-path=*)                RP_MODULES_PATH="$value"  ;;
-        --conf-path=*)                   RP_CONF_PATH="$value"     ;;
-        --error-log-path=*)              RP_ERROR_LOG_PATH="$value";;
-        --pid-path=*)                    RP_PID_PATH="$value"      ;;
-        --lock-path=*)                   RP_LOCK_PATH="$value"     ;;
-        --user=*)                        RP_USER="$value"          ;;
-        --group=*)                       RP_GROUP="$value"         ;;
+        --prefix=)                       RAP_PREFIX="!"             ;;
+        --prefix=*)                      RAP_PREFIX="$value"        ;;
+        --sbin-path=*)                   RAP_SBIN_PATH="$value"     ;;
+        --modules-path=*)                RAP_MODULES_PATH="$value"  ;;
+        --conf-path=*)                   RAP_CONF_PATH="$value"     ;;
+        --error-log-path=*)              RAP_ERROR_LOG_PATH="$value";;
+        --pid-path=*)                    RAP_PID_PATH="$value"      ;;
+        --lock-path=*)                   RAP_LOCK_PATH="$value"     ;;
+        --user=*)                        RAP_USER="$value"          ;;
+        --group=*)                       RAP_GROUP="$value"         ;;
 
-        --crossbuild=*)                  RP_PLATFORM="$value"      ;;
+        --crossbuild=*)                  RAP_PLATFORM="$value"      ;;
 
-        --build=*)                       RP_BUILD="$value"         ;;
-        --builddir=*)                    RP_OBJS="$value"          ;;
+        --build=*)                       RAP_BUILD="$value"         ;;
+        --builddir=*)                    RAP_OBJS="$value"          ;;
 
         --with-select_module)            EVENT_SELECT=YES           ;;
         --without-select_module)         EVENT_SELECT=NONE          ;;
@@ -205,22 +205,22 @@ do
 
         --with-threads)                  USE_THREADS=YES            ;;
 
-        --with-file-aio)                 RP_FILE_AIO=YES           ;;
+        --with-file-aio)                 RAP_FILE_AIO=YES           ;;
 
         --with-ipv6)
-            RP_POST_CONF_MSG="$RP_POST_CONF_MSG
+            RAP_POST_CONF_MSG="$RAP_POST_CONF_MSG
 $0: warning: the \"--with-ipv6\" option is deprecated"
         ;;
 
         --without-http)                  HTTP=NO                    ;;
         --without-http-cache)            HTTP_CACHE=NO              ;;
 
-        --http-log-path=*)               RP_HTTP_LOG_PATH="$value" ;;
-        --http-client-body-temp-path=*)  RP_HTTP_CLIENT_TEMP_PATH="$value" ;;
-        --http-proxy-temp-path=*)        RP_HTTP_PROXY_TEMP_PATH="$value" ;;
-        --http-fastcgi-temp-path=*)      RP_HTTP_FASTCGI_TEMP_PATH="$value" ;;
-        --http-uwsgi-temp-path=*)        RP_HTTP_UWSGI_TEMP_PATH="$value" ;;
-        --http-scgi-temp-path=*)         RP_HTTP_SCGI_TEMP_PATH="$value" ;;
+        --http-log-path=*)               RAP_HTTP_LOG_PATH="$value" ;;
+        --http-client-body-temp-path=*)  RAP_HTTP_CLIENT_TEMP_PATH="$value" ;;
+        --http-proxy-temp-path=*)        RAP_HTTP_PROXY_TEMP_PATH="$value" ;;
+        --http-fastcgi-temp-path=*)      RAP_HTTP_FASTCGI_TEMP_PATH="$value" ;;
+        --http-uwsgi-temp-path=*)        RAP_HTTP_UWSGI_TEMP_PATH="$value" ;;
+        --http-scgi-temp-path=*)         RAP_HTTP_SCGI_TEMP_PATH="$value" ;;
 
         --with-http_ssl_module)          HTTP_SSL=YES               ;;
         --with-http_v2_module)           HTTP_V2=YES                ;;
@@ -281,8 +281,8 @@ $0: warning: the \"--with-ipv6\" option is deprecated"
 
         --with-http_perl_module)         HTTP_PERL=YES              ;;
         --with-http_perl_module=dynamic) HTTP_PERL=DYNAMIC          ;;
-        --with-perl_modules_path=*)      RP_PERL_MODULES="$value"  ;;
-        --with-perl=*)                   RP_PERL="$value"          ;;
+        --with-perl_modules_path=*)      RAP_PERL_MODULES="$value"  ;;
+        --with-perl=*)                   RAP_PERL="$value"          ;;
 
         # STUB
         --with-http_stub_status_module)  HTTP_STUB_STATUS=YES       ;;
@@ -293,13 +293,13 @@ $0: warning: the \"--with-ipv6\" option is deprecated"
         # STUB
         --with-imap)
             MAIL=YES
-            RP_POST_CONF_MSG="$RP_POST_CONF_MSG
+            RAP_POST_CONF_MSG="$RAP_POST_CONF_MSG
 $0: warning: the \"--with-imap\" option is deprecated, \
 use the \"--with-mail\" option instead"
         ;;
         --with-imap_ssl_module)
             MAIL_SSL=YES
-            RP_POST_CONF_MSG="$RP_POST_CONF_MSG
+            RAP_POST_CONF_MSG="$RAP_POST_CONF_MSG
 $0: warning: the \"--with-imap_ssl_module\" option is deprecated, \
 use the \"--with-mail_ssl_module\" option instead"
         ;;
@@ -333,20 +333,20 @@ use the \"--with-mail_ssl_module\" option instead"
         --without-stream_upstream_zone_module)
                                          STREAM_UPSTREAM_ZONE=NO    ;;
 
-        --with-google_perftools_module)  RP_GOOGLE_PERFTOOLS=YES   ;;
-        --with-cpp_test_module)          RP_CPP_TEST=YES           ;;
+        --with-google_perftools_module)  RAP_GOOGLE_PERFTOOLS=YES   ;;
+        --with-cpp_test_module)          RAP_CPP_TEST=YES           ;;
 
-        --add-module=*)                  RP_ADDONS="$RP_ADDONS $value" ;;
+        --add-module=*)                  RAP_ADDONS="$RAP_ADDONS $value" ;;
         --add-dynamic-module=*)          DYNAMIC_ADDONS="$DYNAMIC_ADDONS $value" ;;
 
-        --with-compat)                   RP_COMPAT=YES             ;;
+        --with-compat)                   RAP_COMPAT=YES             ;;
 
         --with-cc=*)                     CC="$value"                ;;
         --with-cpp=*)                    CPP="$value"               ;;
-        --with-cc-opt=*)                 RP_CC_OPT="$value"        ;;
-        --with-ld-opt=*)                 RP_LD_OPT="$value"        ;;
+        --with-cc-opt=*)                 RAP_CC_OPT="$value"        ;;
+        --with-ld-opt=*)                 RAP_LD_OPT="$value"        ;;
         --with-cpu-opt=*)                CPU="$value"               ;;
-        --with-debug)                    RP_DEBUG=YES              ;;
+        --with-debug)                    RAP_DEBUG=YES              ;;
 
         --without-pcre)                  USE_PCRE=DISABLED          ;;
         --with-pcre)                     USE_PCRE=YES               ;;
@@ -358,28 +358,28 @@ use the \"--with-mail_ssl_module\" option instead"
         --with-openssl-opt=*)            OPENSSL_OPT="$value"       ;;
 
         --with-md5=*)
-            RP_POST_CONF_MSG="$RP_POST_CONF_MSG
+            RAP_POST_CONF_MSG="$RAP_POST_CONF_MSG
 $0: warning: the \"--with-md5\" option is deprecated"
         ;;
         --with-md5-opt=*)
-            RP_POST_CONF_MSG="$RP_POST_CONF_MSG
+            RAP_POST_CONF_MSG="$RAP_POST_CONF_MSG
 $0: warning: the \"--with-md5-opt\" option is deprecated"
         ;;
         --with-md5-asm)
-            RP_POST_CONF_MSG="$RP_POST_CONF_MSG
+            RAP_POST_CONF_MSG="$RAP_POST_CONF_MSG
 $0: warning: the \"--with-md5-asm\" option is deprecated"
         ;;
 
         --with-sha1=*)
-            RP_POST_CONF_MSG="$RP_POST_CONF_MSG
+            RAP_POST_CONF_MSG="$RAP_POST_CONF_MSG
 $0: warning: the \"--with-sha1\" option is deprecated"
         ;;
         --with-sha1-opt=*)
-            RP_POST_CONF_MSG="$RP_POST_CONF_MSG
+            RAP_POST_CONF_MSG="$RAP_POST_CONF_MSG
 $0: warning: the \"--with-sha1-opt\" option is deprecated"
         ;;
         --with-sha1-asm)
-            RP_POST_CONF_MSG="$RP_POST_CONF_MSG
+            RAP_POST_CONF_MSG="$RAP_POST_CONF_MSG
 $0: warning: the \"--with-sha1-asm\" option is deprecated"
         ;;
 
@@ -387,13 +387,13 @@ $0: warning: the \"--with-sha1-asm\" option is deprecated"
         --with-zlib-opt=*)               ZLIB_OPT="$value"          ;;
         --with-zlib-asm=*)               ZLIB_ASM="$value"          ;;
 
-        --with-libatomic)                RP_LIBATOMIC=YES          ;;
-        --with-libatomic=*)              RP_LIBATOMIC="$value"     ;;
+        --with-libatomic)                RAP_LIBATOMIC=YES          ;;
+        --with-libatomic=*)              RAP_LIBATOMIC="$value"     ;;
 
-        --test-build-devpoll)            RP_TEST_BUILD_DEVPOLL=YES ;;
-        --test-build-eventport)          RP_TEST_BUILD_EVENTPORT=YES ;;
-        --test-build-epoll)              RP_TEST_BUILD_EPOLL=YES   ;;
-        --test-build-solaris-sendfilev)  RP_TEST_BUILD_SOLARIS_SENDFILEV=YES ;;
+        --test-build-devpoll)            RAP_TEST_BUILD_DEVPOLL=YES ;;
+        --test-build-eventport)          RAP_TEST_BUILD_EVENTPORT=YES ;;
+        --test-build-epoll)              RAP_TEST_BUILD_EPOLL=YES   ;;
+        --test-build-solaris-sendfilev)  RAP_TEST_BUILD_SOLARIS_SENDFILEV=YES ;;
 
         *)
             echo "$0: error: invalid option \"$option\""
@@ -403,7 +403,7 @@ $0: warning: the \"--with-sha1-asm\" option is deprecated"
 done
 
 
-RP_CONFIGURE="$opt"
+RAP_CONFIGURE="$opt"
 
 
 if [ $help = yes ]; then
@@ -437,68 +437,68 @@ cat << END
 
   --with-file-aio                    enable file AIO support
 
-  --with-http_ssl_module             enable rp_http_ssl_module
-  --with-http_v2_module              enable rp_http_v2_module
-  --with-http_realip_module          enable rp_http_realip_module
-  --with-http_addition_module        enable rp_http_addition_module
-  --with-http_xslt_module            enable rp_http_xslt_module
-  --with-http_xslt_module=dynamic    enable dynamic rp_http_xslt_module
-  --with-http_image_filter_module    enable rp_http_image_filter_module
+  --with-http_ssl_module             enable rap_http_ssl_module
+  --with-http_v2_module              enable rap_http_v2_module
+  --with-http_realip_module          enable rap_http_realip_module
+  --with-http_addition_module        enable rap_http_addition_module
+  --with-http_xslt_module            enable rap_http_xslt_module
+  --with-http_xslt_module=dynamic    enable dynamic rap_http_xslt_module
+  --with-http_image_filter_module    enable rap_http_image_filter_module
   --with-http_image_filter_module=dynamic
-                                     enable dynamic rp_http_image_filter_module
-  --with-http_geoip_module           enable rp_http_geoip_module
-  --with-http_geoip_module=dynamic   enable dynamic rp_http_geoip_module
-  --with-http_sub_module             enable rp_http_sub_module
-  --with-http_dav_module             enable rp_http_dav_module
-  --with-http_flv_module             enable rp_http_flv_module
-  --with-http_mp4_module             enable rp_http_mp4_module
-  --with-http_gunzip_module          enable rp_http_gunzip_module
-  --with-http_gzip_static_module     enable rp_http_gzip_static_module
-  --with-http_auth_request_module    enable rp_http_auth_request_module
-  --with-http_random_index_module    enable rp_http_random_index_module
-  --with-http_secure_link_module     enable rp_http_secure_link_module
-  --with-http_degradation_module     enable rp_http_degradation_module
-  --with-http_slice_module           enable rp_http_slice_module
-  --with-http_stub_status_module     enable rp_http_stub_status_module
+                                     enable dynamic rap_http_image_filter_module
+  --with-http_geoip_module           enable rap_http_geoip_module
+  --with-http_geoip_module=dynamic   enable dynamic rap_http_geoip_module
+  --with-http_sub_module             enable rap_http_sub_module
+  --with-http_dav_module             enable rap_http_dav_module
+  --with-http_flv_module             enable rap_http_flv_module
+  --with-http_mp4_module             enable rap_http_mp4_module
+  --with-http_gunzip_module          enable rap_http_gunzip_module
+  --with-http_gzip_static_module     enable rap_http_gzip_static_module
+  --with-http_auth_request_module    enable rap_http_auth_request_module
+  --with-http_random_index_module    enable rap_http_random_index_module
+  --with-http_secure_link_module     enable rap_http_secure_link_module
+  --with-http_degradation_module     enable rap_http_degradation_module
+  --with-http_slice_module           enable rap_http_slice_module
+  --with-http_stub_status_module     enable rap_http_stub_status_module
 
-  --without-http_charset_module      disable rp_http_charset_module
-  --without-http_gzip_module         disable rp_http_gzip_module
-  --without-http_ssi_module          disable rp_http_ssi_module
-  --without-http_userid_module       disable rp_http_userid_module
-  --without-http_access_module       disable rp_http_access_module
-  --without-http_auth_basic_module   disable rp_http_auth_basic_module
-  --without-http_mirror_module       disable rp_http_mirror_module
-  --without-http_autoindex_module    disable rp_http_autoindex_module
-  --without-http_geo_module          disable rp_http_geo_module
-  --without-http_map_module          disable rp_http_map_module
-  --without-http_split_clients_module disable rp_http_split_clients_module
-  --without-http_referer_module      disable rp_http_referer_module
-  --without-http_rewrite_module      disable rp_http_rewrite_module
-  --without-http_proxy_module        disable rp_http_proxy_module
-  --without-http_fastcgi_module      disable rp_http_fastcgi_module
-  --without-http_uwsgi_module        disable rp_http_uwsgi_module
-  --without-http_scgi_module         disable rp_http_scgi_module
-  --without-http_grpc_module         disable rp_http_grpc_module
-  --without-http_memcached_module    disable rp_http_memcached_module
-  --without-http_limit_conn_module   disable rp_http_limit_conn_module
-  --without-http_limit_req_module    disable rp_http_limit_req_module
-  --without-http_empty_gif_module    disable rp_http_empty_gif_module
-  --without-http_browser_module      disable rp_http_browser_module
+  --without-http_charset_module      disable rap_http_charset_module
+  --without-http_gzip_module         disable rap_http_gzip_module
+  --without-http_ssi_module          disable rap_http_ssi_module
+  --without-http_userid_module       disable rap_http_userid_module
+  --without-http_access_module       disable rap_http_access_module
+  --without-http_auth_basic_module   disable rap_http_auth_basic_module
+  --without-http_mirror_module       disable rap_http_mirror_module
+  --without-http_autoindex_module    disable rap_http_autoindex_module
+  --without-http_geo_module          disable rap_http_geo_module
+  --without-http_map_module          disable rap_http_map_module
+  --without-http_split_clients_module disable rap_http_split_clients_module
+  --without-http_referer_module      disable rap_http_referer_module
+  --without-http_rewrite_module      disable rap_http_rewrite_module
+  --without-http_proxy_module        disable rap_http_proxy_module
+  --without-http_fastcgi_module      disable rap_http_fastcgi_module
+  --without-http_uwsgi_module        disable rap_http_uwsgi_module
+  --without-http_scgi_module         disable rap_http_scgi_module
+  --without-http_grpc_module         disable rap_http_grpc_module
+  --without-http_memcached_module    disable rap_http_memcached_module
+  --without-http_limit_conn_module   disable rap_http_limit_conn_module
+  --without-http_limit_req_module    disable rap_http_limit_req_module
+  --without-http_empty_gif_module    disable rap_http_empty_gif_module
+  --without-http_browser_module      disable rap_http_browser_module
   --without-http_upstream_hash_module
-                                     disable rp_http_upstream_hash_module
+                                     disable rap_http_upstream_hash_module
   --without-http_upstream_ip_hash_module
-                                     disable rp_http_upstream_ip_hash_module
+                                     disable rap_http_upstream_ip_hash_module
   --without-http_upstream_least_conn_module
-                                     disable rp_http_upstream_least_conn_module
+                                     disable rap_http_upstream_least_conn_module
   --without-http_upstream_random_module
-                                     disable rp_http_upstream_random_module
+                                     disable rap_http_upstream_random_module
   --without-http_upstream_keepalive_module
-                                     disable rp_http_upstream_keepalive_module
+                                     disable rap_http_upstream_keepalive_module
   --without-http_upstream_zone_module
-                                     disable rp_http_upstream_zone_module
+                                     disable rap_http_upstream_zone_module
 
-  --with-http_perl_module            enable rp_http_perl_module
-  --with-http_perl_module=dynamic    enable dynamic rp_http_perl_module
+  --with-http_perl_module            enable rap_http_perl_module
+  --with-http_perl_module=dynamic    enable dynamic rap_http_perl_module
   --with-perl_modules_path=PATH      set Perl modules path
   --with-perl=PATH                   set perl binary pathname
 
@@ -519,36 +519,36 @@ cat << END
 
   --with-mail                        enable POP3/IMAP4/SMTP proxy module
   --with-mail=dynamic                enable dynamic POP3/IMAP4/SMTP proxy module
-  --with-mail_ssl_module             enable rp_mail_ssl_module
-  --without-mail_pop3_module         disable rp_mail_pop3_module
-  --without-mail_imap_module         disable rp_mail_imap_module
-  --without-mail_smtp_module         disable rp_mail_smtp_module
+  --with-mail_ssl_module             enable rap_mail_ssl_module
+  --without-mail_pop3_module         disable rap_mail_pop3_module
+  --without-mail_imap_module         disable rap_mail_imap_module
+  --without-mail_smtp_module         disable rap_mail_smtp_module
 
   --with-stream                      enable TCP/UDP proxy module
   --with-stream=dynamic              enable dynamic TCP/UDP proxy module
-  --with-stream_ssl_module           enable rp_stream_ssl_module
-  --with-stream_realip_module        enable rp_stream_realip_module
-  --with-stream_geoip_module         enable rp_stream_geoip_module
-  --with-stream_geoip_module=dynamic enable dynamic rp_stream_geoip_module
-  --with-stream_ssl_preread_module   enable rp_stream_ssl_preread_module
-  --without-stream_limit_conn_module disable rp_stream_limit_conn_module
-  --without-stream_access_module     disable rp_stream_access_module
-  --without-stream_geo_module        disable rp_stream_geo_module
-  --without-stream_map_module        disable rp_stream_map_module
+  --with-stream_ssl_module           enable rap_stream_ssl_module
+  --with-stream_realip_module        enable rap_stream_realip_module
+  --with-stream_geoip_module         enable rap_stream_geoip_module
+  --with-stream_geoip_module=dynamic enable dynamic rap_stream_geoip_module
+  --with-stream_ssl_preread_module   enable rap_stream_ssl_preread_module
+  --without-stream_limit_conn_module disable rap_stream_limit_conn_module
+  --without-stream_access_module     disable rap_stream_access_module
+  --without-stream_geo_module        disable rap_stream_geo_module
+  --without-stream_map_module        disable rap_stream_map_module
   --without-stream_split_clients_module
-                                     disable rp_stream_split_clients_module
-  --without-stream_return_module     disable rp_stream_return_module
+                                     disable rap_stream_split_clients_module
+  --without-stream_return_module     disable rap_stream_return_module
   --without-stream_upstream_hash_module
-                                     disable rp_stream_upstream_hash_module
+                                     disable rap_stream_upstream_hash_module
   --without-stream_upstream_least_conn_module
-                                     disable rp_stream_upstream_least_conn_module
+                                     disable rap_stream_upstream_least_conn_module
   --without-stream_upstream_random_module
-                                     disable rp_stream_upstream_random_module
+                                     disable rap_stream_upstream_random_module
   --without-stream_upstream_zone_module
-                                     disable rp_stream_upstream_zone_module
+                                     disable rap_stream_upstream_zone_module
 
-  --with-google_perftools_module     enable rp_google_perftools_module
-  --with-cpp_test_module             enable rp_cpp_test_module
+  --with-google_perftools_module     enable rap_google_perftools_module
+  --with-cpp_test_module             enable rap_cpp_test_module
 
   --add-module=PATH                  enable external module
   --add-dynamic-module=PATH          enable dynamic external module
@@ -589,32 +589,32 @@ END
 fi
 
 
-if [ ".$RP_PLATFORM" = ".win32" ]; then
-    RP_WINE=$WINE
+if [ ".$RAP_PLATFORM" = ".win32" ]; then
+    RAP_WINE=$WINE
 fi
 
 
-RP_SBIN_PATH=${RP_SBIN_PATH:-sbin/rap}
-RP_MODULES_PATH=${RP_MODULES_PATH:-modules}
-RP_CONF_PATH=${RP_CONF_PATH:-conf/rap.conf}
-RP_CONF_PREFIX=`dirname $RP_CONF_PATH`
-RP_PID_PATH=${RP_PID_PATH:-logs/rap.pid}
-RP_LOCK_PATH=${RP_LOCK_PATH:-logs/rap.lock}
+RAP_SBIN_PATH=${RAP_SBIN_PATH:-sbin/rap}
+RAP_MODULES_PATH=${RAP_MODULES_PATH:-modules}
+RAP_CONF_PATH=${RAP_CONF_PATH:-conf/rap.conf}
+RAP_CONF_PREFIX=`dirname $RAP_CONF_PATH`
+RAP_PID_PATH=${RAP_PID_PATH:-logs/rap.pid}
+RAP_LOCK_PATH=${RAP_LOCK_PATH:-logs/rap.lock}
 
-if [ ".$RP_ERROR_LOG_PATH" = ".stderr" ]; then
-    RP_ERROR_LOG_PATH=
+if [ ".$RAP_ERROR_LOG_PATH" = ".stderr" ]; then
+    RAP_ERROR_LOG_PATH=
 else
-    RP_ERROR_LOG_PATH=${RP_ERROR_LOG_PATH:-logs/error.log}
+    RAP_ERROR_LOG_PATH=${RAP_ERROR_LOG_PATH:-logs/error.log}
 fi
 
-RP_HTTP_LOG_PATH=${RP_HTTP_LOG_PATH:-logs/access.log}
-RP_HTTP_CLIENT_TEMP_PATH=${RP_HTTP_CLIENT_TEMP_PATH:-client_body_temp}
-RP_HTTP_PROXY_TEMP_PATH=${RP_HTTP_PROXY_TEMP_PATH:-proxy_temp}
-RP_HTTP_FASTCGI_TEMP_PATH=${RP_HTTP_FASTCGI_TEMP_PATH:-fastcgi_temp}
-RP_HTTP_UWSGI_TEMP_PATH=${RP_HTTP_UWSGI_TEMP_PATH:-uwsgi_temp}
-RP_HTTP_SCGI_TEMP_PATH=${RP_HTTP_SCGI_TEMP_PATH:-scgi_temp}
+RAP_HTTP_LOG_PATH=${RAP_HTTP_LOG_PATH:-logs/access.log}
+RAP_HTTP_CLIENT_TEMP_PATH=${RAP_HTTP_CLIENT_TEMP_PATH:-client_body_temp}
+RAP_HTTP_PROXY_TEMP_PATH=${RAP_HTTP_PROXY_TEMP_PATH:-proxy_temp}
+RAP_HTTP_FASTCGI_TEMP_PATH=${RAP_HTTP_FASTCGI_TEMP_PATH:-fastcgi_temp}
+RAP_HTTP_UWSGI_TEMP_PATH=${RAP_HTTP_UWSGI_TEMP_PATH:-uwsgi_temp}
+RAP_HTTP_SCGI_TEMP_PATH=${RAP_HTTP_SCGI_TEMP_PATH:-scgi_temp}
 
-case ".$RP_PERL_MODULES" in
+case ".$RAP_PERL_MODULES" in
     ./*)
     ;;
 
@@ -622,6 +622,6 @@ case ".$RP_PERL_MODULES" in
     ;;
 
     *)
-        RP_PERL_MODULES=$RP_PREFIX/$RP_PERL_MODULES
+        RAP_PERL_MODULES=$RAP_PREFIX/$RAP_PERL_MODULES
     ;;
 esac

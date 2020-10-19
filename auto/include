@@ -3,22 +3,22 @@
 # Copyright (C) Rap, Inc.
 
 
-echo $rp_n "checking for $rp_include ...$rp_c"
+echo $rap_n "checking for $rap_include ...$rap_c"
 
-cat << END >> $RP_AUTOCONF_ERR
+cat << END >> $RAP_AUTOCONF_ERR
 
 ----------------------------------------
-checking for $rp_include
+checking for $rap_include
 
 END
 
 
-rp_found=no
+rap_found=no
 
-cat << END > $RP_AUTOTEST.c
+cat << END > $RAP_AUTOTEST.c
 
-$RP_INCLUDE_SYS_PARAM_H
-#include <$rp_include>
+$RAP_INCLUDE_SYS_PARAM_H
+#include <$rap_include>
 
 int main(void) {
     return 0;
@@ -27,32 +27,32 @@ int main(void) {
 END
 
 
-rp_test="$CC -o $RP_AUTOTEST $RP_AUTOTEST.c"
+rap_test="$CC -o $RAP_AUTOTEST $RAP_AUTOTEST.c"
 
-eval "$rp_test >> $RP_AUTOCONF_ERR 2>&1"
+eval "$rap_test >> $RAP_AUTOCONF_ERR 2>&1"
 
-if [ -x $RP_AUTOTEST ]; then
+if [ -x $RAP_AUTOTEST ]; then
 
-    rp_found=yes
+    rap_found=yes
 
     echo " found"
 
-    rp_name=`echo $rp_include \
+    rap_name=`echo $rap_include \
               | tr abcdefghijklmnopqrstuvwxyz/. ABCDEFGHIJKLMNOPQRSTUVWXYZ__`
 
 
-    have=RP_HAVE_$rp_name . auto/have_headers
+    have=RAP_HAVE_$rap_name . auto/have_headers
 
-    eval "RP_INCLUDE_$rp_name='#include <$rp_include>'"
+    eval "RAP_INCLUDE_$rap_name='#include <$rap_include>'"
 
 else
     echo " not found"
 
-    echo "----------"    >> $RP_AUTOCONF_ERR
-    cat $RP_AUTOTEST.c  >> $RP_AUTOCONF_ERR
-    echo "----------"    >> $RP_AUTOCONF_ERR
-    echo $rp_test       >> $RP_AUTOCONF_ERR
-    echo "----------"    >> $RP_AUTOCONF_ERR
+    echo "----------"    >> $RAP_AUTOCONF_ERR
+    cat $RAP_AUTOTEST.c  >> $RAP_AUTOCONF_ERR
+    echo "----------"    >> $RAP_AUTOCONF_ERR
+    echo $rap_test       >> $RAP_AUTOCONF_ERR
+    echo "----------"    >> $RAP_AUTOCONF_ERR
 fi
 
-rm -rf $RP_AUTOTEST*
+rm -rf $RAP_AUTOTEST*

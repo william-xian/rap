@@ -3,17 +3,17 @@
 # Copyright (C) Rap, Inc.
 
 
-have=RP_SOLARIS . auto/have_headers
+have=RAP_SOLARIS . auto/have_headers
 
 CORE_INCS="$UNIX_INCS"
 CORE_DEPS="$UNIX_DEPS $SOLARIS_DEPS"
 CORE_SRCS="$UNIX_SRCS $SOLARIS_SRCS "
 CORE_LIBS="$CORE_LIBS -lsocket -lnsl"
 
-RP_RPATH=YES
+RAP_RPATH=YES
 
 # Solaris's make does not support a blank line between target and rules
-rp_spacer=
+rap_spacer=
 
 CC_AUX_FLAGS="$CC_AUX_FLAGS -D_FILE_OFFSET_BITS=64 -lsocket -lnsl"
 
@@ -27,35 +27,35 @@ if [ $ZLIB_ASM != NO ]; then
 fi
 
 
-rp_feature="sendfilev()"
-rp_feature_name="RP_HAVE_SENDFILE"
-rp_feature_run=no
-rp_feature_incs="#include <sys/sendfile.h>"
-rp_feature_path=
-rp_feature_libs="-lsendfile"
-rp_feature_test="int fd = 1; sendfilevec_t vec[1];
+rap_feature="sendfilev()"
+rap_feature_name="RAP_HAVE_SENDFILE"
+rap_feature_run=no
+rap_feature_incs="#include <sys/sendfile.h>"
+rap_feature_path=
+rap_feature_libs="-lsendfile"
+rap_feature_test="int fd = 1; sendfilevec_t vec[1];
                   size_t sent; ssize_t n;
                   n = sendfilev(fd, vec, 1, &sent);
                   if (n == -1) return 1"
 . auto/feature
 
 
-if [ $rp_found = yes ]; then
+if [ $rap_found = yes ]; then
     CORE_SRCS="$CORE_SRCS $SOLARIS_SENDFILEV_SRCS"
     CORE_LIBS="$CORE_LIBS -lsendfile"
 fi
 
 
-rp_feature="event ports"
-rp_feature_name="RP_HAVE_EVENTPORT"
-rp_feature_run=no
-rp_feature_incs="#include <port.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="(void) port_create()"
+rap_feature="event ports"
+rap_feature_name="RAP_HAVE_EVENTPORT"
+rap_feature_run=no
+rap_feature_incs="#include <port.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="(void) port_create()"
 . auto/feature
 
-if [ $rp_found = yes ]; then
+if [ $rap_found = yes ]; then
     CORE_SRCS="$CORE_SRCS $EVENTPORT_SRCS"
     EVENT_MODULES="$EVENT_MODULES $EVENTPORT_MODULE"
 fi

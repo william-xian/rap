@@ -3,37 +3,37 @@
 # Copyright (C) Rap, Inc.
 
 
-RP_USER=${RP_USER:-nobody}
+RAP_USER=${RAP_USER:-nobody}
 
-if [ -z "$RP_GROUP" ]; then
-    if [ $RP_USER = nobody ]; then
+if [ -z "$RAP_GROUP" ]; then
+    if [ $RAP_USER = nobody ]; then
         if grep nobody /etc/group 2>&1 >/dev/null; then
             echo "checking for nobody group ... found"
-            RP_GROUP=nobody
+            RAP_GROUP=nobody
         else
             echo "checking for nobody group ... not found"
 
             if grep nogroup /etc/group 2>&1 >/dev/null; then
                 echo "checking for nogroup group ... found"
-                RP_GROUP=nogroup
+                RAP_GROUP=nogroup
             else
                 echo "checking for nogroup group ... not found"
-                RP_GROUP=nobody
+                RAP_GROUP=nobody
             fi
         fi
     else
-        RP_GROUP=$RP_USER
+        RAP_GROUP=$RAP_USER
     fi
 fi
 
 
-rp_feature="poll()"
-rp_feature_name=
-rp_feature_run=no
-rp_feature_incs="#include <poll.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="int  n; struct pollfd  pl;
+rap_feature="poll()"
+rap_feature_name=
+rap_feature_run=no
+rap_feature_incs="#include <poll.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="int  n; struct pollfd  pl;
                   pl.fd = 0;
                   pl.events = 0;
                   pl.revents = 0;
@@ -41,18 +41,18 @@ rp_feature_test="int  n; struct pollfd  pl;
                   if (n == -1) return 1"
 . auto/feature
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
     EVENT_POLL=NONE
 fi
 
 
-rp_feature="/dev/poll"
-rp_feature_name="RP_HAVE_DEVPOLL"
-rp_feature_run=no
-rp_feature_incs="#include <sys/devpoll.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="int  n, dp; struct dvpoll  dvp;
+rap_feature="/dev/poll"
+rap_feature_name="RAP_HAVE_DEVPOLL"
+rap_feature_run=no
+rap_feature_incs="#include <sys/devpoll.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="int  n, dp; struct dvpoll  dvp;
                   dp = 0;
                   dvp.dp_fds = NULL;
                   dvp.dp_nfds = 0;
@@ -61,50 +61,50 @@ rp_feature_test="int  n, dp; struct dvpoll  dvp;
                   if (n == -1) return 1"
 . auto/feature
 
-if [ $rp_found = yes ]; then
+if [ $rap_found = yes ]; then
     CORE_SRCS="$CORE_SRCS $DEVPOLL_SRCS"
     EVENT_MODULES="$EVENT_MODULES $DEVPOLL_MODULE"
     EVENT_FOUND=YES
 fi
 
 
-if test -z "$RP_KQUEUE_CHECKED"; then
-    rp_feature="kqueue"
-    rp_feature_name="RP_HAVE_KQUEUE"
-    rp_feature_run=no
-    rp_feature_incs="#include <sys/event.h>"
-    rp_feature_path=
-    rp_feature_libs=
-    rp_feature_test="(void) kqueue()"
+if test -z "$RAP_KQUEUE_CHECKED"; then
+    rap_feature="kqueue"
+    rap_feature_name="RAP_HAVE_KQUEUE"
+    rap_feature_run=no
+    rap_feature_incs="#include <sys/event.h>"
+    rap_feature_path=
+    rap_feature_libs=
+    rap_feature_test="(void) kqueue()"
     . auto/feature
 
-    if [ $rp_found = yes ]; then
+    if [ $rap_found = yes ]; then
 
-        have=RP_HAVE_CLEAR_EVENT . auto/have
+        have=RAP_HAVE_CLEAR_EVENT . auto/have
         EVENT_MODULES="$EVENT_MODULES $KQUEUE_MODULE"
         CORE_SRCS="$CORE_SRCS $KQUEUE_SRCS"
         EVENT_FOUND=YES
 
-        rp_feature="kqueue's NOTE_LOWAT"
-        rp_feature_name="RP_HAVE_LOWAT_EVENT"
-        rp_feature_run=no
-        rp_feature_incs="#include <sys/event.h>"
-        rp_feature_path=
-        rp_feature_libs=
-        rp_feature_test="struct kevent  kev;
+        rap_feature="kqueue's NOTE_LOWAT"
+        rap_feature_name="RAP_HAVE_LOWAT_EVENT"
+        rap_feature_run=no
+        rap_feature_incs="#include <sys/event.h>"
+        rap_feature_path=
+        rap_feature_libs=
+        rap_feature_test="struct kevent  kev;
                           kev.fflags = NOTE_LOWAT;
                           (void) kev"
         . auto/feature
 
 
-        rp_feature="kqueue's EVFILT_TIMER"
-        rp_feature_name="RP_HAVE_TIMER_EVENT"
-        rp_feature_run=yes
-        rp_feature_incs="#include <sys/event.h>
+        rap_feature="kqueue's EVFILT_TIMER"
+        rap_feature_name="RAP_HAVE_TIMER_EVENT"
+        rap_feature_run=yes
+        rap_feature_incs="#include <sys/event.h>
                           #include <sys/time.h>"
-        rp_feature_path=
-        rp_feature_libs=
-        rp_feature_test="int      kq;
+        rap_feature_path=
+        rap_feature_libs=
+        rap_feature_test="int      kq;
                   struct kevent    kev;
                   struct timespec  ts;
 
@@ -129,306 +129,306 @@ if test -z "$RP_KQUEUE_CHECKED"; then
 fi
 
 
-if [ "$RP_SYSTEM" = "NetBSD" ]; then
+if [ "$RAP_SYSTEM" = "NetBSD" ]; then
 
     # NetBSD 2.0 incompatibly defines kevent.udata as "intptr_t"
 
-    cat << END >> $RP_AUTO_CONFIG_H
+    cat << END >> $RAP_AUTO_CONFIG_H
 
-#define RP_KQUEUE_UDATA_T
+#define RAP_KQUEUE_UDATA_T
 
 END
 
 else
-    cat << END >> $RP_AUTO_CONFIG_H
+    cat << END >> $RAP_AUTO_CONFIG_H
 
-#define RP_KQUEUE_UDATA_T  (void *)
+#define RAP_KQUEUE_UDATA_T  (void *)
 
 END
 
 fi
 
 
-rp_feature="crypt()"
-rp_feature_name=
-rp_feature_run=no
-rp_feature_incs=
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="crypt(\"test\", \"salt\");"
+rap_feature="crypt()"
+rap_feature_name=
+rap_feature_run=no
+rap_feature_incs=
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="crypt(\"test\", \"salt\");"
 . auto/feature
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
-    rp_feature="crypt() in libcrypt"
-    rp_feature_name=
-    rp_feature_run=no
-    rp_feature_incs=
-    rp_feature_path=
-    rp_feature_libs=-lcrypt
+    rap_feature="crypt() in libcrypt"
+    rap_feature_name=
+    rap_feature_run=no
+    rap_feature_incs=
+    rap_feature_path=
+    rap_feature_libs=-lcrypt
     . auto/feature
 
-    if [ $rp_found = yes ]; then
+    if [ $rap_found = yes ]; then
         CRYPT_LIB="-lcrypt"
     fi
 fi
 
 
-rp_feature="F_READAHEAD"
-rp_feature_name="RP_HAVE_F_READAHEAD"
-rp_feature_run=no
-rp_feature_incs="#include <fcntl.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="fcntl(0, F_READAHEAD, 1);"
+rap_feature="F_READAHEAD"
+rap_feature_name="RAP_HAVE_F_READAHEAD"
+rap_feature_run=no
+rap_feature_incs="#include <fcntl.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="fcntl(0, F_READAHEAD, 1);"
 . auto/feature
 
 
-rp_feature="posix_fadvise()"
-rp_feature_name="RP_HAVE_POSIX_FADVISE"
-rp_feature_run=no
-rp_feature_incs="#include <fcntl.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="posix_fadvise(0, 0, 0, POSIX_FADV_SEQUENTIAL);"
+rap_feature="posix_fadvise()"
+rap_feature_name="RAP_HAVE_POSIX_FADVISE"
+rap_feature_run=no
+rap_feature_incs="#include <fcntl.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="posix_fadvise(0, 0, 0, POSIX_FADV_SEQUENTIAL);"
 . auto/feature
 
 
-rp_feature="O_DIRECT"
-rp_feature_name="RP_HAVE_O_DIRECT"
-rp_feature_run=no
-rp_feature_incs="#include <fcntl.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="fcntl(0, F_SETFL, O_DIRECT);"
+rap_feature="O_DIRECT"
+rap_feature_name="RAP_HAVE_O_DIRECT"
+rap_feature_run=no
+rap_feature_incs="#include <fcntl.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="fcntl(0, F_SETFL, O_DIRECT);"
 . auto/feature
 
 
-if [ $rp_found = yes -a "$RP_SYSTEM" = "Linux" ]; then
-    have=RP_HAVE_ALIGNED_DIRECTIO . auto/have
+if [ $rap_found = yes -a "$RAP_SYSTEM" = "Linux" ]; then
+    have=RAP_HAVE_ALIGNED_DIRECTIO . auto/have
 fi
 
-rp_feature="F_NOCACHE"
-rp_feature_name="RP_HAVE_F_NOCACHE"
-rp_feature_run=no
-rp_feature_incs="#include <fcntl.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="fcntl(0, F_NOCACHE, 1);"
+rap_feature="F_NOCACHE"
+rap_feature_name="RAP_HAVE_F_NOCACHE"
+rap_feature_run=no
+rap_feature_incs="#include <fcntl.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="fcntl(0, F_NOCACHE, 1);"
 . auto/feature
 
 
-rp_feature="directio()"
-rp_feature_name="RP_HAVE_DIRECTIO"
-rp_feature_run=no
-rp_feature_incs="#include <sys/types.h>
+rap_feature="directio()"
+rap_feature_name="RAP_HAVE_DIRECTIO"
+rap_feature_run=no
+rap_feature_incs="#include <sys/types.h>
                   #include <sys/fcntl.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="directio(0, DIRECTIO_ON);"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="directio(0, DIRECTIO_ON);"
 . auto/feature
 
 
-rp_feature="statfs()"
-rp_feature_name="RP_HAVE_STATFS"
-rp_feature_run=no
-rp_feature_incs="$RP_INCLUDE_SYS_PARAM_H
-                  $RP_INCLUDE_SYS_MOUNT_H
-                  $RP_INCLUDE_SYS_VFS_H"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct statfs  fs;
+rap_feature="statfs()"
+rap_feature_name="RAP_HAVE_STATFS"
+rap_feature_run=no
+rap_feature_incs="$RAP_INCLUDE_SYS_PARAM_H
+                  $RAP_INCLUDE_SYS_MOUNT_H
+                  $RAP_INCLUDE_SYS_VFS_H"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct statfs  fs;
                   statfs(\".\", &fs);"
 . auto/feature
 
 
-rp_feature="statvfs()"
-rp_feature_name="RP_HAVE_STATVFS"
-rp_feature_run=no
-rp_feature_incs="#include <sys/types.h>
+rap_feature="statvfs()"
+rap_feature_name="RAP_HAVE_STATVFS"
+rap_feature_run=no
+rap_feature_incs="#include <sys/types.h>
                   #include <sys/statvfs.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct statvfs  fs;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct statvfs  fs;
                   statvfs(\".\", &fs);"
 . auto/feature
 
 
-rp_feature="dlopen()"
-rp_feature_name="RP_HAVE_DLOPEN"
-rp_feature_run=no
-rp_feature_incs="#include <dlfcn.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="dlopen(NULL, RTLD_NOW | RTLD_GLOBAL); dlsym(NULL, \"\")"
+rap_feature="dlopen()"
+rap_feature_name="RAP_HAVE_DLOPEN"
+rap_feature_run=no
+rap_feature_incs="#include <dlfcn.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="dlopen(NULL, RTLD_NOW | RTLD_GLOBAL); dlsym(NULL, \"\")"
 . auto/feature
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
-    rp_feature="dlopen() in libdl"
-    rp_feature_libs="-ldl"
+    rap_feature="dlopen() in libdl"
+    rap_feature_libs="-ldl"
     . auto/feature
 
-    if [ $rp_found = yes ]; then
+    if [ $rap_found = yes ]; then
         CORE_LIBS="$CORE_LIBS -ldl"
-        RP_LIBDL="-ldl"
+        RAP_LIBDL="-ldl"
     fi
 fi
 
 
-rp_feature="sched_yield()"
-rp_feature_name="RP_HAVE_SCHED_YIELD"
-rp_feature_run=no
-rp_feature_incs="#include <sched.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="sched_yield()"
+rap_feature="sched_yield()"
+rap_feature_name="RAP_HAVE_SCHED_YIELD"
+rap_feature_run=no
+rap_feature_incs="#include <sched.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="sched_yield()"
 . auto/feature
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
-    rp_feature="sched_yield() in librt"
-    rp_feature_libs="-lrt"
+    rap_feature="sched_yield() in librt"
+    rap_feature_libs="-lrt"
     . auto/feature
 
-    if [ $rp_found = yes ]; then
+    if [ $rap_found = yes ]; then
         CORE_LIBS="$CORE_LIBS -lrt"
     fi
 fi
 
 
-rp_feature="sched_setaffinity()"
-rp_feature_name="RP_HAVE_SCHED_SETAFFINITY"
-rp_feature_run=no
-rp_feature_incs="#include <sched.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="cpu_set_t mask;
+rap_feature="sched_setaffinity()"
+rap_feature_name="RAP_HAVE_SCHED_SETAFFINITY"
+rap_feature_run=no
+rap_feature_incs="#include <sched.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="cpu_set_t mask;
                   CPU_ZERO(&mask);
                   sched_setaffinity(0, sizeof(cpu_set_t), &mask)"
 . auto/feature
 
 
-rp_feature="SO_SETFIB"
-rp_feature_name="RP_HAVE_SETFIB"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, SOL_SOCKET, SO_SETFIB, NULL, 0)"
+rap_feature="SO_SETFIB"
+rap_feature_name="RAP_HAVE_SETFIB"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, SOL_SOCKET, SO_SETFIB, NULL, 0)"
 . auto/feature
 
 
-rp_feature="SO_REUSEPORT"
-rp_feature_name="RP_HAVE_REUSEPORT"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, SOL_SOCKET, SO_REUSEPORT, NULL, 0)"
+rap_feature="SO_REUSEPORT"
+rap_feature_name="RAP_HAVE_REUSEPORT"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, SOL_SOCKET, SO_REUSEPORT, NULL, 0)"
 . auto/feature
 
 
-rp_feature="SO_ACCEPTFILTER"
-rp_feature_name="RP_HAVE_DEFERRED_ACCEPT"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, SOL_SOCKET, SO_ACCEPTFILTER, NULL, 0)"
+rap_feature="SO_ACCEPTFILTER"
+rap_feature_name="RAP_HAVE_DEFERRED_ACCEPT"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, SOL_SOCKET, SO_ACCEPTFILTER, NULL, 0)"
 . auto/feature
 
 
 # OpenBSD bind to any address for transparent proxying
 
-rp_feature="SO_BINDANY"
-rp_feature_name="RP_HAVE_TRANSPARENT_PROXY"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, SOL_SOCKET, SO_BINDANY, NULL, 0)"
+rap_feature="SO_BINDANY"
+rap_feature_name="RAP_HAVE_TRANSPARENT_PROXY"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, SOL_SOCKET, SO_BINDANY, NULL, 0)"
 . auto/feature
 
 
 # Linux transparent proxying
 
-rp_feature="IP_TRANSPARENT"
-rp_feature_name="RP_HAVE_TRANSPARENT_PROXY"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="IP_TRANSPARENT"
+rap_feature_name="RAP_HAVE_TRANSPARENT_PROXY"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, IPPROTO_IP, IP_TRANSPARENT, NULL, 0)"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, IPPROTO_IP, IP_TRANSPARENT, NULL, 0)"
 . auto/feature
 
 
 # FreeBSD bind to any address for transparent proxying
 
-rp_feature="IP_BINDANY"
-rp_feature_name="RP_HAVE_TRANSPARENT_PROXY"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="IP_BINDANY"
+rap_feature_name="RAP_HAVE_TRANSPARENT_PROXY"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, IPPROTO_IP, IP_BINDANY, NULL, 0)"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, IPPROTO_IP, IP_BINDANY, NULL, 0)"
 . auto/feature
 
 
 # Linux IP_BIND_ADDRESS_NO_PORT
 
-rp_feature="IP_BIND_ADDRESS_NO_PORT"
-rp_feature_name="RP_HAVE_IP_BIND_ADDRESS_NO_PORT"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="IP_BIND_ADDRESS_NO_PORT"
+rap_feature_name="RAP_HAVE_IP_BIND_ADDRESS_NO_PORT"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, IPPROTO_IP, IP_BIND_ADDRESS_NO_PORT, NULL, 0)"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, IPPROTO_IP, IP_BIND_ADDRESS_NO_PORT, NULL, 0)"
 . auto/feature
 
 
 # BSD way to get IPv4 datagram destination address
 
-rp_feature="IP_RECVDSTADDR"
-rp_feature_name="RP_HAVE_IP_RECVDSTADDR"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="IP_RECVDSTADDR"
+rap_feature_name="RAP_HAVE_IP_RECVDSTADDR"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, IPPROTO_IP, IP_RECVDSTADDR, NULL, 0)"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, IPPROTO_IP, IP_RECVDSTADDR, NULL, 0)"
 . auto/feature
 
 
 # BSD way to set IPv4 datagram source address
 
-rp_feature="IP_SENDSRCADDR"
-rp_feature_name="RP_HAVE_IP_SENDSRCADDR"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="IP_SENDSRCADDR"
+rap_feature_name="RAP_HAVE_IP_SENDSRCADDR"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, IPPROTO_IP, IP_SENDSRCADDR, NULL, 0)"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, IPPROTO_IP, IP_SENDSRCADDR, NULL, 0)"
 . auto/feature
 
 
 # Linux way to get IPv4 datagram destination address
 
-rp_feature="IP_PKTINFO"
-rp_feature_name="RP_HAVE_IP_PKTINFO"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="IP_PKTINFO"
+rap_feature_name="RAP_HAVE_IP_PKTINFO"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct in_pktinfo  pkt;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct in_pktinfo  pkt;
                   pkt.ipi_spec_dst.s_addr = INADDR_ANY;
                   (void) pkt;
                   setsockopt(0, IPPROTO_IP, IP_PKTINFO, NULL, 0)"
@@ -437,64 +437,64 @@ rp_feature_test="struct in_pktinfo  pkt;
 
 # RFC 3542 way to get IPv6 datagram destination address
 
-rp_feature="IPV6_RECVPKTINFO"
-rp_feature_name="RP_HAVE_IPV6_RECVPKTINFO"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="IPV6_RECVPKTINFO"
+rap_feature_name="RAP_HAVE_IPV6_RECVPKTINFO"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, IPPROTO_IPV6, IPV6_RECVPKTINFO, NULL, 0)"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, IPPROTO_IPV6, IPV6_RECVPKTINFO, NULL, 0)"
 . auto/feature
 
 
-rp_feature="TCP_DEFER_ACCEPT"
-rp_feature_name="RP_HAVE_DEFERRED_ACCEPT"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="TCP_DEFER_ACCEPT"
+rap_feature_name="RAP_HAVE_DEFERRED_ACCEPT"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>
                   #include <netinet/tcp.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, IPPROTO_TCP, TCP_DEFER_ACCEPT, NULL, 0)"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, IPPROTO_TCP, TCP_DEFER_ACCEPT, NULL, 0)"
 . auto/feature
 
 
-rp_feature="TCP_KEEPIDLE"
-rp_feature_name="RP_HAVE_KEEPALIVE_TUNABLE"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="TCP_KEEPIDLE"
+rap_feature_name="RAP_HAVE_KEEPALIVE_TUNABLE"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>
                   #include <netinet/tcp.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, IPPROTO_TCP, TCP_KEEPIDLE, NULL, 0);
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, IPPROTO_TCP, TCP_KEEPIDLE, NULL, 0);
                   setsockopt(0, IPPROTO_TCP, TCP_KEEPINTVL, NULL, 0);
                   setsockopt(0, IPPROTO_TCP, TCP_KEEPCNT, NULL, 0)"
 . auto/feature
 
 
-rp_feature="TCP_FASTOPEN"
-rp_feature_name="RP_HAVE_TCP_FASTOPEN"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="TCP_FASTOPEN"
+rap_feature_name="RAP_HAVE_TCP_FASTOPEN"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>
                   #include <netinet/tcp.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="setsockopt(0, IPPROTO_TCP, TCP_FASTOPEN, NULL, 0)"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="setsockopt(0, IPPROTO_TCP, TCP_FASTOPEN, NULL, 0)"
 . auto/feature
 
 
-rp_feature="TCP_INFO"
-rp_feature_name="RP_HAVE_TCP_INFO"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="TCP_INFO"
+rap_feature_name="RAP_HAVE_TCP_INFO"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>
                   #include <netinet/tcp.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="socklen_t optlen = sizeof(struct tcp_info);
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="socklen_t optlen = sizeof(struct tcp_info);
                   struct tcp_info ti;
                   ti.tcpi_rtt = 0;
                   ti.tcpi_rttvar = 0;
@@ -504,42 +504,42 @@ rp_feature_test="socklen_t optlen = sizeof(struct tcp_info);
 . auto/feature
 
 
-rp_feature="accept4()"
-rp_feature_name="RP_HAVE_ACCEPT4"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="accept4(0, NULL, NULL, SOCK_NONBLOCK)"
+rap_feature="accept4()"
+rap_feature_name="RAP_HAVE_ACCEPT4"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="accept4(0, NULL, NULL, SOCK_NONBLOCK)"
 . auto/feature
 
-if [ $RP_FILE_AIO = YES ]; then
+if [ $RAP_FILE_AIO = YES ]; then
 
-    rp_feature="kqueue AIO support"
-    rp_feature_name="RP_HAVE_FILE_AIO"
-    rp_feature_run=no
-    rp_feature_incs="#include <aio.h>"
-    rp_feature_path=
-    rp_feature_libs=
-    rp_feature_test="struct aiocb  iocb;
+    rap_feature="kqueue AIO support"
+    rap_feature_name="RAP_HAVE_FILE_AIO"
+    rap_feature_run=no
+    rap_feature_incs="#include <aio.h>"
+    rap_feature_path=
+    rap_feature_libs=
+    rap_feature_test="struct aiocb  iocb;
                       iocb.aio_sigevent.sigev_notify = SIGEV_KEVENT;
                       (void) aio_read(&iocb)"
     . auto/feature
 
-    if [ $rp_found = yes ]; then
+    if [ $rap_found = yes ]; then
         CORE_SRCS="$CORE_SRCS $FILE_AIO_SRCS"
     fi
 
-    if [ $rp_found = no ]; then
+    if [ $rap_found = no ]; then
 
-        rp_feature="Linux AIO support"
-        rp_feature_name="RP_HAVE_FILE_AIO"
-        rp_feature_run=no
-        rp_feature_incs="#include <linux/aio_abi.h>
+        rap_feature="Linux AIO support"
+        rap_feature_name="RAP_HAVE_FILE_AIO"
+        rap_feature_run=no
+        rap_feature_incs="#include <linux/aio_abi.h>
                           #include <sys/eventfd.h>"
-        rp_feature_path=
-        rp_feature_libs=
-        rp_feature_test="struct iocb  iocb;
+        rap_feature_path=
+        rap_feature_libs=
+        rap_feature_test="struct iocb  iocb;
                           iocb.aio_lio_opcode = IOCB_CMD_PREAD;
                           iocb.aio_flags = IOCB_FLAG_RESFD;
                           iocb.aio_resfd = -1;
@@ -547,19 +547,19 @@ if [ $RP_FILE_AIO = YES ]; then
                           (void) eventfd(0, 0)"
         . auto/feature
 
-        if [ $rp_found = yes ]; then
-            have=RP_HAVE_EVENTFD . auto/have
-            have=RP_HAVE_SYS_EVENTFD_H . auto/have
+        if [ $rap_found = yes ]; then
+            have=RAP_HAVE_EVENTFD . auto/have
+            have=RAP_HAVE_SYS_EVENTFD_H . auto/have
             CORE_SRCS="$CORE_SRCS $LINUX_AIO_SRCS"
         fi
     fi
 
-    if [ $rp_found = no ]; then
+    if [ $rap_found = no ]; then
 
-        rp_feature="Linux AIO support (SYS_eventfd)"
-        rp_feature_incs="#include <linux/aio_abi.h>
+        rap_feature="Linux AIO support (SYS_eventfd)"
+        rap_feature_incs="#include <linux/aio_abi.h>
                           #include <sys/syscall.h>"
-        rp_feature_test="struct iocb  iocb;
+        rap_feature_test="struct iocb  iocb;
                           iocb.aio_lio_opcode = IOCB_CMD_PREAD;
                           iocb.aio_flags = IOCB_FLAG_RESFD;
                           iocb.aio_resfd = -1;
@@ -567,13 +567,13 @@ if [ $RP_FILE_AIO = YES ]; then
                           (void) SYS_eventfd"
         . auto/feature
 
-        if [ $rp_found = yes ]; then
-            have=RP_HAVE_EVENTFD . auto/have
+        if [ $rap_found = yes ]; then
+            have=RAP_HAVE_EVENTFD . auto/have
             CORE_SRCS="$CORE_SRCS $LINUX_AIO_SRCS"
         fi
     fi
 
-    if [ $rp_found = no ]; then
+    if [ $rap_found = no ]; then
         cat << END
 
 $0: no supported file AIO was found
@@ -585,141 +585,141 @@ END
 
 else
 
-    rp_feature="eventfd()"
-    rp_feature_name="RP_HAVE_EVENTFD"
-    rp_feature_run=no
-    rp_feature_incs="#include <sys/eventfd.h>"
-    rp_feature_path=
-    rp_feature_libs=
-    rp_feature_test="(void) eventfd(0, 0)"
+    rap_feature="eventfd()"
+    rap_feature_name="RAP_HAVE_EVENTFD"
+    rap_feature_run=no
+    rap_feature_incs="#include <sys/eventfd.h>"
+    rap_feature_path=
+    rap_feature_libs=
+    rap_feature_test="(void) eventfd(0, 0)"
     . auto/feature
 
-    if [ $rp_found = yes ]; then
-        have=RP_HAVE_SYS_EVENTFD_H . auto/have
+    if [ $rap_found = yes ]; then
+        have=RAP_HAVE_SYS_EVENTFD_H . auto/have
     fi
 
-    if [ $rp_found = no ]; then
+    if [ $rap_found = no ]; then
 
-        rp_feature="eventfd() (SYS_eventfd)"
-        rp_feature_incs="#include <sys/syscall.h>"
-        rp_feature_test="(void) SYS_eventfd"
+        rap_feature="eventfd() (SYS_eventfd)"
+        rap_feature_incs="#include <sys/syscall.h>"
+        rap_feature_test="(void) SYS_eventfd"
         . auto/feature
     fi
 fi
 
 
-have=RP_HAVE_UNIX_DOMAIN . auto/have
+have=RAP_HAVE_UNIX_DOMAIN . auto/have
 
-rp_feature_libs=
+rap_feature_libs=
 
 
 # C types
 
-rp_type="int"; . auto/types/sizeof
+rap_type="int"; . auto/types/sizeof
 
-rp_type="long"; . auto/types/sizeof
+rap_type="long"; . auto/types/sizeof
 
-rp_type="long long"; . auto/types/sizeof
+rap_type="long long"; . auto/types/sizeof
 
-rp_type="void *"; . auto/types/sizeof; rp_ptr_size=$rp_size
-rp_param=RP_PTR_SIZE; rp_value=$rp_size; . auto/types/value
+rap_type="void *"; . auto/types/sizeof; rap_ptr_size=$rap_size
+rap_param=RAP_PTR_SIZE; rap_value=$rap_size; . auto/types/value
 
 
 # POSIX types
 
-RP_INCLUDE_AUTO_CONFIG_H="#include \"rp_auto_config.h\""
+RAP_INCLUDE_AUTO_CONFIG_H="#include \"rap_auto_config.h\""
 
-rp_type="uint32_t"; rp_types="u_int32_t"; . auto/types/typedef
-rp_type="uint64_t"; rp_types="u_int64_t"; . auto/types/typedef
+rap_type="uint32_t"; rap_types="u_int32_t"; . auto/types/typedef
+rap_type="uint64_t"; rap_types="u_int64_t"; . auto/types/typedef
 
-rp_type="sig_atomic_t"; rp_types="int"; . auto/types/typedef
+rap_type="sig_atomic_t"; rap_types="int"; . auto/types/typedef
 . auto/types/sizeof
-rp_param=RP_SIG_ATOMIC_T_SIZE; rp_value=$rp_size; . auto/types/value
+rap_param=RAP_SIG_ATOMIC_T_SIZE; rap_value=$rap_size; . auto/types/value
 
-rp_type="socklen_t"; rp_types="int"; . auto/types/typedef
+rap_type="socklen_t"; rap_types="int"; . auto/types/typedef
 
-rp_type="in_addr_t"; rp_types="uint32_t u_int32_t"; . auto/types/typedef
+rap_type="in_addr_t"; rap_types="uint32_t u_int32_t"; . auto/types/typedef
 
-rp_type="in_port_t"; rp_types="u_short"; . auto/types/typedef
+rap_type="in_port_t"; rap_types="u_short"; . auto/types/typedef
 
-rp_type="rlim_t"; rp_types="int"; . auto/types/typedef
+rap_type="rlim_t"; rap_types="int"; . auto/types/typedef
 
 . auto/types/uintptr_t
 
 . auto/endianness
 
-rp_type="size_t"; . auto/types/sizeof
-rp_param=RP_MAX_SIZE_T_VALUE; rp_value=$rp_max_value; . auto/types/value
-rp_param=RP_SIZE_T_LEN; rp_value=$rp_max_len; . auto/types/value
+rap_type="size_t"; . auto/types/sizeof
+rap_param=RAP_MAX_SIZE_T_VALUE; rap_value=$rap_max_value; . auto/types/value
+rap_param=RAP_SIZE_T_LEN; rap_value=$rap_max_len; . auto/types/value
 
-rp_type="off_t"; . auto/types/sizeof
-rp_param=RP_MAX_OFF_T_VALUE; rp_value=$rp_max_value; . auto/types/value
-rp_param=RP_OFF_T_LEN; rp_value=$rp_max_len; . auto/types/value
+rap_type="off_t"; . auto/types/sizeof
+rap_param=RAP_MAX_OFF_T_VALUE; rap_value=$rap_max_value; . auto/types/value
+rap_param=RAP_OFF_T_LEN; rap_value=$rap_max_len; . auto/types/value
 
-rp_type="time_t"; . auto/types/sizeof
-rp_param=RP_TIME_T_SIZE; rp_value=$rp_size; . auto/types/value
-rp_param=RP_TIME_T_LEN; rp_value=$rp_max_len; . auto/types/value
-rp_param=RP_MAX_TIME_T_VALUE; rp_value=$rp_max_value; . auto/types/value
+rap_type="time_t"; . auto/types/sizeof
+rap_param=RAP_TIME_T_SIZE; rap_value=$rap_size; . auto/types/value
+rap_param=RAP_TIME_T_LEN; rap_value=$rap_max_len; . auto/types/value
+rap_param=RAP_MAX_TIME_T_VALUE; rap_value=$rap_max_value; . auto/types/value
 
 
 # syscalls, libc calls and some features
 
 
-rp_feature="AF_INET6"
-rp_feature_name="RP_HAVE_INET6"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="AF_INET6"
+rap_feature_name="RAP_HAVE_INET6"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <netinet/in.h>
                   #include <arpa/inet.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct sockaddr_in6  sin6;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct sockaddr_in6  sin6;
                   sin6.sin6_family = AF_INET6;
                   (void) sin6"
 . auto/feature
 
 
-rp_feature="setproctitle()"
-rp_feature_name="RP_HAVE_SETPROCTITLE"
-rp_feature_run=no
-rp_feature_incs="#include <stdlib.h>"
-rp_feature_path=
-rp_feature_libs=$RP_SETPROCTITLE_LIB
-rp_feature_test="setproctitle(\"test\");"
+rap_feature="setproctitle()"
+rap_feature_name="RAP_HAVE_SETPROCTITLE"
+rap_feature_run=no
+rap_feature_incs="#include <stdlib.h>"
+rap_feature_path=
+rap_feature_libs=$RAP_SETPROCTITLE_LIB
+rap_feature_test="setproctitle(\"test\");"
 . auto/feature
 
 
-rp_feature="pread()"
-rp_feature_name="RP_HAVE_PREAD"
-rp_feature_run=no
-rp_feature_incs=
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="char buf[1]; ssize_t n; n = pread(0, buf, 1, 0);
+rap_feature="pread()"
+rap_feature_name="RAP_HAVE_PREAD"
+rap_feature_run=no
+rap_feature_incs=
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="char buf[1]; ssize_t n; n = pread(0, buf, 1, 0);
                   if (n == -1) return 1"
 . auto/feature
 
 
-rp_feature="pwrite()"
-rp_feature_name="RP_HAVE_PWRITE"
-rp_feature_run=no
-rp_feature_incs=
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="char buf[1]; ssize_t n; n = pwrite(1, buf, 1, 0);
+rap_feature="pwrite()"
+rap_feature_name="RAP_HAVE_PWRITE"
+rap_feature_run=no
+rap_feature_incs=
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="char buf[1]; ssize_t n; n = pwrite(1, buf, 1, 0);
                   if (n == -1) return 1"
 . auto/feature
 
 
 # pwritev() was introduced in FreeBSD 6 and Linux 2.6.30, glibc 2.10
 
-rp_feature="pwritev()"
-rp_feature_name="RP_HAVE_PWRITEV"
-rp_feature_run=no
-rp_feature_incs='#include <sys/uio.h>'
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="char buf[1]; struct iovec vec[1]; ssize_t n;
+rap_feature="pwritev()"
+rap_feature_name="RAP_HAVE_PWRITEV"
+rap_feature_run=no
+rap_feature_incs='#include <sys/uio.h>'
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="char buf[1]; struct iovec vec[1]; ssize_t n;
                   vec[0].iov_base = buf;
                   vec[0].iov_len = 1;
                   n = pwritev(1, vec, 1, 0);
@@ -727,44 +727,44 @@ rp_feature_test="char buf[1]; struct iovec vec[1]; ssize_t n;
 . auto/feature
 
 
-rp_feature="sys_nerr"
-rp_feature_name="RP_SYS_NERR"
-rp_feature_run=value
-rp_feature_incs='#include <errno.h>
+rap_feature="sys_nerr"
+rap_feature_name="RAP_SYS_NERR"
+rap_feature_run=value
+rap_feature_incs='#include <errno.h>
                   #include <stdio.h>'
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test='printf("%d", sys_nerr);'
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test='printf("%d", sys_nerr);'
 . auto/feature
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # Cygiwn defines _sys_nerr
-    rp_feature="_sys_nerr"
-    rp_feature_name="RP_SYS_NERR"
-    rp_feature_run=value
-    rp_feature_incs='#include <errno.h>
+    rap_feature="_sys_nerr"
+    rap_feature_name="RAP_SYS_NERR"
+    rap_feature_run=value
+    rap_feature_incs='#include <errno.h>
                       #include <stdio.h>'
-    rp_feature_path=
-    rp_feature_libs=
-    rp_feature_test='printf("%d", _sys_nerr);'
+    rap_feature_path=
+    rap_feature_libs=
+    rap_feature_test='printf("%d", _sys_nerr);'
     . auto/feature
 fi
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # Solaris has no sys_nerr
-    rp_feature='maximum errno'
-    rp_feature_name=RP_SYS_NERR
-    rp_feature_run=value
-    rp_feature_incs='#include <errno.h>
+    rap_feature='maximum errno'
+    rap_feature_name=RAP_SYS_NERR
+    rap_feature_run=value
+    rap_feature_incs='#include <errno.h>
                       #include <string.h>
                       #include <stdio.h>'
-    rp_feature_path=
-    rp_feature_libs=
-    rp_feature_test='int  n;
+    rap_feature_path=
+    rap_feature_libs=
+    rap_feature_test='int  n;
                       char *p;
                       for (n = 1; n < 1000; n++) {
                           errno = 0;
@@ -781,259 +781,259 @@ if [ $rp_found = no ]; then
 fi
 
 
-rp_feature="localtime_r()"
-rp_feature_name="RP_HAVE_LOCALTIME_R"
-rp_feature_run=no
-rp_feature_incs="#include <time.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct tm t; time_t c=0; localtime_r(&c, &t)"
+rap_feature="localtime_r()"
+rap_feature_name="RAP_HAVE_LOCALTIME_R"
+rap_feature_run=no
+rap_feature_incs="#include <time.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct tm t; time_t c=0; localtime_r(&c, &t)"
 . auto/feature
 
 
-rp_feature="clock_gettime(CLOCK_MONOTONIC)"
-rp_feature_name="RP_HAVE_CLOCK_MONOTONIC"
-rp_feature_run=no
-rp_feature_incs="#include <time.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct timespec ts; clock_gettime(CLOCK_MONOTONIC, &ts)"
+rap_feature="clock_gettime(CLOCK_MONOTONIC)"
+rap_feature_name="RAP_HAVE_CLOCK_MONOTONIC"
+rap_feature_run=no
+rap_feature_incs="#include <time.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct timespec ts; clock_gettime(CLOCK_MONOTONIC, &ts)"
 . auto/feature
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # Linux before glibc 2.17, notably CentOS 6
 
-    rp_feature="clock_gettime(CLOCK_MONOTONIC) in librt"
-    rp_feature_libs="-lrt"
+    rap_feature="clock_gettime(CLOCK_MONOTONIC) in librt"
+    rap_feature_libs="-lrt"
     . auto/feature
 
-    if [ $rp_found = yes ]; then
+    if [ $rap_found = yes ]; then
         CORE_LIBS="$CORE_LIBS -lrt"
     fi
 fi
 
 
-rp_feature="posix_memalign()"
-rp_feature_name="RP_HAVE_POSIX_MEMALIGN"
-rp_feature_run=no
-rp_feature_incs="#include <stdlib.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="void *p; int n; n = posix_memalign(&p, 4096, 4096);
+rap_feature="posix_memalign()"
+rap_feature_name="RAP_HAVE_POSIX_MEMALIGN"
+rap_feature_run=no
+rap_feature_incs="#include <stdlib.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="void *p; int n; n = posix_memalign(&p, 4096, 4096);
                   if (n != 0) return 1"
 . auto/feature
 
 
-rp_feature="memalign()"
-rp_feature_name="RP_HAVE_MEMALIGN"
-rp_feature_run=no
-rp_feature_incs="#include <stdlib.h>
+rap_feature="memalign()"
+rap_feature_name="RAP_HAVE_MEMALIGN"
+rap_feature_run=no
+rap_feature_incs="#include <stdlib.h>
                   #include <malloc.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="void *p; p = memalign(4096, 4096);
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="void *p; p = memalign(4096, 4096);
                   if (p == NULL) return 1"
 . auto/feature
 
 
-rp_feature="mmap(MAP_ANON|MAP_SHARED)"
-rp_feature_name="RP_HAVE_MAP_ANON"
-rp_feature_run=yes
-rp_feature_incs="#include <sys/mman.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="void *p;
+rap_feature="mmap(MAP_ANON|MAP_SHARED)"
+rap_feature_name="RAP_HAVE_MAP_ANON"
+rap_feature_run=yes
+rap_feature_incs="#include <sys/mman.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="void *p;
                   p = mmap(NULL, 4096, PROT_READ|PROT_WRITE,
                            MAP_ANON|MAP_SHARED, -1, 0);
                   if (p == MAP_FAILED) return 1;"
 . auto/feature
 
 
-rp_feature='mmap("/dev/zero", MAP_SHARED)'
-rp_feature_name="RP_HAVE_MAP_DEVZERO"
-rp_feature_run=yes
-rp_feature_incs="#include <sys/mman.h>
+rap_feature='mmap("/dev/zero", MAP_SHARED)'
+rap_feature_name="RAP_HAVE_MAP_DEVZERO"
+rap_feature_run=yes
+rap_feature_incs="#include <sys/mman.h>
                   #include <sys/stat.h>
                   #include <fcntl.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test='void *p; int  fd;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test='void *p; int  fd;
                   fd = open("/dev/zero", O_RDWR);
                   p = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
                   if (p == MAP_FAILED) return 1;'
 . auto/feature
 
 
-rp_feature="System V shared memory"
-rp_feature_name="RP_HAVE_SYSVSHM"
-rp_feature_run=yes
-rp_feature_incs="#include <sys/ipc.h>
+rap_feature="System V shared memory"
+rap_feature_name="RAP_HAVE_SYSVSHM"
+rap_feature_run=yes
+rap_feature_incs="#include <sys/ipc.h>
                   #include <sys/shm.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="int  id;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="int  id;
                   id = shmget(IPC_PRIVATE, 4096, (SHM_R|SHM_W|IPC_CREAT));
                   if (id == -1) return 1;
                   shmctl(id, IPC_RMID, NULL);"
 . auto/feature
 
 
-rp_feature="POSIX semaphores"
-rp_feature_name="RP_HAVE_POSIX_SEM"
-rp_feature_run=yes
-rp_feature_incs="#include <semaphore.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="sem_t  sem;
+rap_feature="POSIX semaphores"
+rap_feature_name="RAP_HAVE_POSIX_SEM"
+rap_feature_run=yes
+rap_feature_incs="#include <semaphore.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="sem_t  sem;
                   if (sem_init(&sem, 1, 0) == -1) return 1;
                   sem_destroy(&sem);"
 . auto/feature
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # Linux has POSIX semaphores in libpthread
-    rp_feature="POSIX semaphores in libpthread"
-    rp_feature_libs=-lpthread
+    rap_feature="POSIX semaphores in libpthread"
+    rap_feature_libs=-lpthread
     . auto/feature
 
-    if [ $rp_found = yes ]; then
+    if [ $rap_found = yes ]; then
         CORE_LIBS="$CORE_LIBS -lpthread"
-        RP_LIBPTHREAD="-lpthread"
+        RAP_LIBPTHREAD="-lpthread"
     fi
 fi
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # Solaris has POSIX semaphores in librt
-    rp_feature="POSIX semaphores in librt"
-    rp_feature_libs=-lrt
+    rap_feature="POSIX semaphores in librt"
+    rap_feature_libs=-lrt
     . auto/feature
 
-    if [ $rp_found = yes ]; then
+    if [ $rap_found = yes ]; then
         CORE_LIBS="$CORE_LIBS -lrt"
     fi
 fi
 
 
-rp_feature="struct msghdr.msg_control"
-rp_feature_name="RP_HAVE_MSGHDR_MSG_CONTROL"
-rp_feature_run=no
-rp_feature_incs="#include <sys/socket.h>
+rap_feature="struct msghdr.msg_control"
+rap_feature_name="RAP_HAVE_MSGHDR_MSG_CONTROL"
+rap_feature_run=no
+rap_feature_incs="#include <sys/socket.h>
                   #include <stdio.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct msghdr  msg;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct msghdr  msg;
                   printf(\"%d\", (int) sizeof(msg.msg_control))"
 . auto/feature
 
 
-rp_feature="ioctl(FIONBIO)"
-rp_feature_name="RP_HAVE_FIONBIO"
-rp_feature_run=no
-rp_feature_incs="#include <sys/ioctl.h>
+rap_feature="ioctl(FIONBIO)"
+rap_feature_name="RAP_HAVE_FIONBIO"
+rap_feature_run=no
+rap_feature_incs="#include <sys/ioctl.h>
                   #include <stdio.h>
-                  $RP_INCLUDE_SYS_FILIO_H"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="int i = FIONBIO; printf(\"%d\", i)"
+                  $RAP_INCLUDE_SYS_FILIO_H"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="int i = FIONBIO; printf(\"%d\", i)"
 . auto/feature
 
 
-rp_feature="ioctl(FIONREAD)"
-rp_feature_name="RP_HAVE_FIONREAD"
-rp_feature_run=no
-rp_feature_incs="#include <sys/ioctl.h>
+rap_feature="ioctl(FIONREAD)"
+rap_feature_name="RAP_HAVE_FIONREAD"
+rap_feature_run=no
+rap_feature_incs="#include <sys/ioctl.h>
                   #include <stdio.h>
-                  $RP_INCLUDE_SYS_FILIO_H"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="int i = FIONREAD; printf(\"%d\", i)"
+                  $RAP_INCLUDE_SYS_FILIO_H"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="int i = FIONREAD; printf(\"%d\", i)"
 . auto/feature
 
 
-rp_feature="struct tm.tm_gmtoff"
-rp_feature_name="RP_HAVE_GMTOFF"
-rp_feature_run=no
-rp_feature_incs="#include <time.h>
+rap_feature="struct tm.tm_gmtoff"
+rap_feature_name="RAP_HAVE_GMTOFF"
+rap_feature_run=no
+rap_feature_incs="#include <time.h>
                   #include <stdio.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct tm  tm; tm.tm_gmtoff = 0;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct tm  tm; tm.tm_gmtoff = 0;
                   printf(\"%d\", (int) tm.tm_gmtoff)"
 . auto/feature
 
 
-rp_feature="struct dirent.d_namlen"
-rp_feature_name="RP_HAVE_D_NAMLEN"
-rp_feature_run=no
-rp_feature_incs="#include <dirent.h>
+rap_feature="struct dirent.d_namlen"
+rap_feature_name="RAP_HAVE_D_NAMLEN"
+rap_feature_run=no
+rap_feature_incs="#include <dirent.h>
                   #include <stdio.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct dirent  dir; dir.d_namlen = 0;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct dirent  dir; dir.d_namlen = 0;
                   printf(\"%d\", (int) dir.d_namlen)"
 . auto/feature
 
 
-rp_feature="struct dirent.d_type"
-rp_feature_name="RP_HAVE_D_TYPE"
-rp_feature_run=no
-rp_feature_incs="#include <dirent.h>
+rap_feature="struct dirent.d_type"
+rap_feature_name="RAP_HAVE_D_TYPE"
+rap_feature_run=no
+rap_feature_incs="#include <dirent.h>
                   #include <stdio.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct dirent  dir; dir.d_type = DT_REG;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct dirent  dir; dir.d_type = DT_REG;
                   printf(\"%d\", (int) dir.d_type)"
 . auto/feature
 
 
-rp_feature="sysconf(_SC_NPROCESSORS_ONLN)"
-rp_feature_name="RP_HAVE_SC_NPROCESSORS_ONLN"
-rp_feature_run=no
-rp_feature_incs=
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="sysconf(_SC_NPROCESSORS_ONLN)"
+rap_feature="sysconf(_SC_NPROCESSORS_ONLN)"
+rap_feature_name="RAP_HAVE_SC_NPROCESSORS_ONLN"
+rap_feature_run=no
+rap_feature_incs=
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="sysconf(_SC_NPROCESSORS_ONLN)"
 . auto/feature
 
 
-rp_feature="sysconf(_SC_LEVEL1_DCACHE_LINESIZE)"
-rp_feature_name="RP_HAVE_LEVEL1_DCACHE_LINESIZE"
-rp_feature_run=no
-rp_feature_incs=
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="sysconf(_SC_LEVEL1_DCACHE_LINESIZE)"
+rap_feature="sysconf(_SC_LEVEL1_DCACHE_LINESIZE)"
+rap_feature_name="RAP_HAVE_LEVEL1_DCACHE_LINESIZE"
+rap_feature_run=no
+rap_feature_incs=
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="sysconf(_SC_LEVEL1_DCACHE_LINESIZE)"
 . auto/feature
 
 
-rp_feature="openat(), fstatat()"
-rp_feature_name="RP_HAVE_OPENAT"
-rp_feature_run=no
-rp_feature_incs="#include <sys/types.h>
+rap_feature="openat(), fstatat()"
+rap_feature_name="RAP_HAVE_OPENAT"
+rap_feature_run=no
+rap_feature_incs="#include <sys/types.h>
                   #include <sys/stat.h>
                   #include <fcntl.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct stat sb;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct stat sb;
                   openat(AT_FDCWD, \".\", O_RDONLY|O_NOFOLLOW);
                   fstatat(AT_FDCWD, \".\", &sb, AT_SYMLINK_NOFOLLOW);"
 . auto/feature
 
 
-rp_feature="getaddrinfo()"
-rp_feature_name="RP_HAVE_GETADDRINFO"
-rp_feature_run=no
-rp_feature_incs="#include <sys/types.h>
+rap_feature="getaddrinfo()"
+rap_feature_name="RAP_HAVE_GETADDRINFO"
+rap_feature_run=no
+rap_feature_incs="#include <sys/types.h>
                   #include <sys/socket.h>
                   #include <netdb.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test='struct addrinfo *res;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test='struct addrinfo *res;
                   if (getaddrinfo("localhost", NULL, NULL, &res) != 0) return 1;
                   freeaddrinfo(res)'
 . auto/feature

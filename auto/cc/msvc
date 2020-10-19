@@ -11,15 +11,15 @@
 # MSVC 2015 (14.0)                        cl 19.00
 
 
-RP_MSVC_VER=`$RP_WINE $CC 2>&1 | grep 'Compiler Version' 2>&1 \
+RAP_MSVC_VER=`$RAP_WINE $CC 2>&1 | grep 'Compiler Version' 2>&1 \
                                  | sed -e 's/^.* Version \(.*\)/\1/'`
 
-echo " + cl version: $RP_MSVC_VER"
+echo " + cl version: $RAP_MSVC_VER"
 
-have=RP_COMPILER value="\"cl $RP_MSVC_VER\"" . auto/define
+have=RAP_COMPILER value="\"cl $RAP_MSVC_VER\"" . auto/define
 
 
-rp_msvc_ver=`echo $RP_MSVC_VER | sed -e 's/^\([0-9]*\).*/\1/'`
+rap_msvc_ver=`echo $RAP_MSVC_VER | sed -e 's/^\([0-9]*\).*/\1/'`
 
 
 # optimizations
@@ -107,50 +107,50 @@ CORE_LIBS="$CORE_LIBS kernel32.lib user32.lib"
 # debug
 # msvc under Wine issues
 # C1902: Program database manager mismatch; please check your installation
-if [ -z "$RP_WINE" ]; then
-   CFLAGS="$CFLAGS -Zi -Fd$RP_OBJS/rap.pdb"
+if [ -z "$RAP_WINE" ]; then
+   CFLAGS="$CFLAGS -Zi -Fd$RAP_OBJS/rap.pdb"
    CORE_LINK="$CORE_LINK -debug"
 fi
 
 
 # MSVC 2005 supports C99 variadic macros
-if [ "$rp_msvc_ver" -ge 14 ]; then
-    have=RP_HAVE_C99_VARIADIC_MACROS . auto/have
+if [ "$rap_msvc_ver" -ge 14 ]; then
+    have=RAP_HAVE_C99_VARIADIC_MACROS . auto/have
 fi
 
 
 # precompiled headers
-CORE_DEPS="$CORE_DEPS $RP_OBJS/rp_config.pch"
-CORE_LINK="$CORE_LINK $RP_OBJS/rp_pch.obj"
-RP_PCH="$RP_OBJS/rp_config.pch"
-RP_BUILD_PCH="-Ycrp_config.h -Fp$RP_OBJS/rp_config.pch"
-RP_USE_PCH="-Yurp_config.h -Fp$RP_OBJS/rp_config.pch"
+CORE_DEPS="$CORE_DEPS $RAP_OBJS/rap_config.pch"
+CORE_LINK="$CORE_LINK $RAP_OBJS/rap_pch.obj"
+RAP_PCH="$RAP_OBJS/rap_config.pch"
+RAP_BUILD_PCH="-Ycrap_config.h -Fp$RAP_OBJS/rap_config.pch"
+RAP_USE_PCH="-Yurap_config.h -Fp$RAP_OBJS/rap_config.pch"
 
 
 # the resource file
-RP_RES="$RP_OBJS/rap.res"
-RP_RCC="rc -fo$RP_RES \$(CORE_INCS) $RP_WIN32_RC"
-CORE_LINK="$RP_RES $CORE_LINK"
+RAP_RES="$RAP_OBJS/rap.res"
+RAP_RCC="rc -fo$RAP_RES \$(CORE_INCS) $RAP_WIN32_RC"
+CORE_LINK="$RAP_RES $CORE_LINK"
 
 
 # dynamic modules
-#MAIN_LINK="-link -def:$RP_OBJS/rap.def"
-#MODULE_LINK="-LD $RP_OBJS/rap.lib"
+#MAIN_LINK="-link -def:$RAP_OBJS/rap.def"
+#MODULE_LINK="-LD $RAP_OBJS/rap.lib"
 
 
-rp_pic_opt=
-rp_objout="-Fo"
-rp_binout="-Fe"
-rp_objext="obj"
+rap_pic_opt=
+rap_objout="-Fo"
+rap_binout="-Fe"
+rap_objext="obj"
 
-rp_long_start='@<<
+rap_long_start='@<<
 	'
-rp_long_end='<<'
-rp_long_regex_cont=' \
+rap_long_end='<<'
+rap_long_regex_cont=' \
 	'
-rp_long_cont='
+rap_long_cont='
 	'
 
 # MSVC understand / in path
-#rp_regex_dirsep='\\'
-#rp_dirsep="\\"
+#rap_regex_dirsep='\\'
+#rap_dirsep="\\"

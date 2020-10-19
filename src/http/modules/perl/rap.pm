@@ -125,7 +125,7 @@ This module provides a Perl interface to the rap HTTP server API.
 
 =head1 SEE ALSO
 
-http://rap.org/en/docs/http/rp_http_perl_module.html
+http://rap.org/en/docs/http/rap_http_perl_module.html
 
 =head1 AUTHOR
 

@@ -5,169 +5,169 @@
  */
 
 
-#include <rp_config.h>
-#include <rp_core.h>
+#include <rap_config.h>
+#include <rap_core.h>
 #include <rap.h>
 
 
-static void rp_show_version_info(void);
-static rp_int_t rp_add_inherited_sockets(rp_cycle_t *cycle);
-static void rp_cleanup_environment(void *data);
-static rp_int_t rp_get_options(int argc, char *const *argv);
-static rp_int_t rp_process_options(rp_cycle_t *cycle);
-static rp_int_t rp_save_argv(rp_cycle_t *cycle, int argc, char *const *argv);
-static void *rp_core_module_create_conf(rp_cycle_t *cycle);
-static char *rp_core_module_init_conf(rp_cycle_t *cycle, void *conf);
-static char *rp_set_user(rp_conf_t *cf, rp_command_t *cmd, void *conf);
-static char *rp_set_env(rp_conf_t *cf, rp_command_t *cmd, void *conf);
-static char *rp_set_priority(rp_conf_t *cf, rp_command_t *cmd, void *conf);
-static char *rp_set_cpu_affinity(rp_conf_t *cf, rp_command_t *cmd,
+static void rap_show_version_info(void);
+static rap_int_t rap_add_inherited_sockets(rap_cycle_t *cycle);
+static void rap_cleanup_environment(void *data);
+static rap_int_t rap_get_options(int argc, char *const *argv);
+static rap_int_t rap_process_options(rap_cycle_t *cycle);
+static rap_int_t rap_save_argv(rap_cycle_t *cycle, int argc, char *const *argv);
+static void *rap_core_module_create_conf(rap_cycle_t *cycle);
+static char *rap_core_module_init_conf(rap_cycle_t *cycle, void *conf);
+static char *rap_set_user(rap_conf_t *cf, rap_command_t *cmd, void *conf);
+static char *rap_set_env(rap_conf_t *cf, rap_command_t *cmd, void *conf);
+static char *rap_set_priority(rap_conf_t *cf, rap_command_t *cmd, void *conf);
+static char *rap_set_cpu_affinity(rap_conf_t *cf, rap_command_t *cmd,
     void *conf);
-static char *rp_set_worker_processes(rp_conf_t *cf, rp_command_t *cmd,
+static char *rap_set_worker_processes(rap_conf_t *cf, rap_command_t *cmd,
     void *conf);
-static char *rp_load_module(rp_conf_t *cf, rp_command_t *cmd, void *conf);
-#if (RP_HAVE_DLOPEN)
-static void rp_unload_module(void *data);
+static char *rap_load_module(rap_conf_t *cf, rap_command_t *cmd, void *conf);
+#if (RAP_HAVE_DLOPEN)
+static void rap_unload_module(void *data);
 #endif
 
 
-static rp_conf_enum_t  rp_debug_points[] = {
-    { rp_string("stop"), RP_DEBUG_POINTS_STOP },
-    { rp_string("abort"), RP_DEBUG_POINTS_ABORT },
-    { rp_null_string, 0 }
+static rap_conf_enum_t  rap_debug_points[] = {
+    { rap_string("stop"), RAP_DEBUG_POINTS_STOP },
+    { rap_string("abort"), RAP_DEBUG_POINTS_ABORT },
+    { rap_null_string, 0 }
 };
 
 
-static rp_command_t  rp_core_commands[] = {
+static rap_command_t  rap_core_commands[] = {
 
-    { rp_string("daemon"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_FLAG,
-      rp_conf_set_flag_slot,
+    { rap_string("daemon"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_FLAG,
+      rap_conf_set_flag_slot,
       0,
-      offsetof(rp_core_conf_t, daemon),
+      offsetof(rap_core_conf_t, daemon),
       NULL },
 
-    { rp_string("master_process"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_FLAG,
-      rp_conf_set_flag_slot,
+    { rap_string("master_process"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_FLAG,
+      rap_conf_set_flag_slot,
       0,
-      offsetof(rp_core_conf_t, master),
+      offsetof(rap_core_conf_t, master),
       NULL },
 
-    { rp_string("timer_resolution"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_conf_set_msec_slot,
+    { rap_string("timer_resolution"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_conf_set_msec_slot,
       0,
-      offsetof(rp_core_conf_t, timer_resolution),
+      offsetof(rap_core_conf_t, timer_resolution),
       NULL },
 
-    { rp_string("pid"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_conf_set_str_slot,
+    { rap_string("pid"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_conf_set_str_slot,
       0,
-      offsetof(rp_core_conf_t, pid),
+      offsetof(rap_core_conf_t, pid),
       NULL },
 
-    { rp_string("lock_file"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_conf_set_str_slot,
+    { rap_string("lock_file"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_conf_set_str_slot,
       0,
-      offsetof(rp_core_conf_t, lock_file),
+      offsetof(rap_core_conf_t, lock_file),
       NULL },
 
-    { rp_string("worker_processes"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_set_worker_processes,
-      0,
-      0,
-      NULL },
-
-    { rp_string("debug_points"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_conf_set_enum_slot,
-      0,
-      offsetof(rp_core_conf_t, debug_points),
-      &rp_debug_points },
-
-    { rp_string("user"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE12,
-      rp_set_user,
+    { rap_string("worker_processes"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_set_worker_processes,
       0,
       0,
       NULL },
 
-    { rp_string("worker_priority"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_set_priority,
+    { rap_string("debug_points"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_conf_set_enum_slot,
+      0,
+      offsetof(rap_core_conf_t, debug_points),
+      &rap_debug_points },
+
+    { rap_string("user"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE12,
+      rap_set_user,
       0,
       0,
       NULL },
 
-    { rp_string("worker_cpu_affinity"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_1MORE,
-      rp_set_cpu_affinity,
+    { rap_string("worker_priority"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_set_priority,
       0,
       0,
       NULL },
 
-    { rp_string("worker_rlimit_nofile"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_conf_set_num_slot,
-      0,
-      offsetof(rp_core_conf_t, rlimit_nofile),
-      NULL },
-
-    { rp_string("worker_rlimit_core"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_conf_set_off_slot,
-      0,
-      offsetof(rp_core_conf_t, rlimit_core),
-      NULL },
-
-    { rp_string("worker_shutdown_timeout"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_conf_set_msec_slot,
-      0,
-      offsetof(rp_core_conf_t, shutdown_timeout),
-      NULL },
-
-    { rp_string("working_directory"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_conf_set_str_slot,
-      0,
-      offsetof(rp_core_conf_t, working_directory),
-      NULL },
-
-    { rp_string("env"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_set_env,
+    { rap_string("worker_cpu_affinity"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_1MORE,
+      rap_set_cpu_affinity,
       0,
       0,
       NULL },
 
-    { rp_string("load_module"),
-      RP_MAIN_CONF|RP_DIRECT_CONF|RP_CONF_TAKE1,
-      rp_load_module,
+    { rap_string("worker_rlimit_nofile"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_conf_set_num_slot,
+      0,
+      offsetof(rap_core_conf_t, rlimit_nofile),
+      NULL },
+
+    { rap_string("worker_rlimit_core"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_conf_set_off_slot,
+      0,
+      offsetof(rap_core_conf_t, rlimit_core),
+      NULL },
+
+    { rap_string("worker_shutdown_timeout"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_conf_set_msec_slot,
+      0,
+      offsetof(rap_core_conf_t, shutdown_timeout),
+      NULL },
+
+    { rap_string("working_directory"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_conf_set_str_slot,
+      0,
+      offsetof(rap_core_conf_t, working_directory),
+      NULL },
+
+    { rap_string("env"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_set_env,
       0,
       0,
       NULL },
 
-      rp_null_command
+    { rap_string("load_module"),
+      RAP_MAIN_CONF|RAP_DIRECT_CONF|RAP_CONF_TAKE1,
+      rap_load_module,
+      0,
+      0,
+      NULL },
+
+      rap_null_command
 };
 
 
-static rp_core_module_t  rp_core_module_ctx = {
-    rp_string("core"),
-    rp_core_module_create_conf,
-    rp_core_module_init_conf
+static rap_core_module_t  rap_core_module_ctx = {
+    rap_string("core"),
+    rap_core_module_create_conf,
+    rap_core_module_init_conf
 };
 
 
-rp_module_t  rp_core_module = {
-    RP_MODULE_V1,
-    &rp_core_module_ctx,                  /* module context */
-    rp_core_commands,                     /* module directives */
-    RP_CORE_MODULE,                       /* module type */
+rap_module_t  rap_core_module = {
+    RAP_MODULE_V1,
+    &rap_core_module_ctx,                  /* module context */
+    rap_core_commands,                     /* module directives */
+    RAP_CORE_MODULE,                       /* module type */
     NULL,                                  /* init master */
     NULL,                                  /* init module */
     NULL,                                  /* init process */
@@ -175,211 +175,211 @@ rp_module_t  rp_core_module = {
     NULL,                                  /* exit thread */
     NULL,                                  /* exit process */
     NULL,                                  /* exit master */
-    RP_MODULE_V1_PADDING
+    RAP_MODULE_V1_PADDING
 };
 
 
-static rp_uint_t   rp_show_help;
-static rp_uint_t   rp_show_version;
-static rp_uint_t   rp_show_configure;
-static u_char      *rp_prefix;
-static u_char      *rp_conf_file;
-static u_char      *rp_conf_params;
-static char        *rp_signal;
+static rap_uint_t   rap_show_help;
+static rap_uint_t   rap_show_version;
+static rap_uint_t   rap_show_configure;
+static u_char      *rap_prefix;
+static u_char      *rap_conf_file;
+static u_char      *rap_conf_params;
+static char        *rap_signal;
 
 
-static char **rp_os_environ;
+static char **rap_os_environ;
 
 
-int rp_cdecl
+int rap_cdecl
 main(int argc, char *const *argv)
 {
-    rp_buf_t        *b;
-    rp_log_t        *log;
-    rp_uint_t        i;
-    rp_cycle_t      *cycle, init_cycle;
-    rp_conf_dump_t  *cd;
-    rp_core_conf_t  *ccf;
+    rap_buf_t        *b;
+    rap_log_t        *log;
+    rap_uint_t        i;
+    rap_cycle_t      *cycle, init_cycle;
+    rap_conf_dump_t  *cd;
+    rap_core_conf_t  *ccf;
 
-    rp_debug_init();
+    rap_debug_init();
 
-    if (rp_strerror_init() != RP_OK) {
+    if (rap_strerror_init() != RAP_OK) {
         return 1;
     }
 
-    if (rp_get_options(argc, argv) != RP_OK) {
+    if (rap_get_options(argc, argv) != RAP_OK) {
         return 1;
     }
 
-    if (rp_show_version) {
-        rp_show_version_info();
+    if (rap_show_version) {
+        rap_show_version_info();
 
-        if (!rp_test_config) {
+        if (!rap_test_config) {
             return 0;
         }
     }
 
-    /* TODO */ rp_max_sockets = -1;
+    /* TODO */ rap_max_sockets = -1;
 
-    rp_time_init();
+    rap_time_init();
 
-#if (RP_PCRE)
-    rp_regex_init();
+#if (RAP_PCRE)
+    rap_regex_init();
 #endif
 
-    rp_pid = rp_getpid();
-    rp_parent = rp_getppid();
+    rap_pid = rap_getpid();
+    rap_parent = rap_getppid();
 
-    log = rp_log_init(rp_prefix);
+    log = rap_log_init(rap_prefix);
     if (log == NULL) {
         return 1;
     }
 
     /* STUB */
-#if (RP_OPENSSL)
-    rp_ssl_init(log);
+#if (RAP_OPENSSL)
+    rap_ssl_init(log);
 #endif
 
     /*
      * init_cycle->log is required for signal handlers and
-     * rp_process_options()
+     * rap_process_options()
      */
 
-    rp_memzero(&init_cycle, sizeof(rp_cycle_t));
+    rap_memzero(&init_cycle, sizeof(rap_cycle_t));
     init_cycle.log = log;
-    rp_cycle = &init_cycle;
+    rap_cycle = &init_cycle;
 
-    init_cycle.pool = rp_create_pool(1024, log);
+    init_cycle.pool = rap_create_pool(1024, log);
     if (init_cycle.pool == NULL) {
         return 1;
     }
 
-    if (rp_save_argv(&init_cycle, argc, argv) != RP_OK) {
+    if (rap_save_argv(&init_cycle, argc, argv) != RAP_OK) {
         return 1;
     }
 
-    if (rp_process_options(&init_cycle) != RP_OK) {
+    if (rap_process_options(&init_cycle) != RAP_OK) {
         return 1;
     }
 
-    if (rp_os_init(log) != RP_OK) {
-        return 1;
-    }
-
-    /*
-     * rp_crc32_table_init() requires rp_cacheline_size set in rp_os_init()
-     */
-
-    if (rp_crc32_table_init() != RP_OK) {
+    if (rap_os_init(log) != RAP_OK) {
         return 1;
     }
 
     /*
-     * rp_slab_sizes_init() requires rp_pagesize set in rp_os_init()
+     * rap_crc32_table_init() requires rap_cacheline_size set in rap_os_init()
      */
 
-    rp_slab_sizes_init();
-
-    if (rp_add_inherited_sockets(&init_cycle) != RP_OK) {
+    if (rap_crc32_table_init() != RAP_OK) {
         return 1;
     }
 
-    if (rp_preinit_modules() != RP_OK) {
+    /*
+     * rap_slab_sizes_init() requires rap_pagesize set in rap_os_init()
+     */
+
+    rap_slab_sizes_init();
+
+    if (rap_add_inherited_sockets(&init_cycle) != RAP_OK) {
         return 1;
     }
 
-    cycle = rp_init_cycle(&init_cycle);
+    if (rap_preinit_modules() != RAP_OK) {
+        return 1;
+    }
+
+    cycle = rap_init_cycle(&init_cycle);
     if (cycle == NULL) {
-        if (rp_test_config) {
-            rp_log_stderr(0, "configuration file %s test failed",
+        if (rap_test_config) {
+            rap_log_stderr(0, "configuration file %s test failed",
                            init_cycle.conf_file.data);
         }
 
         return 1;
     }
 
-    if (rp_test_config) {
-        if (!rp_quiet_mode) {
-            rp_log_stderr(0, "configuration file %s test is successful",
+    if (rap_test_config) {
+        if (!rap_quiet_mode) {
+            rap_log_stderr(0, "configuration file %s test is successful",
                            cycle->conf_file.data);
         }
 
-        if (rp_dump_config) {
+        if (rap_dump_config) {
             cd = cycle->config_dump.elts;
 
             for (i = 0; i < cycle->config_dump.nelts; i++) {
 
-                rp_write_stdout("# configuration file ");
-                (void) rp_write_fd(rp_stdout, cd[i].name.data,
+                rap_write_stdout("# configuration file ");
+                (void) rap_write_fd(rap_stdout, cd[i].name.data,
                                     cd[i].name.len);
-                rp_write_stdout(":" RP_LINEFEED);
+                rap_write_stdout(":" RAP_LINEFEED);
 
                 b = cd[i].buffer;
 
-                (void) rp_write_fd(rp_stdout, b->pos, b->last - b->pos);
-                rp_write_stdout(RP_LINEFEED);
+                (void) rap_write_fd(rap_stdout, b->pos, b->last - b->pos);
+                rap_write_stdout(RAP_LINEFEED);
             }
         }
 
         return 0;
     }
 
-    if (rp_signal) {
-        return rp_signal_process(cycle, rp_signal);
+    if (rap_signal) {
+        return rap_signal_process(cycle, rap_signal);
     }
 
-    rp_os_status(cycle->log);
+    rap_os_status(cycle->log);
 
-    rp_cycle = cycle;
+    rap_cycle = cycle;
 
-    ccf = (rp_core_conf_t *) rp_get_conf(cycle->conf_ctx, rp_core_module);
+    ccf = (rap_core_conf_t *) rap_get_conf(cycle->conf_ctx, rap_core_module);
 
-    if (ccf->master && rp_process == RP_PROCESS_SINGLE) {
-        rp_process = RP_PROCESS_MASTER;
+    if (ccf->master && rap_process == RAP_PROCESS_SINGLE) {
+        rap_process = RAP_PROCESS_MASTER;
     }
 
-#if !(RP_WIN32)
+#if !(RAP_WIN32)
 
-    if (rp_init_signals(cycle->log) != RP_OK) {
+    if (rap_init_signals(cycle->log) != RAP_OK) {
         return 1;
     }
 
-    if (!rp_inherited && ccf->daemon) {
-        if (rp_daemon(cycle->log) != RP_OK) {
+    if (!rap_inherited && ccf->daemon) {
+        if (rap_daemon(cycle->log) != RAP_OK) {
             return 1;
         }
 
-        rp_daemonized = 1;
+        rap_daemonized = 1;
     }
 
-    if (rp_inherited) {
-        rp_daemonized = 1;
+    if (rap_inherited) {
+        rap_daemonized = 1;
     }
 
 #endif
 
-    if (rp_create_pidfile(&ccf->pid, cycle->log) != RP_OK) {
+    if (rap_create_pidfile(&ccf->pid, cycle->log) != RAP_OK) {
         return 1;
     }
 
-    if (rp_log_redirect_stderr(cycle) != RP_OK) {
+    if (rap_log_redirect_stderr(cycle) != RAP_OK) {
         return 1;
     }
 
-    if (log->file->fd != rp_stderr) {
-        if (rp_close_file(log->file->fd) == RP_FILE_ERROR) {
-            rp_log_error(RP_LOG_ALERT, cycle->log, rp_errno,
-                          rp_close_file_n " built-in log failed");
+    if (log->file->fd != rap_stderr) {
+        if (rap_close_file(log->file->fd) == RAP_FILE_ERROR) {
+            rap_log_error(RAP_LOG_ALERT, cycle->log, rap_errno,
+                          rap_close_file_n " built-in log failed");
         }
     }
 
-    rp_use_stderr = 0;
+    rap_use_stderr = 0;
 
-    if (rp_process == RP_PROCESS_SINGLE) {
-        rp_single_process_cycle(cycle);
+    if (rap_process == RAP_PROCESS_SINGLE) {
+        rap_single_process_cycle(cycle);
 
     } else {
-        rp_master_process_cycle(cycle);
+        rap_master_process_cycle(cycle);
     }
 
     return 0;
@@ -387,95 +387,95 @@ main(int argc, char *const *argv)
 
 
 static void
-rp_show_version_info(void)
+rap_show_version_info(void)
 {
-    rp_write_stderr("rap version: " RAP_VER_BUILD RP_LINEFEED);
+    rap_write_stderr("rap version: " RAP_VER_BUILD RAP_LINEFEED);
 
-    if (rp_show_help) {
-        rp_write_stderr(
+    if (rap_show_help) {
+        rap_write_stderr(
             "Usage: rap [-?hvVtTq] [-s signal] [-c filename] "
-                         "[-p prefix] [-g directives]" RP_LINEFEED
-                         RP_LINEFEED
-            "Options:" RP_LINEFEED
-            "  -?,-h         : this help" RP_LINEFEED
-            "  -v            : show version and exit" RP_LINEFEED
+                         "[-p prefix] [-g directives]" RAP_LINEFEED
+                         RAP_LINEFEED
+            "Options:" RAP_LINEFEED
+            "  -?,-h         : this help" RAP_LINEFEED
+            "  -v            : show version and exit" RAP_LINEFEED
             "  -V            : show version and configure options then exit"
-                               RP_LINEFEED
-            "  -t            : test configuration and exit" RP_LINEFEED
+                               RAP_LINEFEED
+            "  -t            : test configuration and exit" RAP_LINEFEED
             "  -T            : test configuration, dump it and exit"
-                               RP_LINEFEED
+                               RAP_LINEFEED
             "  -q            : suppress non-error messages "
-                               "during configuration testing" RP_LINEFEED
+                               "during configuration testing" RAP_LINEFEED
             "  -s signal     : send signal to a master process: "
-                               "stop, quit, reopen, reload" RP_LINEFEED
-#ifdef RP_PREFIX
-            "  -p prefix     : set prefix path (default: " RP_PREFIX ")"
-                               RP_LINEFEED
+                               "stop, quit, reopen, reload" RAP_LINEFEED
+#ifdef RAP_PREFIX
+            "  -p prefix     : set prefix path (default: " RAP_PREFIX ")"
+                               RAP_LINEFEED
 #else
-            "  -p prefix     : set prefix path (default: NONE)" RP_LINEFEED
+            "  -p prefix     : set prefix path (default: NONE)" RAP_LINEFEED
 #endif
-            "  -c filename   : set configuration file (default: " RP_CONF_PATH
-                               ")" RP_LINEFEED
+            "  -c filename   : set configuration file (default: " RAP_CONF_PATH
+                               ")" RAP_LINEFEED
             "  -g directives : set global directives out of configuration "
-                               "file" RP_LINEFEED RP_LINEFEED
+                               "file" RAP_LINEFEED RAP_LINEFEED
         );
     }
 
-    if (rp_show_configure) {
+    if (rap_show_configure) {
 
-#ifdef RP_COMPILER
-        rp_write_stderr("built by " RP_COMPILER RP_LINEFEED);
+#ifdef RAP_COMPILER
+        rap_write_stderr("built by " RAP_COMPILER RAP_LINEFEED);
 #endif
 
-#if (RP_SSL)
-        if (rp_strcmp(rp_ssl_version(), OPENSSL_VERSION_TEXT) == 0) {
-            rp_write_stderr("built with " OPENSSL_VERSION_TEXT RP_LINEFEED);
+#if (RAP_SSL)
+        if (rap_strcmp(rap_ssl_version(), OPENSSL_VERSION_TEXT) == 0) {
+            rap_write_stderr("built with " OPENSSL_VERSION_TEXT RAP_LINEFEED);
         } else {
-            rp_write_stderr("built with " OPENSSL_VERSION_TEXT
+            rap_write_stderr("built with " OPENSSL_VERSION_TEXT
                              " (running with ");
-            rp_write_stderr((char *) (uintptr_t) rp_ssl_version());
-            rp_write_stderr(")" RP_LINEFEED);
+            rap_write_stderr((char *) (uintptr_t) rap_ssl_version());
+            rap_write_stderr(")" RAP_LINEFEED);
         }
 #ifdef SSL_CTRL_SET_TLSEXT_HOSTNAME
-        rp_write_stderr("TLS SNI support enabled" RP_LINEFEED);
+        rap_write_stderr("TLS SNI support enabled" RAP_LINEFEED);
 #else
-        rp_write_stderr("TLS SNI support disabled" RP_LINEFEED);
+        rap_write_stderr("TLS SNI support disabled" RAP_LINEFEED);
 #endif
 #endif
 
-        rp_write_stderr("configure arguments:" RP_CONFIGURE RP_LINEFEED);
+        rap_write_stderr("configure arguments:" RAP_CONFIGURE RAP_LINEFEED);
     }
 }
 
 
-static rp_int_t
-rp_add_inherited_sockets(rp_cycle_t *cycle)
+static rap_int_t
+rap_add_inherited_sockets(rap_cycle_t *cycle)
 {
     u_char           *p, *v, *inherited;
-    rp_int_t         s;
-    rp_listening_t  *ls;
+    rap_int_t         s;
+    rap_listening_t  *ls;
 
     inherited = (u_char *) getenv(RAP_VAR);
 
     if (inherited == NULL) {
-        return RP_OK;
+        return RAP_OK;
     }
 
-    rp_log_error(RP_LOG_NOTICE, cycle->log, 0,
+    rap_log_error(RAP_LOG_NOTICE, cycle->log, 0,
                   "using inherited sockets from \"%s\"", inherited);
 
-    if (rp_array_init(&cycle->listening, cycle->pool, 10,
-                       sizeof(rp_listening_t))
-        != RP_OK)
+    if (rap_array_init(&cycle->listening, cycle->pool, 10,
+                       sizeof(rap_listening_t))
+        != RAP_OK)
     {
-        return RP_ERROR;
+        return RAP_ERROR;
     }
 
     for (p = inherited, v = p; *p; p++) {
         if (*p == ':' || *p == ';') {
-            s = rp_atoi(v, p - v);
-            if (s == RP_ERROR) {
-                rp_log_error(RP_LOG_EMERG, cycle->log, 0,
+            s = rap_atoi(v, p - v);
+            if (s == RAP_ERROR) {
+                rap_log_error(RAP_LOG_EMERG, cycle->log, 0,
                               "invalid socket number \"%s\" in " RAP_VAR
                               " environment variable, ignoring the rest"
                               " of the variable", v);
@@ -484,39 +484,39 @@ rp_add_inherited_sockets(rp_cycle_t *cycle)
 
             v = p + 1;
 
-            ls = rp_array_push(&cycle->listening);
+            ls = rap_array_push(&cycle->listening);
             if (ls == NULL) {
-                return RP_ERROR;
+                return RAP_ERROR;
             }
 
-            rp_memzero(ls, sizeof(rp_listening_t));
+            rap_memzero(ls, sizeof(rap_listening_t));
 
-            ls->fd = (rp_socket_t) s;
+            ls->fd = (rap_socket_t) s;
         }
     }
 
     if (v != p) {
-        rp_log_error(RP_LOG_EMERG, cycle->log, 0,
+        rap_log_error(RAP_LOG_EMERG, cycle->log, 0,
                       "invalid socket number \"%s\" in " RAP_VAR
                       " environment variable, ignoring", v);
     }
 
-    rp_inherited = 1;
+    rap_inherited = 1;
 
-    return rp_set_inherited_sockets(cycle);
+    return rap_set_inherited_sockets(cycle);
 }
 
 
 char **
-rp_set_environment(rp_cycle_t *cycle, rp_uint_t *last)
+rap_set_environment(rap_cycle_t *cycle, rap_uint_t *last)
 {
     char                **p, **env;
-    rp_str_t            *var;
-    rp_uint_t            i, n;
-    rp_core_conf_t      *ccf;
-    rp_pool_cleanup_t   *cln;
+    rap_str_t            *var;
+    rap_uint_t            i, n;
+    rap_core_conf_t      *ccf;
+    rap_pool_cleanup_t   *cln;
 
-    ccf = (rp_core_conf_t *) rp_get_conf(cycle->conf_ctx, rp_core_module);
+    ccf = (rap_core_conf_t *) rap_get_conf(cycle->conf_ctx, rap_core_module);
 
     if (last == NULL && ccf->environment) {
         return ccf->environment;
@@ -525,14 +525,14 @@ rp_set_environment(rp_cycle_t *cycle, rp_uint_t *last)
     var = ccf->env.elts;
 
     for (i = 0; i < ccf->env.nelts; i++) {
-        if (rp_strcmp(var[i].data, "TZ") == 0
-            || rp_strncmp(var[i].data, "TZ=", 3) == 0)
+        if (rap_strcmp(var[i].data, "TZ") == 0
+            || rap_strncmp(var[i].data, "TZ=", 3) == 0)
         {
             goto tz_found;
         }
     }
 
-    var = rp_array_push(&ccf->env);
+    var = rap_array_push(&ccf->env);
     if (var == NULL) {
         return NULL;
     }
@@ -553,9 +553,9 @@ tz_found:
             continue;
         }
 
-        for (p = rp_os_environ; *p; p++) {
+        for (p = rap_os_environ; *p; p++) {
 
-            if (rp_strncmp(*p, var[i].data, var[i].len) == 0
+            if (rap_strncmp(*p, var[i].data, var[i].len) == 0
                 && (*p)[var[i].len] == '=')
             {
                 n++;
@@ -565,7 +565,7 @@ tz_found:
     }
 
     if (last) {
-        env = rp_alloc((*last + n + 1) * sizeof(char *), cycle->log);
+        env = rap_alloc((*last + n + 1) * sizeof(char *), cycle->log);
         if (env == NULL) {
             return NULL;
         }
@@ -573,17 +573,17 @@ tz_found:
         *last = n;
 
     } else {
-        cln = rp_pool_cleanup_add(cycle->pool, 0);
+        cln = rap_pool_cleanup_add(cycle->pool, 0);
         if (cln == NULL) {
             return NULL;
         }
 
-        env = rp_alloc((n + 1) * sizeof(char *), cycle->log);
+        env = rap_alloc((n + 1) * sizeof(char *), cycle->log);
         if (env == NULL) {
             return NULL;
         }
 
-        cln->handler = rp_cleanup_environment;
+        cln->handler = rap_cleanup_environment;
         cln->data = env;
     }
 
@@ -596,9 +596,9 @@ tz_found:
             continue;
         }
 
-        for (p = rp_os_environ; *p; p++) {
+        for (p = rap_os_environ; *p; p++) {
 
-            if (rp_strncmp(*p, var[i].data, var[i].len) == 0
+            if (rap_strncmp(*p, var[i].data, var[i].len) == 0
                 && (*p)[var[i].len] == '=')
             {
                 env[n++] = *p;
@@ -619,7 +619,7 @@ tz_found:
 
 
 static void
-rp_cleanup_environment(void *data)
+rap_cleanup_environment(void *data)
 {
     char  **env = data;
 
@@ -633,53 +633,53 @@ rp_cleanup_environment(void *data)
         return;
     }
 
-    rp_free(env);
+    rap_free(env);
 }
 
 
-rp_pid_t
-rp_exec_new_binary(rp_cycle_t *cycle, char *const *argv)
+rap_pid_t
+rap_exec_new_binary(rap_cycle_t *cycle, char *const *argv)
 {
     char             **env, *var;
     u_char            *p;
-    rp_uint_t         i, n;
-    rp_pid_t          pid;
-    rp_exec_ctx_t     ctx;
-    rp_core_conf_t   *ccf;
-    rp_listening_t   *ls;
+    rap_uint_t         i, n;
+    rap_pid_t          pid;
+    rap_exec_ctx_t     ctx;
+    rap_core_conf_t   *ccf;
+    rap_listening_t   *ls;
 
-    rp_memzero(&ctx, sizeof(rp_exec_ctx_t));
+    rap_memzero(&ctx, sizeof(rap_exec_ctx_t));
 
     ctx.path = argv[0];
     ctx.name = "new binary process";
     ctx.argv = argv;
 
     n = 2;
-    env = rp_set_environment(cycle, &n);
+    env = rap_set_environment(cycle, &n);
     if (env == NULL) {
-        return RP_INVALID_PID;
+        return RAP_INVALID_PID;
     }
 
-    var = rp_alloc(sizeof(RAP_VAR)
-                    + cycle->listening.nelts * (RP_INT32_LEN + 1) + 2,
+    var = rap_alloc(sizeof(RAP_VAR)
+                    + cycle->listening.nelts * (RAP_INT32_LEN + 1) + 2,
                     cycle->log);
     if (var == NULL) {
-        rp_free(env);
-        return RP_INVALID_PID;
+        rap_free(env);
+        return RAP_INVALID_PID;
     }
 
-    p = rp_cpymem(var, RAP_VAR "=", sizeof(RAP_VAR));
+    p = rap_cpymem(var, RAP_VAR "=", sizeof(RAP_VAR));
 
     ls = cycle->listening.elts;
     for (i = 0; i < cycle->listening.nelts; i++) {
-        p = rp_sprintf(p, "%ud;", ls[i].fd);
+        p = rap_sprintf(p, "%ud;", ls[i].fd);
     }
 
     *p = '\0';
 
     env[n++] = var;
 
-#if (RP_SETPROCTITLE_USES_ENV)
+#if (RAP_SETPROCTITLE_USES_ENV)
 
     /* allocate the spare 300 bytes for the new binary process title */
 
@@ -693,64 +693,64 @@ rp_exec_new_binary(rp_cycle_t *cycle, char *const *argv)
 
     env[n] = NULL;
 
-#if (RP_DEBUG)
+#if (RAP_DEBUG)
     {
     char  **e;
     for (e = env; *e; e++) {
-        rp_log_debug1(RP_LOG_DEBUG_CORE, cycle->log, 0, "env: %s", *e);
+        rap_log_debug1(RAP_LOG_DEBUG_CORE, cycle->log, 0, "env: %s", *e);
     }
     }
 #endif
 
     ctx.envp = (char *const *) env;
 
-    ccf = (rp_core_conf_t *) rp_get_conf(cycle->conf_ctx, rp_core_module);
+    ccf = (rap_core_conf_t *) rap_get_conf(cycle->conf_ctx, rap_core_module);
 
-    if (rp_rename_file(ccf->pid.data, ccf->oldpid.data) == RP_FILE_ERROR) {
-        rp_log_error(RP_LOG_ALERT, cycle->log, rp_errno,
-                      rp_rename_file_n " %s to %s failed "
+    if (rap_rename_file(ccf->pid.data, ccf->oldpid.data) == RAP_FILE_ERROR) {
+        rap_log_error(RAP_LOG_ALERT, cycle->log, rap_errno,
+                      rap_rename_file_n " %s to %s failed "
                       "before executing new binary process \"%s\"",
                       ccf->pid.data, ccf->oldpid.data, argv[0]);
 
-        rp_free(env);
-        rp_free(var);
+        rap_free(env);
+        rap_free(var);
 
-        return RP_INVALID_PID;
+        return RAP_INVALID_PID;
     }
 
-    pid = rp_execute(cycle, &ctx);
+    pid = rap_execute(cycle, &ctx);
 
-    if (pid == RP_INVALID_PID) {
-        if (rp_rename_file(ccf->oldpid.data, ccf->pid.data)
-            == RP_FILE_ERROR)
+    if (pid == RAP_INVALID_PID) {
+        if (rap_rename_file(ccf->oldpid.data, ccf->pid.data)
+            == RAP_FILE_ERROR)
         {
-            rp_log_error(RP_LOG_ALERT, cycle->log, rp_errno,
-                          rp_rename_file_n " %s back to %s failed after "
+            rap_log_error(RAP_LOG_ALERT, cycle->log, rap_errno,
+                          rap_rename_file_n " %s back to %s failed after "
                           "an attempt to execute new binary process \"%s\"",
                           ccf->oldpid.data, ccf->pid.data, argv[0]);
         }
     }
 
-    rp_free(env);
-    rp_free(var);
+    rap_free(env);
+    rap_free(var);
 
     return pid;
 }
 
 
-static rp_int_t
-rp_get_options(int argc, char *const *argv)
+static rap_int_t
+rap_get_options(int argc, char *const *argv)
 {
     u_char     *p;
-    rp_int_t   i;
+    rap_int_t   i;
 
     for (i = 1; i < argc; i++) {
 
         p = (u_char *) argv[i];
 
         if (*p++ != '-') {
-            rp_log_stderr(0, "invalid option: \"%s\"", argv[i]);
-            return RP_ERROR;
+            rap_log_stderr(0, "invalid option: \"%s\"", argv[i]);
+            return RAP_ERROR;
         }
 
         while (*p) {
@@ -759,101 +759,101 @@ rp_get_options(int argc, char *const *argv)
 
             case '?':
             case 'h':
-                rp_show_version = 1;
-                rp_show_help = 1;
+                rap_show_version = 1;
+                rap_show_help = 1;
                 break;
 
             case 'v':
-                rp_show_version = 1;
+                rap_show_version = 1;
                 break;
 
             case 'V':
-                rp_show_version = 1;
-                rp_show_configure = 1;
+                rap_show_version = 1;
+                rap_show_configure = 1;
                 break;
 
             case 't':
-                rp_test_config = 1;
+                rap_test_config = 1;
                 break;
 
             case 'T':
-                rp_test_config = 1;
-                rp_dump_config = 1;
+                rap_test_config = 1;
+                rap_dump_config = 1;
                 break;
 
             case 'q':
-                rp_quiet_mode = 1;
+                rap_quiet_mode = 1;
                 break;
 
             case 'p':
                 if (*p) {
-                    rp_prefix = p;
+                    rap_prefix = p;
                     goto next;
                 }
 
                 if (argv[++i]) {
-                    rp_prefix = (u_char *) argv[i];
+                    rap_prefix = (u_char *) argv[i];
                     goto next;
                 }
 
-                rp_log_stderr(0, "option \"-p\" requires directory name");
-                return RP_ERROR;
+                rap_log_stderr(0, "option \"-p\" requires directory name");
+                return RAP_ERROR;
 
             case 'c':
                 if (*p) {
-                    rp_conf_file = p;
+                    rap_conf_file = p;
                     goto next;
                 }
 
                 if (argv[++i]) {
-                    rp_conf_file = (u_char *) argv[i];
+                    rap_conf_file = (u_char *) argv[i];
                     goto next;
                 }
 
-                rp_log_stderr(0, "option \"-c\" requires file name");
-                return RP_ERROR;
+                rap_log_stderr(0, "option \"-c\" requires file name");
+                return RAP_ERROR;
 
             case 'g':
                 if (*p) {
-                    rp_conf_params = p;
+                    rap_conf_params = p;
                     goto next;
                 }
 
                 if (argv[++i]) {
-                    rp_conf_params = (u_char *) argv[i];
+                    rap_conf_params = (u_char *) argv[i];
                     goto next;
                 }
 
-                rp_log_stderr(0, "option \"-g\" requires parameter");
-                return RP_ERROR;
+                rap_log_stderr(0, "option \"-g\" requires parameter");
+                return RAP_ERROR;
 
             case 's':
                 if (*p) {
-                    rp_signal = (char *) p;
+                    rap_signal = (char *) p;
 
                 } else if (argv[++i]) {
-                    rp_signal = argv[i];
+                    rap_signal = argv[i];
 
                 } else {
-                    rp_log_stderr(0, "option \"-s\" requires parameter");
-                    return RP_ERROR;
+                    rap_log_stderr(0, "option \"-s\" requires parameter");
+                    return RAP_ERROR;
                 }
 
-                if (rp_strcmp(rp_signal, "stop") == 0
-                    || rp_strcmp(rp_signal, "quit") == 0
-                    || rp_strcmp(rp_signal, "reopen") == 0
-                    || rp_strcmp(rp_signal, "reload") == 0)
+                if (rap_strcmp(rap_signal, "stop") == 0
+                    || rap_strcmp(rap_signal, "quit") == 0
+                    || rap_strcmp(rap_signal, "reopen") == 0
+                    || rap_strcmp(rap_signal, "reload") == 0)
                 {
-                    rp_process = RP_PROCESS_SIGNALLER;
+                    rap_process = RAP_PROCESS_SIGNALLER;
                     goto next;
                 }
 
-                rp_log_stderr(0, "invalid option: \"-s %s\"", rp_signal);
-                return RP_ERROR;
+                rap_log_stderr(0, "invalid option: \"-s %s\"", rap_signal);
+                return RAP_ERROR;
 
             default:
-                rp_log_stderr(0, "invalid option: \"%c\"", *(p - 1));
-                return RP_ERROR;
+                rap_log_stderr(0, "invalid option: \"%c\"", *(p - 1));
+                return RAP_ERROR;
             }
         }
 
@@ -862,69 +862,69 @@ rp_get_options(int argc, char *const *argv)
         continue;
     }
 
-    return RP_OK;
+    return RAP_OK;
 }
 
 
-static rp_int_t
-rp_save_argv(rp_cycle_t *cycle, int argc, char *const *argv)
+static rap_int_t
+rap_save_argv(rap_cycle_t *cycle, int argc, char *const *argv)
 {
-#if (RP_FREEBSD)
+#if (RAP_FREEBSD)
 
-    rp_os_argv = (char **) argv;
-    rp_argc = argc;
-    rp_argv = (char **) argv;
+    rap_os_argv = (char **) argv;
+    rap_argc = argc;
+    rap_argv = (char **) argv;
 
 #else
     size_t     len;
-    rp_int_t  i;
+    rap_int_t  i;
 
-    rp_os_argv = (char **) argv;
-    rp_argc = argc;
+    rap_os_argv = (char **) argv;
+    rap_argc = argc;
 
-    rp_argv = rp_alloc((argc + 1) * sizeof(char *), cycle->log);
-    if (rp_argv == NULL) {
-        return RP_ERROR;
+    rap_argv = rap_alloc((argc + 1) * sizeof(char *), cycle->log);
+    if (rap_argv == NULL) {
+        return RAP_ERROR;
     }
 
     for (i = 0; i < argc; i++) {
-        len = rp_strlen(argv[i]) + 1;
+        len = rap_strlen(argv[i]) + 1;
 
-        rp_argv[i] = rp_alloc(len, cycle->log);
-        if (rp_argv[i] == NULL) {
-            return RP_ERROR;
+        rap_argv[i] = rap_alloc(len, cycle->log);
+        if (rap_argv[i] == NULL) {
+            return RAP_ERROR;
         }
 
-        (void) rp_cpystrn((u_char *) rp_argv[i], (u_char *) argv[i], len);
+        (void) rap_cpystrn((u_char *) rap_argv[i], (u_char *) argv[i], len);
     }
 
-    rp_argv[i] = NULL;
+    rap_argv[i] = NULL;
 
 #endif
 
-    rp_os_environ = environ;
+    rap_os_environ = environ;
 
-    return RP_OK;
+    return RAP_OK;
 }
 
 
-static rp_int_t
-rp_process_options(rp_cycle_t *cycle)
+static rap_int_t
+rap_process_options(rap_cycle_t *cycle)
 {
     u_char  *p;
     size_t   len;
 
-    if (rp_prefix) {
-        len = rp_strlen(rp_prefix);
-        p = rp_prefix;
+    if (rap_prefix) {
+        len = rap_strlen(rap_prefix);
+        p = rap_prefix;
 
-        if (len && !rp_path_separator(p[len - 1])) {
-            p = rp_pnalloc(cycle->pool, len + 1);
+        if (len && !rap_path_separator(p[len - 1])) {
+            p = rap_pnalloc(cycle->pool, len + 1);
             if (p == NULL) {
-                return RP_ERROR;
+                return RAP_ERROR;
             }
 
-            rp_memcpy(p, rp_prefix, len);
+            rap_memcpy(p, rap_prefix, len);
             p[len++] = '/';
         }
 
@@ -935,19 +935,19 @@ rp_process_options(rp_cycle_t *cycle)
 
     } else {
 
-#ifndef RP_PREFIX
+#ifndef RAP_PREFIX
 
-        p = rp_pnalloc(cycle->pool, RP_MAX_PATH);
+        p = rap_pnalloc(cycle->pool, RAP_MAX_PATH);
         if (p == NULL) {
-            return RP_ERROR;
+            return RAP_ERROR;
         }
 
-        if (rp_getcwd(p, RP_MAX_PATH) == 0) {
-            rp_log_stderr(rp_errno, "[emerg]: " rp_getcwd_n " failed");
-            return RP_ERROR;
+        if (rap_getcwd(p, RAP_MAX_PATH) == 0) {
+            rap_log_stderr(rap_errno, "[emerg]: " rap_getcwd_n " failed");
+            return RAP_ERROR;
         }
 
-        len = rp_strlen(p);
+        len = rap_strlen(p);
 
         p[len++] = '/';
 
@@ -958,64 +958,64 @@ rp_process_options(rp_cycle_t *cycle)
 
 #else
 
-#ifdef RP_CONF_PREFIX
-        rp_str_set(&cycle->conf_prefix, RP_CONF_PREFIX);
+#ifdef RAP_CONF_PREFIX
+        rap_str_set(&cycle->conf_prefix, RAP_CONF_PREFIX);
 #else
-        rp_str_set(&cycle->conf_prefix, RP_PREFIX);
+        rap_str_set(&cycle->conf_prefix, RAP_PREFIX);
 #endif
-        rp_str_set(&cycle->prefix, RP_PREFIX);
+        rap_str_set(&cycle->prefix, RAP_PREFIX);
 
 #endif
     }
 
-    if (rp_conf_file) {
-        cycle->conf_file.len = rp_strlen(rp_conf_file);
-        cycle->conf_file.data = rp_conf_file;
+    if (rap_conf_file) {
+        cycle->conf_file.len = rap_strlen(rap_conf_file);
+        cycle->conf_file.data = rap_conf_file;
 
     } else {
-        rp_str_set(&cycle->conf_file, RP_CONF_PATH);
+        rap_str_set(&cycle->conf_file, RAP_CONF_PATH);
     }
 
-    if (rp_conf_full_name(cycle, &cycle->conf_file, 0) != RP_OK) {
-        return RP_ERROR;
+    if (rap_conf_full_name(cycle, &cycle->conf_file, 0) != RAP_OK) {
+        return RAP_ERROR;
     }
 
     for (p = cycle->conf_file.data + cycle->conf_file.len - 1;
          p > cycle->conf_file.data;
          p--)
     {
-        if (rp_path_separator(*p)) {
+        if (rap_path_separator(*p)) {
             cycle->conf_prefix.len = p - cycle->conf_file.data + 1;
             cycle->conf_prefix.data = cycle->conf_file.data;
             break;
         }
     }
 
-    if (rp_conf_params) {
-        cycle->conf_param.len = rp_strlen(rp_conf_params);
-        cycle->conf_param.data = rp_conf_params;
+    if (rap_conf_params) {
+        cycle->conf_param.len = rap_strlen(rap_conf_params);
+        cycle->conf_param.data = rap_conf_params;
     }
 
-    if (rp_test_config) {
-        cycle->log->log_level = RP_LOG_INFO;
+    if (rap_test_config) {
+        cycle->log->log_level = RAP_LOG_INFO;
     }
 
-    return RP_OK;
+    return RAP_OK;
 }
 
 
 static void *
-rp_core_module_create_conf(rp_cycle_t *cycle)
+rap_core_module_create_conf(rap_cycle_t *cycle)
 {
-    rp_core_conf_t  *ccf;
+    rap_core_conf_t  *ccf;
 
-    ccf = rp_pcalloc(cycle->pool, sizeof(rp_core_conf_t));
+    ccf = rap_pcalloc(cycle->pool, sizeof(rap_core_conf_t));
     if (ccf == NULL) {
         return NULL;
     }
 
     /*
-     * set by rp_pcalloc()
+     * set by rap_pcalloc()
      *
      *     ccf->pid = NULL;
      *     ccf->oldpid = NULL;
@@ -1025,22 +1025,22 @@ rp_core_module_create_conf(rp_cycle_t *cycle)
      *     ccf->cpu_affinity = NULL;
      */
 
-    ccf->daemon = RP_CONF_UNSET;
-    ccf->master = RP_CONF_UNSET;
-    ccf->timer_resolution = RP_CONF_UNSET_MSEC;
-    ccf->shutdown_timeout = RP_CONF_UNSET_MSEC;
+    ccf->daemon = RAP_CONF_UNSET;
+    ccf->master = RAP_CONF_UNSET;
+    ccf->timer_resolution = RAP_CONF_UNSET_MSEC;
+    ccf->shutdown_timeout = RAP_CONF_UNSET_MSEC;
 
-    ccf->worker_processes = RP_CONF_UNSET;
-    ccf->debug_points = RP_CONF_UNSET;
+    ccf->worker_processes = RAP_CONF_UNSET;
+    ccf->debug_points = RAP_CONF_UNSET;
 
-    ccf->rlimit_nofile = RP_CONF_UNSET;
-    ccf->rlimit_core = RP_CONF_UNSET;
+    ccf->rlimit_nofile = RAP_CONF_UNSET;
+    ccf->rlimit_core = RAP_CONF_UNSET;
 
-    ccf->user = (rp_uid_t) RP_CONF_UNSET_UINT;
-    ccf->group = (rp_gid_t) RP_CONF_UNSET_UINT;
+    ccf->user = (rap_uid_t) RAP_CONF_UNSET_UINT;
+    ccf->group = (rap_gid_t) RAP_CONF_UNSET_UINT;
 
-    if (rp_array_init(&ccf->env, cycle->pool, 1, sizeof(rp_str_t))
-        != RP_OK)
+    if (rap_array_init(&ccf->env, cycle->pool, 1, sizeof(rap_str_t))
+        != RAP_OK)
     {
         return NULL;
     }
@@ -1050,26 +1050,26 @@ rp_core_module_create_conf(rp_cycle_t *cycle)
 
 
 static char *
-rp_core_module_init_conf(rp_cycle_t *cycle, void *conf)
+rap_core_module_init_conf(rap_cycle_t *cycle, void *conf)
 {
-    rp_core_conf_t  *ccf = conf;
+    rap_core_conf_t  *ccf = conf;
 
-    rp_conf_init_value(ccf->daemon, 1);
-    rp_conf_init_value(ccf->master, 1);
-    rp_conf_init_msec_value(ccf->timer_resolution, 0);
-    rp_conf_init_msec_value(ccf->shutdown_timeout, 0);
+    rap_conf_init_value(ccf->daemon, 1);
+    rap_conf_init_value(ccf->master, 1);
+    rap_conf_init_msec_value(ccf->timer_resolution, 0);
+    rap_conf_init_msec_value(ccf->shutdown_timeout, 0);
 
-    rp_conf_init_value(ccf->worker_processes, 1);
-    rp_conf_init_value(ccf->debug_points, 0);
+    rap_conf_init_value(ccf->worker_processes, 1);
+    rap_conf_init_value(ccf->debug_points, 0);
 
-#if (RP_HAVE_CPU_AFFINITY)
+#if (RAP_HAVE_CPU_AFFINITY)
 
     if (!ccf->cpu_affinity_auto
         && ccf->cpu_affinity_n
         && ccf->cpu_affinity_n != 1
-        && ccf->cpu_affinity_n != (rp_uint_t) ccf->worker_processes)
+        && ccf->cpu_affinity_n != (rap_uint_t) ccf->worker_processes)
     {
-        rp_log_error(RP_LOG_WARN, cycle->log, 0,
+        rap_log_error(RAP_LOG_WARN, cycle->log, 0,
                       "the number of \"worker_processes\" is not equal to "
                       "the number of \"worker_cpu_affinity\" masks, "
                       "using last mask for remaining worker processes");
@@ -1079,47 +1079,47 @@ rp_core_module_init_conf(rp_cycle_t *cycle, void *conf)
 
 
     if (ccf->pid.len == 0) {
-        rp_str_set(&ccf->pid, RP_PID_PATH);
+        rap_str_set(&ccf->pid, RAP_PID_PATH);
     }
 
-    if (rp_conf_full_name(cycle, &ccf->pid, 0) != RP_OK) {
-        return RP_CONF_ERROR;
+    if (rap_conf_full_name(cycle, &ccf->pid, 0) != RAP_OK) {
+        return RAP_CONF_ERROR;
     }
 
-    ccf->oldpid.len = ccf->pid.len + sizeof(RP_OLDPID_EXT);
+    ccf->oldpid.len = ccf->pid.len + sizeof(RAP_OLDPID_EXT);
 
-    ccf->oldpid.data = rp_pnalloc(cycle->pool, ccf->oldpid.len);
+    ccf->oldpid.data = rap_pnalloc(cycle->pool, ccf->oldpid.len);
     if (ccf->oldpid.data == NULL) {
-        return RP_CONF_ERROR;
+        return RAP_CONF_ERROR;
     }
 
-    rp_memcpy(rp_cpymem(ccf->oldpid.data, ccf->pid.data, ccf->pid.len),
-               RP_OLDPID_EXT, sizeof(RP_OLDPID_EXT));
+    rap_memcpy(rap_cpymem(ccf->oldpid.data, ccf->pid.data, ccf->pid.len),
+               RAP_OLDPID_EXT, sizeof(RAP_OLDPID_EXT));
 
 
-#if !(RP_WIN32)
+#if !(RAP_WIN32)
 
-    if (ccf->user == (uid_t) RP_CONF_UNSET_UINT && geteuid() == 0) {
+    if (ccf->user == (uid_t) RAP_CONF_UNSET_UINT && geteuid() == 0) {
         struct group   *grp;
         struct passwd  *pwd;
 
-        rp_set_errno(0);
-        pwd = getpwnam(RP_USER);
+        rap_set_errno(0);
+        pwd = getpwnam(RAP_USER);
         if (pwd == NULL) {
-            rp_log_error(RP_LOG_EMERG, cycle->log, rp_errno,
-                          "getpwnam(\"" RP_USER "\") failed");
-            return RP_CONF_ERROR;
+            rap_log_error(RAP_LOG_EMERG, cycle->log, rap_errno,
+                          "getpwnam(\"" RAP_USER "\") failed");
+            return RAP_CONF_ERROR;
         }
 
-        ccf->username = RP_USER;
+        ccf->username = RAP_USER;
         ccf->user = pwd->pw_uid;
 
-        rp_set_errno(0);
-        grp = getgrnam(RP_GROUP);
+        rap_set_errno(0);
+        grp = getgrnam(RAP_GROUP);
         if (grp == NULL) {
-            rp_log_error(RP_LOG_EMERG, cycle->log, rp_errno,
-                          "getgrnam(\"" RP_GROUP "\") failed");
-            return RP_CONF_ERROR;
+            rap_log_error(RAP_LOG_EMERG, cycle->log, rap_errno,
+                          "getgrnam(\"" RAP_GROUP "\") failed");
+            return RAP_CONF_ERROR;
         }
 
         ccf->group = grp->gr_gid;
@@ -1127,15 +1127,15 @@ rp_core_module_init_conf(rp_cycle_t *cycle, void *conf)
 
 
     if (ccf->lock_file.len == 0) {
-        rp_str_set(&ccf->lock_file, RP_LOCK_PATH);
+        rap_str_set(&ccf->lock_file, RAP_LOCK_PATH);
     }
 
-    if (rp_conf_full_name(cycle, &ccf->lock_file, 0) != RP_OK) {
-        return RP_CONF_ERROR;
+    if (rap_conf_full_name(cycle, &ccf->lock_file, 0) != RAP_OK) {
+        return RAP_CONF_ERROR;
     }
 
     {
-    rp_str_t  lock_file;
+    rap_str_t  lock_file;
 
     lock_file = cycle->old_cycle->lock_file;
 
@@ -1143,30 +1143,30 @@ rp_core_module_init_conf(rp_cycle_t *cycle, void *conf)
         lock_file.len--;
 
         if (ccf->lock_file.len != lock_file.len
-            || rp_strncmp(ccf->lock_file.data, lock_file.data, lock_file.len)
+            || rap_strncmp(ccf->lock_file.data, lock_file.data, lock_file.len)
                != 0)
         {
-            rp_log_error(RP_LOG_EMERG, cycle->log, 0,
+            rap_log_error(RAP_LOG_EMERG, cycle->log, 0,
                           "\"lock_file\" could not be changed, ignored");
         }
 
         cycle->lock_file.len = lock_file.len + 1;
         lock_file.len += sizeof(".accept");
 
-        cycle->lock_file.data = rp_pstrdup(cycle->pool, &lock_file);
+        cycle->lock_file.data = rap_pstrdup(cycle->pool, &lock_file);
         if (cycle->lock_file.data == NULL) {
-            return RP_CONF_ERROR;
+            return RAP_CONF_ERROR;
         }
 
     } else {
         cycle->lock_file.len = ccf->lock_file.len + 1;
-        cycle->lock_file.data = rp_pnalloc(cycle->pool,
+        cycle->lock_file.data = rap_pnalloc(cycle->pool,
                                       ccf->lock_file.len + sizeof(".accept"));
         if (cycle->lock_file.data == NULL) {
-            return RP_CONF_ERROR;
+            return RAP_CONF_ERROR;
         }
 
-        rp_memcpy(rp_cpymem(cycle->lock_file.data, ccf->lock_file.data,
+        rap_memcpy(rap_cpymem(cycle->lock_file.data, ccf->lock_file.data,
                               ccf->lock_file.len),
                    ".accept", sizeof(".accept"));
     }
@@ -1174,84 +1174,84 @@ rp_core_module_init_conf(rp_cycle_t *cycle, void *conf)
 
 #endif
 
-    return RP_CONF_OK;
+    return RAP_CONF_OK;
 }
 
 
 static char *
-rp_set_user(rp_conf_t *cf, rp_command_t *cmd, void *conf)
+rap_set_user(rap_conf_t *cf, rap_command_t *cmd, void *conf)
 {
-#if (RP_WIN32)
+#if (RAP_WIN32)
 
-    rp_conf_log_error(RP_LOG_WARN, cf, 0,
+    rap_conf_log_error(RAP_LOG_WARN, cf, 0,
                        "\"user\" is not supported, ignored");
 
-    return RP_CONF_OK;
+    return RAP_CONF_OK;
 
 #else
 
-    rp_core_conf_t  *ccf = conf;
+    rap_core_conf_t  *ccf = conf;
 
     char             *group;
     struct passwd    *pwd;
     struct group     *grp;
-    rp_str_t        *value;
+    rap_str_t        *value;
 
-    if (ccf->user != (uid_t) RP_CONF_UNSET_UINT) {
+    if (ccf->user != (uid_t) RAP_CONF_UNSET_UINT) {
         return "is duplicate";
     }
 
     if (geteuid() != 0) {
-        rp_conf_log_error(RP_LOG_WARN, cf, 0,
+        rap_conf_log_error(RAP_LOG_WARN, cf, 0,
                            "the \"user\" directive makes sense only "
                            "if the master process runs "
                            "with super-user privileges, ignored");
-        return RP_CONF_OK;
+        return RAP_CONF_OK;
     }
 
     value = cf->args->elts;
 
     ccf->username = (char *) value[1].data;
 
-    rp_set_errno(0);
+    rap_set_errno(0);
     pwd = getpwnam((const char *) value[1].data);
     if (pwd == NULL) {
-        rp_conf_log_error(RP_LOG_EMERG, cf, rp_errno,
+        rap_conf_log_error(RAP_LOG_EMERG, cf, rap_errno,
                            "getpwnam(\"%s\") failed", value[1].data);
-        return RP_CONF_ERROR;
+        return RAP_CONF_ERROR;
     }
 
     ccf->user = pwd->pw_uid;
 
     group = (char *) ((cf->args->nelts == 2) ? value[1].data : value[2].data);
 
-    rp_set_errno(0);
+    rap_set_errno(0);
     grp = getgrnam(group);
     if (grp == NULL) {
-        rp_conf_log_error(RP_LOG_EMERG, cf, rp_errno,
+        rap_conf_log_error(RAP_LOG_EMERG, cf, rap_errno,
                            "getgrnam(\"%s\") failed", group);
-        return RP_CONF_ERROR;
+        return RAP_CONF_ERROR;
     }
 
     ccf->group = grp->gr_gid;
 
-    return RP_CONF_OK;
+    return RAP_CONF_OK;
 
 #endif
 }
 
 
 static char *
-rp_set_env(rp_conf_t *cf, rp_command_t *cmd, void *conf)
+rap_set_env(rap_conf_t *cf, rap_command_t *cmd, void *conf)
 {
-    rp_core_conf_t  *ccf = conf;
+    rap_core_conf_t  *ccf = conf;
 
-    rp_str_t   *value, *var;
-    rp_uint_t   i;
+    rap_str_t   *value, *var;
+    rap_uint_t   i;
 
-    var = rp_array_push(&ccf->env);
+    var = rap_array_push(&ccf->env);
     if (var == NULL) {
-        return RP_CONF_ERROR;
+        return RAP_CONF_ERROR;
     }
 
     value = cf->args->elts;
@@ -1263,21 +1263,21 @@ rp_set_env(rp_conf_t *cf, rp_command_t *cmd, void *conf)
 
             var->len = i;
 
-            return RP_CONF_OK;
+            return RAP_CONF_OK;
         }
     }
 
-    return RP_CONF_OK;
+    return RAP_CONF_OK;
 }
 
 
 static char *
-rp_set_priority(rp_conf_t *cf, rp_command_t *cmd, void *conf)
+rap_set_priority(rap_conf_t *cf, rap_command_t *cmd, void *conf)
 {
-    rp_core_conf_t  *ccf = conf;
+    rap_core_conf_t  *ccf = conf;
 
-    rp_str_t        *value;
-    rp_uint_t        n, minus;
+    rap_str_t        *value;
+    rap_uint_t        n, minus;
 
     if (ccf->priority != 0) {
         return "is duplicate";
@@ -1298,8 +1298,8 @@ rp_set_priority(rp_conf_t *cf, rp_command_t *cmd, void *conf)
         minus = 0;
     }
 
-    ccf->priority = rp_atoi(&value[1].data[n], value[1].len - n);
-    if (ccf->priority == RP_ERROR) {
+    ccf->priority = rap_atoi(&value[1].data[n], value[1].len - n);
+    if (ccf->priority == RAP_ERROR) {
         return "invalid number";
     }
 
@@ -1307,28 +1307,28 @@ rp_set_priority(rp_conf_t *cf, rp_command_t *cmd, void *conf)
         ccf->priority = -ccf->priority;
     }
 
-    return RP_CONF_OK;
+    return RAP_CONF_OK;
 }
 
 
 static char *
-rp_set_cpu_affinity(rp_conf_t *cf, rp_command_t *cmd, void *conf)
+rap_set_cpu_affinity(rap_conf_t *cf, rap_command_t *cmd, void *conf)
 {
-#if (RP_HAVE_CPU_AFFINITY)
-    rp_core_conf_t  *ccf = conf;
+#if (RAP_HAVE_CPU_AFFINITY)
+    rap_core_conf_t  *ccf = conf;
 
     u_char            ch, *p;
-    rp_str_t        *value;
-    rp_uint_t        i, n;
-    rp_cpuset_t     *mask;
+    rap_str_t        *value;
+    rap_uint_t        i, n;
+    rap_cpuset_t     *mask;
 
     if (ccf->cpu_affinity) {
         return "is duplicate";
     }
 
-    mask = rp_palloc(cf->pool, (cf->args->nelts - 1) * sizeof(rp_cpuset_t));
+    mask = rap_palloc(cf->pool, (cf->args->nelts - 1) * sizeof(rap_cpuset_t));
     if (mask == NULL) {
-        return RP_CONF_ERROR;
+        return RAP_CONF_ERROR;
     }
 
     ccf->cpu_affinity_n = cf->args->nelts - 1;
@@ -1336,19 +1336,19 @@ rp_set_cpu_affinity(rp_conf_t *cf, rp_command_t *cmd, void *conf)
 
     value = cf->args->elts;
 
-    if (rp_strcmp(value[1].data, "auto") == 0) {
+    if (rap_strcmp(value[1].data, "auto") == 0) {
 
         if (cf->args->nelts > 3) {
-            rp_conf_log_error(RP_LOG_EMERG, cf, 0,
+            rap_conf_log_error(RAP_LOG_EMERG, cf, 0,
                                "invalid number of arguments in "
                                "\"worker_cpu_affinity\" directive");
-            return RP_CONF_ERROR;
+            return RAP_CONF_ERROR;
         }
 
         ccf->cpu_affinity_auto = 1;
 
         CPU_ZERO(&mask[0]);
-        for (i = 0; i < (rp_uint_t) rp_min(rp_ncpu, CPU_SETSIZE); i++) {
+        for (i = 0; i < (rap_uint_t) rap_min(rap_ncpu, CPU_SETSIZE); i++) {
             CPU_SET(i, &mask[0]);
         }
 
@@ -1361,10 +1361,10 @@ rp_set_cpu_affinity(rp_conf_t *cf, rp_command_t *cmd, void *conf)
     for ( /* void */ ; n < cf->args->nelts; n++) {
 
         if (value[n].len > CPU_SETSIZE) {
-            rp_conf_log_error(RP_LOG_EMERG, cf, 0,
+            rap_conf_log_error(RAP_LOG_EMERG, cf, 0,
                          "\"worker_cpu_affinity\" supports up to %d CPUs only",
                          CPU_SETSIZE);
-            return RP_CONF_ERROR;
+            return RAP_CONF_ERROR;
         }
 
         i = 0;
@@ -1391,36 +1391,36 @@ rp_set_cpu_affinity(rp_conf_t *cf, rp_command_t *cmd, void *conf)
                 continue;
             }
 
-            rp_conf_log_error(RP_LOG_EMERG, cf, 0,
+            rap_conf_log_error(RAP_LOG_EMERG, cf, 0,
                           "invalid character \"%c\" in \"worker_cpu_affinity\"",
                           ch);
-            return RP_CONF_ERROR;
+            return RAP_CONF_ERROR;
         }
     }
 
 #else
 
-    rp_conf_log_error(RP_LOG_WARN, cf, 0,
+    rap_conf_log_error(RAP_LOG_WARN, cf, 0,
                        "\"worker_cpu_affinity\" is not supported "
                        "on this platform, ignored");
 #endif
 
-    return RP_CONF_OK;
+    return RAP_CONF_OK;
 }
 
 
-rp_cpuset_t *
-rp_get_cpu_affinity(rp_uint_t n)
+rap_cpuset_t *
+rap_get_cpu_affinity(rap_uint_t n)
 {
-#if (RP_HAVE_CPU_AFFINITY)
-    rp_uint_t        i, j;
-    rp_cpuset_t     *mask;
-    rp_core_conf_t  *ccf;
+#if (RAP_HAVE_CPU_AFFINITY)
+    rap_uint_t        i, j;
+    rap_cpuset_t     *mask;
+    rap_core_conf_t  *ccf;
 
-    static rp_cpuset_t  result;
+    static rap_cpuset_t  result;
 
-    ccf = (rp_core_conf_t *) rp_get_conf(rp_cycle->conf_ctx,
-                                           rp_core_module);
+    ccf = (rap_core_conf_t *) rap_get_conf(rap_cycle->conf_ctx,
+                                           rap_core_module);
 
     if (ccf->cpu_affinity == NULL) {
         return NULL;
@@ -1464,44 +1464,44 @@ rp_get_cpu_affinity(rp_uint_t n)
 
 
 static char *
-rp_set_worker_processes(rp_conf_t *cf, rp_command_t *cmd, void *conf)
+rap_set_worker_processes(rap_conf_t *cf, rap_command_t *cmd, void *conf)
 {
-    rp_str_t        *value;
-    rp_core_conf_t  *ccf;
+    rap_str_t        *value;
+    rap_core_conf_t  *ccf;
 
-    ccf = (rp_core_conf_t *) conf;
+    ccf = (rap_core_conf_t *) conf;
 
-    if (ccf->worker_processes != RP_CONF_UNSET) {
+    if (ccf->worker_processes != RAP_CONF_UNSET) {
         return "is duplicate";
     }
 
     value = cf->args->elts;
 
-    if (rp_strcmp(value[1].data, "auto") == 0) {
-        ccf->worker_processes = rp_ncpu;
-        return RP_CONF_OK;
+    if (rap_strcmp(value[1].data, "auto") == 0) {
+        ccf->worker_processes = rap_ncpu;
+        return RAP_CONF_OK;
     }
 
-    ccf->worker_processes = rp_atoi(value[1].data, value[1].len);
+    ccf->worker_processes = rap_atoi(value[1].data, value[1].len);
 
-    if (ccf->worker_processes == RP_ERROR) {
+    if (ccf->worker_processes == RAP_ERROR) {
         return "invalid value";
     }
 
-    return RP_CONF_OK;
+    return RAP_CONF_OK;
 }
 
 
 static char *
-rp_load_module(rp_conf_t *cf, rp_command_t *cmd, void *conf)
+rap_load_module(rap_conf_t *cf, rap_command_t *cmd, void *conf)
 {
-#if (RP_HAVE_DLOPEN)
+#if (RAP_HAVE_DLOPEN)
     void                *handle;
     char               **names, **order;
-    rp_str_t           *value, file;
-    rp_uint_t           i;
-    rp_module_t        *module, **modules;
-    rp_pool_cleanup_t  *cln;
+    rap_str_t           *value, file;
+    rap_uint_t           i;
+    rap_module_t        *module, **modules;
+    rap_pool_cleanup_t  *cln;
 
     if (cf->cycle->modules_used) {
         return "is specified too late";
@@ -1511,79 +1511,79 @@ rp_load_module(rp_conf_t *cf, rp_command_t *cmd, void *conf)
 
     file = value[1];
 
-    if (rp_conf_full_name(cf->cycle, &file, 0) != RP_OK) {
-        return RP_CONF_ERROR;
+    if (rap_conf_full_name(cf->cycle, &file, 0) != RAP_OK) {
+        return RAP_CONF_ERROR;
     }
 
-    cln = rp_pool_cleanup_add(cf->cycle->pool, 0);
+    cln = rap_pool_cleanup_add(cf->cycle->pool, 0);
     if (cln == NULL) {
-        return RP_CONF_ERROR;
+        return RAP_CONF_ERROR;
     }
 
-    handle = rp_dlopen(file.data);
+    handle = rap_dlopen(file.data);
     if (handle == NULL) {
-        rp_conf_log_error(RP_LOG_EMERG, cf, 0,
-                           rp_dlopen_n " \"%s\" failed (%s)",
-                           file.data, rp_dlerror());
-        return RP_CONF_ERROR;
+        rap_conf_log_error(RAP_LOG_EMERG, cf, 0,
+                           rap_dlopen_n " \"%s\" failed (%s)",
+                           file.data, rap_dlerror());
+        return RAP_CONF_ERROR;
     }
 
-    cln->handler = rp_unload_module;
+    cln->handler = rap_unload_module;
     cln->data = handle;
 
-    modules = rp_dlsym(handle, "rp_modules");
+    modules = rap_dlsym(handle, "rap_modules");
     if (modules == NULL) {
-        rp_conf_log_error(RP_LOG_EMERG, cf, 0,
-                           rp_dlsym_n " \"%V\", \"%s\" failed (%s)",
-                           &value[1], "rp_modules", rp_dlerror());
-        return RP_CONF_ERROR;
+        rap_conf_log_error(RAP_LOG_EMERG, cf, 0,
+                           rap_dlsym_n " \"%V\", \"%s\" failed (%s)",
+                           &value[1], "rap_modules", rap_dlerror());
+        return RAP_CONF_ERROR;
     }
 
-    names = rp_dlsym(handle, "rp_module_names");
+    names = rap_dlsym(handle, "rap_module_names");
     if (names == NULL) {
-        rp_conf_log_error(RP_LOG_EMERG, cf, 0,
-                           rp_dlsym_n " \"%V\", \"%s\" failed (%s)",
-                           &value[1], "rp_module_names", rp_dlerror());
-        return RP_CONF_ERROR;
+        rap_conf_log_error(RAP_LOG_EMERG, cf, 0,
+                           rap_dlsym_n " \"%V\", \"%s\" failed (%s)",
+                           &value[1], "rap_module_names", rap_dlerror());
+        return RAP_CONF_ERROR;
     }
 
-    order = rp_dlsym(handle, "rp_module_order");
+    order = rap_dlsym(handle, "rap_module_order");
 
     for (i = 0; modules[i]; i++) {
         module = modules[i];
         module->name = names[i];
 
-        if (rp_add_module(cf, &file, module, order) != RP_OK) {
-            return RP_CONF_ERROR;
+        if (rap_add_module(cf, &file, module, order) != RAP_OK) {
+            return RAP_CONF_ERROR;
         }
 
-        rp_log_debug2(RP_LOG_DEBUG_CORE, cf->log, 0, "module: %s i:%ui",
+        rap_log_debug2(RAP_LOG_DEBUG_CORE, cf->log, 0, "module: %s i:%ui",
                        module->name, module->index);
     }
 
-    return RP_CONF_OK;
+    return RAP_CONF_OK;
 
 #else
 
-    rp_conf_log_error(RP_LOG_EMERG, cf, 0,
+    rap_conf_log_error(RAP_LOG_EMERG, cf, 0,
                        "\"load_module\" is not supported "
                        "on this platform");
-    return RP_CONF_ERROR;
+    return RAP_CONF_ERROR;
 
 #endif
 }
 
 
-#if (RP_HAVE_DLOPEN)
+#if (RAP_HAVE_DLOPEN)
 
 static void
-rp_unload_module(void *data)
+rap_unload_module(void *data)
 {
     void  *handle = data;
 
-    if (rp_dlclose(handle) != 0) {
-        rp_log_error(RP_LOG_ALERT, rp_cycle->log, 0,
-                      rp_dlclose_n " failed (%s)", rp_dlerror());
+    if (rap_dlclose(handle) != 0) {
+        rap_log_error(RAP_LOG_ALERT, rap_cycle->log, 0,
+                      rap_dlclose_n " failed (%s)", rap_dlerror());
     }
 }
 

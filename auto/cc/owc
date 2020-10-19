@@ -61,14 +61,14 @@ CFLAGS="$CFLAGS -d2"
 CFLAGS="$CFLAGS -zq"
 
 # Open Watcom C 1.2
-have=RP_HAVE_C99_VARIADIC_MACROS . auto/have
+have=RAP_HAVE_C99_VARIADIC_MACROS . auto/have
 
 
 # the precompiled headers
-#CORE_DEPS="$CORE_DEPS $RP_OBJS/rp_config.pch"
-#RP_PCH="$RP_OBJS/rp_config.pch"
-#RP_BUILD_PCH="-fhq=$RP_OBJS/rp_config.pch"
-#RP_USE_PCH="-fh=$RP_OBJS/rp_config.pch"
+#CORE_DEPS="$CORE_DEPS $RAP_OBJS/rap_config.pch"
+#RAP_PCH="$RAP_OBJS/rap_config.pch"
+#RAP_BUILD_PCH="-fhq=$RAP_OBJS/rap_config.pch"
+#RAP_USE_PCH="-fh=$RAP_OBJS/rap_config.pch"
 
 
 # the link flags, built target is NT GUI mode application
@@ -76,28 +76,28 @@ have=RP_HAVE_C99_VARIADIC_MACROS . auto/have
 
 
 # the resource file
-RP_RCC="wrc \$(CORE_INCS) -fo=$RP_OBJS/rap.res "
-RP_RCC="$RP_RCC $RP_WIN32_RC $RP_OBJS/rap.exe"
+RAP_RCC="wrc \$(CORE_INCS) -fo=$RAP_OBJS/rap.res "
+RAP_RCC="$RAP_RCC $RAP_WIN32_RC $RAP_OBJS/rap.exe"
 
 
-rp_include_opt="-i="
-rp_objout="-fo"
-rp_binout="-fe="
-rp_objext="obj"
+rap_include_opt="-i="
+rap_objout="-fo"
+rap_binout="-fe="
+rap_objext="obj"
 
-rp_regex_dirsep='\\'
-rp_dirsep="\\"
+rap_regex_dirsep='\\'
+rap_dirsep="\\"
 
-rp_long_start=' '
-rp_long_end=' '
-rp_long_regex_cont=' \&\
+rap_long_start=' '
+rap_long_end=' '
+rap_long_regex_cont=' \&\
 	'
-rp_long_cont=' &
+rap_long_cont=' &
 	'
 
-rp_regex_cont=' \&\
+rap_regex_cont=' \&\
 	'
-rp_cont=' &
+rap_cont=' &
 	'
-rp_tab=' &
+rap_tab=' &
 		'

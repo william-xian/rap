@@ -13,14 +13,14 @@
 #define RAP_VERSION      "1.18.0"
 #define RAP_VER          "rap/" RAP_VERSION
 
-#ifdef RP_BUILD
-#define RAP_VER_BUILD    RAP_VER " (" RP_BUILD ")"
+#ifdef RAP_BUILD
+#define RAP_VER_BUILD    RAP_VER " (" RAP_BUILD ")"
 #else
 #define RAP_VER_BUILD    RAP_VER
 #endif
 
 #define RAP_VAR          "RAP"
-#define RP_OLDPID_EXT     ".oldbin"
+#define RAP_OLDPID_EXT     ".oldbin"
 
 
 #endif /* _RAP_H_INCLUDED_ */

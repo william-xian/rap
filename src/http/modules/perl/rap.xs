@@ -7,29 +7,29 @@
 
 #define PERL_NO_GET_CONTEXT
 
-#include <rp_config.h>
-#include <rp_core.h>
-#include <rp_http.h>
-#include <rp_http_perl_module.h>
+#include <rap_config.h>
+#include <rap_core.h>
+#include <rap_http.h>
+#include <rap_http_perl_module.h>
 
 #include "XSUB.h"
 
 
-#define rp_http_perl_set_request(r, ctx)                                     \
+#define rap_http_perl_set_request(r, ctx)                                     \
                                                                               \
-    ctx = INT2PTR(rp_http_perl_ctx_t *, SvIV((SV *) SvRV(ST(0))));           \
+    ctx = INT2PTR(rap_http_perl_ctx_t *, SvIV((SV *) SvRV(ST(0))));           \
     r = ctx->request
 
 
-#define rp_http_perl_set_targ(p, len)                                        \
+#define rap_http_perl_set_targ(p, len)                                        \
                                                                               \
     SvUPGRADE(TARG, SVt_PV);                                                  \
     SvPOK_on(TARG);                                                           \
     sv_setpvn(TARG, (char *) p, len)
 
 
-static rp_int_t
-rp_http_perl_sv2str(pTHX_ rp_http_request_t *r, rp_str_t *s, SV *sv)
+static rap_int_t
+rap_http_perl_sv2str(pTHX_ rap_http_request_t *r, rap_str_t *s, SV *sv)
 {
     u_char  *p;
     STRLEN   len;
@@ -45,38 +45,38 @@ rp_http_perl_sv2str(pTHX_ rp_http_request_t *r, rp_str_t *s, SV *sv)
     if (SvREADONLY(sv) && SvPOK(sv)) {
         s->data = p;
 
-        rp_log_debug2(RP_LOG_DEBUG_HTTP, r->connection->log, 0,
+        rap_log_debug2(RAP_LOG_DEBUG_HTTP, r->connection->log, 0,
                        "perl sv2str: %08XD \"%V\"", sv->sv_flags, s);
 
-        return RP_OK;
+        return RAP_OK;
     }
 
-    s->data = rp_pnalloc(r->pool, len);
+    s->data = rap_pnalloc(r->pool, len);
     if (s->data == NULL) {
-        return RP_ERROR;
+        return RAP_ERROR;
     }
 
-    rp_memcpy(s->data, p, len);
+    rap_memcpy(s->data, p, len);
 
-    rp_log_debug2(RP_LOG_DEBUG_HTTP, r->connection->log, 0,
+    rap_log_debug2(RAP_LOG_DEBUG_HTTP, r->connection->log, 0,
                    "perl sv2str: %08XD \"%V\"", sv->sv_flags, s);
 
-    return RP_OK;
+    return RAP_OK;
 }
 
 
-static rp_int_t
-rp_http_perl_output(rp_http_request_t *r, rp_http_perl_ctx_t *ctx,
-    rp_buf_t *b)
+static rap_int_t
+rap_http_perl_output(rap_http_request_t *r, rap_http_perl_ctx_t *ctx,
+    rap_buf_t *b)
 {
-    rp_chain_t   out;
-#if (RP_HTTP_SSI)
-    rp_chain_t  *cl;
+    rap_chain_t   out;
+#if (RAP_HTTP_SSI)
+    rap_chain_t  *cl;
 
     if (ctx->ssi) {
-        cl = rp_alloc_chain_link(r->pool);
+        cl = rap_alloc_chain_link(r->pool);
         if (cl == NULL) {
-            return RP_ERROR;
+            return RAP_ERROR;
         }
 
         cl->buf = b;
@@ -84,14 +84,14 @@ rp_http_perl_output(rp_http_request_t *r, rp_http_perl_ctx_t *ctx,
         *ctx->ssi->last_out = cl;
         ctx->ssi->last_out = &cl->next;
 
-        return RP_OK;
+        return RAP_OK;
     }
 #endif
 
     out.buf = b;
     out.next = NULL;
 
-    return rp_http_output_filter(r, &out);
+    return rap_http_output_filter(r, &out);
 }
 
 
@@ -105,10 +105,10 @@ void
 status(r, code)
     CODE:
 
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->variable) {
         croak("status(): cannot be used in variable handler");
@@ -116,7 +116,7 @@ status(r, code)
 
     r->headers_out.status = SvIV(ST(1));
 
-    rp_log_debug1(RP_LOG_DEBUG_HTTP, r->connection->log, 0,
+    rap_log_debug1(RAP_LOG_DEBUG_HTTP, r->connection->log, 0,
                    "perl status: %d", r->headers_out.status);
 
     XSRETURN_UNDEF;
@@ -126,12 +126,12 @@ void
 send_http_header(r, ...)
     CODE:
 
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
     SV                   *sv;
-    rp_int_t             rc;
+    rap_int_t             rc;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->error) {
         croak("send_http_header(): called after error");
@@ -150,25 +150,25 @@ send_http_header(r, ...)
     }
 
     if (r->headers_out.status == 0) {
-        r->headers_out.status = RP_HTTP_OK;
+        r->headers_out.status = RAP_HTTP_OK;
     }
 
     if (items != 1) {
         sv = ST(1);
 
-        if (rp_http_perl_sv2str(aTHX_ r, &r->headers_out.content_type, sv)
-            != RP_OK)
+        if (rap_http_perl_sv2str(aTHX_ r, &r->headers_out.content_type, sv)
+            != RAP_OK)
         {
             ctx->error = 1;
-            croak("rp_http_perl_sv2str() failed");
+            croak("rap_http_perl_sv2str() failed");
         }
 
         r->headers_out.content_type_len = r->headers_out.content_type.len;
 
     } else {
-        if (rp_http_set_content_type(r) != RP_OK) {
+        if (rap_http_set_content_type(r) != RAP_OK) {
             ctx->error = 1;
-            croak("rp_http_set_content_type() failed");
+            croak("rap_http_set_content_type() failed");
         }
     }
 
@@ -176,12 +176,12 @@ send_http_header(r, ...)
 
     r->disable_not_modified = 1;
 
-    rc = rp_http_send_header(r);
+    rc = rap_http_send_header(r);
 
-    if (rc == RP_ERROR || rc > RP_OK) {
+    if (rc == RAP_ERROR || rc > RAP_OK) {
         ctx->error = 1;
         ctx->status = rc;
-        croak("rp_http_send_header() failed");
+        croak("rap_http_send_header() failed");
     }
 
 
@@ -190,10 +190,10 @@ header_only(r)
     CODE:
 
     dXSTARG;
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     sv_upgrade(TARG, SVt_IV);
     sv_setiv(TARG, r->header_only);
@@ -206,11 +206,11 @@ uri(r)
     CODE:
 
     dXSTARG;
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
 
-    rp_http_perl_set_request(r, ctx);
-    rp_http_perl_set_targ(r->uri.data, r->uri.len);
+    rap_http_perl_set_request(r, ctx);
+    rap_http_perl_set_targ(r->uri.data, r->uri.len);
 
     ST(0) = TARG;
 
@@ -220,11 +220,11 @@ args(r)
     CODE:
 
     dXSTARG;
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
 
-    rp_http_perl_set_request(r, ctx);
-    rp_http_perl_set_targ(r->args.data, r->args.len);
+    rap_http_perl_set_request(r, ctx);
+    rap_http_perl_set_targ(r->args.data, r->args.len);
 
     ST(0) = TARG;
 
@@ -234,11 +234,11 @@ request_method(r)
     CODE:
 
     dXSTARG;
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
 
-    rp_http_perl_set_request(r, ctx);
-    rp_http_perl_set_targ(r->method_name.data, r->method_name.len);
+    rap_http_perl_set_request(r, ctx);
+    rap_http_perl_set_targ(r->method_name.data, r->method_name.len);
 
     ST(0) = TARG;
 
@@ -248,11 +248,11 @@ remote_addr(r)
     CODE:
 
     dXSTARG;
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
 
-    rp_http_perl_set_request(r, ctx);
-    rp_http_perl_set_targ(r->connection->addr_text.data,
+    rap_http_perl_set_request(r, ctx);
+    rap_http_perl_set_targ(r->connection->addr_text.data,
                            r->connection->addr_text.len);
 
     ST(0) = TARG;
@@ -263,20 +263,20 @@ header_in(r, key)
     CODE:
 
     dXSTARG;
-    rp_http_request_t         *r;
-    rp_http_perl_ctx_t        *ctx;
+    rap_http_request_t         *r;
+    rap_http_perl_ctx_t        *ctx;
     SV                         *key;
     u_char                     *p, *lowcase_key, *value, sep;
     STRLEN                      len;
     ssize_t                     size;
-    rp_uint_t                  i, n, hash;
-    rp_array_t                *a;
-    rp_list_part_t            *part;
-    rp_table_elt_t            *h, **ph;
-    rp_http_header_t          *hh;
-    rp_http_core_main_conf_t  *cmcf;
+    rap_uint_t                  i, n, hash;
+    rap_array_t                *a;
+    rap_list_part_t            *part;
+    rap_table_elt_t            *h, **ph;
+    rap_http_header_t          *hh;
+    rap_http_core_main_conf_t  *cmcf;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     key = ST(1);
 
@@ -288,35 +288,35 @@ header_in(r, key)
 
     /* look up hashed headers */
 
-    lowcase_key = rp_pnalloc(r->pool, len);
+    lowcase_key = rap_pnalloc(r->pool, len);
     if (lowcase_key == NULL) {
         ctx->error = 1;
-        croak("rp_pnalloc() failed");
+        croak("rap_pnalloc() failed");
     }
 
-    hash = rp_hash_strlow(lowcase_key, p, len);
+    hash = rap_hash_strlow(lowcase_key, p, len);
 
-    cmcf = rp_http_get_module_main_conf(r, rp_http_core_module);
+    cmcf = rap_http_get_module_main_conf(r, rap_http_core_module);
 
-    hh = rp_hash_find(&cmcf->headers_in_hash, hash, lowcase_key, len);
+    hh = rap_hash_find(&cmcf->headers_in_hash, hash, lowcase_key, len);
 
     if (hh) {
 
-        if (hh->offset == offsetof(rp_http_headers_in_t, cookies)) {
+        if (hh->offset == offsetof(rap_http_headers_in_t, cookies)) {
             sep = ';';
             goto multi;
         }
-#if (RP_HTTP_X_FORWARDED_FOR)
-        if (hh->offset == offsetof(rp_http_headers_in_t, x_forwarded_for)) {
+#if (RAP_HTTP_X_FORWARDED_FOR)
+        if (hh->offset == offsetof(rap_http_headers_in_t, x_forwarded_for)) {
             sep = ',';
             goto multi;
         }
 #endif
 
-        ph = (rp_table_elt_t **) ((char *) &r->headers_in + hh->offset);
+        ph = (rap_table_elt_t **) ((char *) &r->headers_in + hh->offset);
 
         if (*ph) {
-            rp_http_perl_set_targ((*ph)->value.data, (*ph)->value.len);
+            rap_http_perl_set_targ((*ph)->value.data, (*ph)->value.len);
 
             goto done;
         }
@@ -327,7 +327,7 @@ header_in(r, key)
 
         /* Cookie, X-Forwarded-For */
 
-        a = (rp_array_t *) ((char *) &r->headers_in + hh->offset);
+        a = (rap_array_t *) ((char *) &r->headers_in + hh->offset);
 
         n = a->nelts;
 
@@ -338,7 +338,7 @@ header_in(r, key)
         ph = a->elts;
 
         if (n == 1) {
-            rp_http_perl_set_targ((*ph)->value.data, (*ph)->value.len);
+            rap_http_perl_set_targ((*ph)->value.data, (*ph)->value.len);
 
             goto done;
         }
@@ -349,16 +349,16 @@ header_in(r, key)
             size += ph[i]->value.len + sizeof("; ") - 1;
         }
 
-        value = rp_pnalloc(r->pool, size);
+        value = rap_pnalloc(r->pool, size);
         if (value == NULL) {
             ctx->error = 1;
-            croak("rp_pnalloc() failed");
+            croak("rap_pnalloc() failed");
         }
 
         p = value;
 
         for (i = 0; /* void */ ; i++) {
-            p = rp_copy(p, ph[i]->value.data, ph[i]->value.len);
+            p = rap_copy(p, ph[i]->value.data, ph[i]->value.len);
 
             if (i == n - 1) {
                 break;
@@ -367,7 +367,7 @@ header_in(r, key)
             *p++ = sep; *p++ = ' ';
         }
 
-        rp_http_perl_set_targ(value, size);
+        rap_http_perl_set_targ(value, size);
 
         goto done;
     }
@@ -390,12 +390,12 @@ header_in(r, key)
         }
 
         if (len != h[i].key.len
-            || rp_strcasecmp(p, h[i].key.data) != 0)
+            || rap_strcasecmp(p, h[i].key.data) != 0)
         {
             continue;
         }
 
-        rp_http_perl_set_targ(h[i].value.data, h[i].value.len);
+        rap_http_perl_set_targ(h[i].value.data, h[i].value.len);
 
         goto done;
     }
@@ -412,11 +412,11 @@ has_request_body(r, next)
     CODE:
 
     dXSTARG;
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
-    rp_int_t             rc;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
+    rap_int_t             rc;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->variable) {
         croak("has_request_body(): cannot be used in variable handler");
@@ -440,13 +440,13 @@ has_request_body(r, next)
         r->request_body_file_log_level = 0;
     }
 
-    rc = rp_http_read_client_request_body(r, rp_http_perl_handle_request);
+    rc = rap_http_read_client_request_body(r, rap_http_perl_handle_request);
 
-    if (rc >= RP_HTTP_SPECIAL_RESPONSE) {
+    if (rc >= RAP_HTTP_SPECIAL_RESPONSE) {
         ctx->error = 1;
         ctx->status = rc;
         ctx->next = NULL;
-        croak("rp_http_read_client_request_body() failed");
+        croak("rap_http_read_client_request_body() failed");
     }
 
     sv_upgrade(TARG, SVt_IV);
@@ -460,14 +460,14 @@ request_body(r)
     CODE:
 
     dXSTARG;
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
     u_char               *p, *data;
     size_t                len;
-    rp_buf_t            *buf;
-    rp_chain_t          *cl;
+    rap_buf_t            *buf;
+    rap_chain_t          *cl;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (r->request_body == NULL
         || r->request_body->temp_file
@@ -493,10 +493,10 @@ request_body(r)
         len += buf->last - buf->pos;
     }
 
-    p = rp_pnalloc(r->pool, len);
+    p = rap_pnalloc(r->pool, len);
     if (p == NULL) {
         ctx->error = 1;
-        croak("rp_pnalloc() failed");
+        croak("rap_pnalloc() failed");
     }
 
     data = p;
@@ -504,7 +504,7 @@ request_body(r)
 
     for ( /* void */ ; cl; cl = cl->next) {
         buf = cl->buf;
-        p = rp_cpymem(p, buf->pos, buf->last - buf->pos);
+        p = rap_cpymem(p, buf->pos, buf->last - buf->pos);
     }
 
     done:
@@ -513,7 +513,7 @@ request_body(r)
         XSRETURN_UNDEF;
     }
 
-    rp_http_perl_set_targ(data, len);
+    rap_http_perl_set_targ(data, len);
 
     ST(0) = TARG;
 
@@ -523,16 +523,16 @@ request_body_file(r)
     CODE:
 
     dXSTARG;
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (r->request_body == NULL || r->request_body->temp_file == NULL) {
         XSRETURN_UNDEF;
     }
 
-    rp_http_perl_set_targ(r->request_body->temp_file->file.name.data,
+    rap_http_perl_set_targ(r->request_body->temp_file->file.name.data,
                            r->request_body->temp_file->file.name.len);
 
     ST(0) = TARG;
@@ -542,22 +542,22 @@ void
 discard_request_body(r)
     CODE:
 
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
-    rp_int_t             rc;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
+    rap_int_t             rc;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->variable) {
         croak("discard_request_body(): cannot be used in variable handler");
     }
 
-    rc = rp_http_discard_request_body(r);
+    rc = rap_http_discard_request_body(r);
 
-    if (rc != RP_OK) {
+    if (rc != RAP_OK) {
         ctx->error = 1;
         ctx->status = rc;
-        croak("rp_http_discard_request_body() failed");
+        croak("rap_http_discard_request_body() failed");
     }
 
 
@@ -565,13 +565,13 @@ void
 header_out(r, key, value)
     CODE:
 
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
     SV                   *key;
     SV                   *value;
-    rp_table_elt_t      *header;
+    rap_table_elt_t      *header;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->error) {
         croak("header_out(): called after error");
@@ -584,28 +584,28 @@ header_out(r, key, value)
     key = ST(1);
     value = ST(2);
 
-    header = rp_list_push(&r->headers_out.headers);
+    header = rap_list_push(&r->headers_out.headers);
     if (header == NULL) {
         ctx->error = 1;
-        croak("rp_list_push() failed");
+        croak("rap_list_push() failed");
     }
 
     header->hash = 1;
 
-    if (rp_http_perl_sv2str(aTHX_ r, &header->key, key) != RP_OK) {
+    if (rap_http_perl_sv2str(aTHX_ r, &header->key, key) != RAP_OK) {
         header->hash = 0;
         ctx->error = 1;
-        croak("rp_http_perl_sv2str() failed");
+        croak("rap_http_perl_sv2str() failed");
     }
 
-    if (rp_http_perl_sv2str(aTHX_ r, &header->value, value) != RP_OK) {
+    if (rap_http_perl_sv2str(aTHX_ r, &header->value, value) != RAP_OK) {
         header->hash = 0;
         ctx->error = 1;
-        croak("rp_http_perl_sv2str() failed");
+        croak("rap_http_perl_sv2str() failed");
     }
 
     if (header->key.len == sizeof("Content-Length") - 1
-        && rp_strncasecmp(header->key.data, (u_char *) "Content-Length",
+        && rap_strncasecmp(header->key.data, (u_char *) "Content-Length",
                            sizeof("Content-Length") - 1) == 0)
     {
         r->headers_out.content_length_n = (off_t) SvIV(value);
@@ -613,7 +613,7 @@ header_out(r, key, value)
     }
 
     if (header->key.len == sizeof("Content-Encoding") - 1
-        && rp_strncasecmp(header->key.data, (u_char *) "Content-Encoding",
+        && rap_strncasecmp(header->key.data, (u_char *) "Content-Encoding",
                            sizeof("Content-Encoding") - 1) == 0)
     {
         r->headers_out.content_encoding = header;
@@ -625,19 +625,19 @@ filename(r)
     CODE:
 
     dXSTARG;
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
     size_t                root;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->filename.data) {
         goto done;
     }
 
-    if (rp_http_map_uri_to_path(r, &ctx->filename, &root, 0) == NULL) {
+    if (rap_http_map_uri_to_path(r, &ctx->filename, &root, 0) == NULL) {
         ctx->error = 1;
-        croak("rp_http_map_uri_to_path() failed");
+        croak("rap_http_map_uri_to_path() failed");
     }
 
     ctx->filename.len--;
@@ -645,7 +645,7 @@ filename(r)
 
     done:
 
-    rp_http_perl_set_targ(ctx->filename.data, ctx->filename.len);
+    rap_http_perl_set_targ(ctx->filename.data, ctx->filename.len);
 
     ST(0) = TARG;
 
@@ -654,17 +654,17 @@ void
 print(r, ...)
     CODE:
 
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
     SV                   *sv;
     int                   i;
     u_char               *p;
     size_t                size;
     STRLEN                len;
-    rp_int_t             rc;
-    rp_buf_t            *b;
+    rap_int_t             rc;
+    rap_buf_t            *b;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->error) {
         croak("print(): called after error");
@@ -699,10 +699,10 @@ print(r, ...)
                 XSRETURN_EMPTY;
             }
 
-            b = rp_calloc_buf(r->pool);
+            b = rap_calloc_buf(r->pool);
             if (b == NULL) {
                 ctx->error = 1;
-                croak("rp_calloc_buf() failed");
+                croak("rap_calloc_buf() failed");
             }
 
             b->memory = 1;
@@ -711,7 +711,7 @@ print(r, ...)
             b->start = p;
             b->end = b->last;
 
-            rp_log_debug1(RP_LOG_DEBUG_HTTP, r->connection->log, 0,
+            rap_log_debug1(RAP_LOG_DEBUG_HTTP, r->connection->log, 0,
                            "$r->print: read-only SV: %z", len);
 
             goto out;
@@ -730,7 +730,7 @@ print(r, ...)
 
         (void) SvPV(sv, len);
 
-        rp_log_debug1(RP_LOG_DEBUG_HTTP, r->connection->log, 0,
+        rap_log_debug1(RAP_LOG_DEBUG_HTTP, r->connection->log, 0,
                        "$r->print: copy SV: %z", len);
 
         size += len;
@@ -740,10 +740,10 @@ print(r, ...)
         XSRETURN_EMPTY;
     }
 
-    b = rp_create_temp_buf(r->pool, size);
+    b = rap_create_temp_buf(r->pool, size);
     if (b == NULL) {
         ctx->error = 1;
-        croak("rp_create_temp_buf() failed");
+        croak("rap_create_temp_buf() failed");
     }
 
     for (i = 1; i < items; i++) {
@@ -754,16 +754,16 @@ print(r, ...)
         }
 
         p = (u_char *) SvPV(sv, len);
-        b->last = rp_cpymem(b->last, p, len);
+        b->last = rap_cpymem(b->last, p, len);
     }
 
     out:
 
-    rc = rp_http_perl_output(r, ctx, b);
+    rc = rap_http_perl_output(r, ctx, b);
 
-    if (rc == RP_ERROR) {
+    if (rc == RAP_ERROR) {
         ctx->error = 1;
-        croak("rp_http_perl_output() failed");
+        croak("rap_http_perl_output() failed");
     }
 
 
@@ -771,18 +771,18 @@ void
 sendfile(r, filename, offset = -1, bytes = 0)
     CODE:
 
-    rp_http_request_t        *r;
-    rp_http_perl_ctx_t       *ctx;
+    rap_http_request_t        *r;
+    rap_http_perl_ctx_t       *ctx;
     char                      *filename;
     off_t                      offset;
     size_t                     bytes;
-    rp_int_t                  rc;
-    rp_str_t                  path;
-    rp_buf_t                 *b;
-    rp_open_file_info_t       of;
-    rp_http_core_loc_conf_t  *clcf;
+    rap_int_t                  rc;
+    rap_str_t                  path;
+    rap_buf_t                 *b;
+    rap_open_file_info_t       of;
+    rap_http_core_loc_conf_t  *clcf;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->error) {
         croak("sendfile(): called after error");
@@ -805,31 +805,31 @@ sendfile(r, filename, offset = -1, bytes = 0)
     offset = items < 3 ? -1 : SvIV(ST(2));
     bytes = items < 4 ? 0 : SvIV(ST(3));
 
-    b = rp_calloc_buf(r->pool);
+    b = rap_calloc_buf(r->pool);
     if (b == NULL) {
         ctx->error = 1;
-        croak("rp_calloc_buf() failed");
+        croak("rap_calloc_buf() failed");
     }
 
-    b->file = rp_pcalloc(r->pool, sizeof(rp_file_t));
+    b->file = rap_pcalloc(r->pool, sizeof(rap_file_t));
     if (b->file == NULL) {
         ctx->error = 1;
-        croak("rp_pcalloc() failed");
+        croak("rap_pcalloc() failed");
     }
 
-    path.len = rp_strlen(filename);
+    path.len = rap_strlen(filename);
 
-    path.data = rp_pnalloc(r->pool, path.len + 1);
+    path.data = rap_pnalloc(r->pool, path.len + 1);
     if (path.data == NULL) {
         ctx->error = 1;
-        croak("rp_pnalloc() failed");
+        croak("rap_pnalloc() failed");
     }
 
-    (void) rp_cpystrn(path.data, (u_char *) filename, path.len + 1);
+    (void) rap_cpystrn(path.data, (u_char *) filename, path.len + 1);
 
-    clcf = rp_http_get_module_loc_conf(r, rp_http_core_module);
+    clcf = rap_http_get_module_loc_conf(r, rap_http_core_module);
 
-    rp_memzero(&of, sizeof(rp_open_file_info_t));
+    rap_memzero(&of, sizeof(rap_open_file_info_t));
 
     of.read_ahead = clcf->read_ahead;
     of.directio = clcf->directio;
@@ -838,24 +838,24 @@ sendfile(r, filename, offset = -1, bytes = 0)
     of.errors = clcf->open_file_cache_errors;
     of.events = clcf->open_file_cache_events;
 
-    if (rp_http_set_disable_symlinks(r, clcf, &path, &of) != RP_OK) {
+    if (rap_http_set_disable_symlinks(r, clcf, &path, &of) != RAP_OK) {
         ctx->error = 1;
-        croak("rp_http_set_disable_symlinks() failed");
+        croak("rap_http_set_disable_symlinks() failed");
     }
 
-    if (rp_open_cached_file(clcf->open_file_cache, &path, &of, r->pool)
-        != RP_OK)
+    if (rap_open_cached_file(clcf->open_file_cache, &path, &of, r->pool)
+        != RAP_OK)
     {
         if (of.err == 0) {
             ctx->error = 1;
-            croak("rp_open_cached_file() failed");
+            croak("rap_open_cached_file() failed");
         }
 
-        rp_log_error(RP_LOG_CRIT, r->connection->log, rp_errno,
+        rap_log_error(RAP_LOG_CRIT, r->connection->log, rap_errno,
                       "%s \"%s\" failed", of.failed, filename);
 
         ctx->error = 1;
-        croak("rp_open_cached_file() failed");
+        croak("rap_open_cached_file() failed");
     }
 
     if (offset == -1) {
@@ -875,11 +875,11 @@ sendfile(r, filename, offset = -1, bytes = 0)
     b->file->log = r->connection->log;
     b->file->directio = of.is_directio;
 
-    rc = rp_http_perl_output(r, ctx, b);
+    rc = rap_http_perl_output(r, ctx, b);
 
-    if (rc == RP_ERROR) {
+    if (rc == RAP_ERROR) {
         ctx->error = 1;
-        croak("rp_http_perl_output() failed");
+        croak("rap_http_perl_output() failed");
     }
 
 
@@ -887,12 +887,12 @@ void
 flush(r)
     CODE:
 
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
-    rp_int_t             rc;
-    rp_buf_t            *b;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
+    rap_int_t             rc;
+    rap_buf_t            *b;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->error) {
         croak("flush(): called after error");
@@ -906,21 +906,21 @@ flush(r)
         croak("flush(): header not sent");
     }
 
-    b = rp_calloc_buf(r->pool);
+    b = rap_calloc_buf(r->pool);
     if (b == NULL) {
         ctx->error = 1;
-        croak("rp_calloc_buf() failed");
+        croak("rap_calloc_buf() failed");
     }
 
     b->flush = 1;
 
-    rp_log_debug0(RP_LOG_DEBUG_HTTP, r->connection->log, 0, "$r->flush");
+    rap_log_debug0(RAP_LOG_DEBUG_HTTP, r->connection->log, 0, "$r->flush");
 
-    rc = rp_http_perl_output(r, ctx, b);
+    rc = rap_http_perl_output(r, ctx, b);
 
-    if (rc == RP_ERROR) {
+    if (rc == RAP_ERROR) {
         ctx->error = 1;
-        croak("rp_http_perl_output() failed");
+        croak("rap_http_perl_output() failed");
     }
 
     XSRETURN_EMPTY;
@@ -930,11 +930,11 @@ void
 internal_redirect(r, uri)
     CODE:
 
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
     SV                   *uri;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->variable) {
         croak("internal_redirect(): cannot be used in variable handler");
@@ -946,9 +946,9 @@ internal_redirect(r, uri)
 
     uri = ST(1);
 
-    if (rp_http_perl_sv2str(aTHX_ r, &ctx->redirect_uri, uri) != RP_OK) {
+    if (rap_http_perl_sv2str(aTHX_ r, &ctx->redirect_uri, uri) != RAP_OK) {
         ctx->error = 1;
-        croak("rp_http_perl_sv2str() failed");
+        croak("rap_http_perl_sv2str() failed");
     }
 
 
@@ -956,10 +956,10 @@ void
 allow_ranges(r)
     CODE:
 
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->variable) {
         croak("allow_ranges(): cannot be used in variable handler");
@@ -973,33 +973,33 @@ unescape(r, text, type = 0)
     CODE:
 
     dXSTARG;
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
     SV                   *text;
     int                   type;
     u_char               *p, *dst, *src;
     STRLEN                len;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     text = ST(1);
 
     src = (u_char *) SvPV(text, len);
 
-    p = rp_pnalloc(r->pool, len + 1);
+    p = rap_pnalloc(r->pool, len + 1);
     if (p == NULL) {
         ctx->error = 1;
-        croak("rp_pnalloc() failed");
+        croak("rap_pnalloc() failed");
     }
 
     dst = p;
 
     type = items < 3 ? 0 : SvIV(ST(2));
 
-    rp_unescape_uri(&dst, &src, len, (rp_uint_t) type);
+    rap_unescape_uri(&dst, &src, len, (rap_uint_t) type);
     *dst = '\0';
 
-    rp_http_perl_set_targ(p, dst - p);
+    rap_http_perl_set_targ(p, dst - p);
 
     ST(0) = TARG;
 
@@ -1009,17 +1009,17 @@ variable(r, name, value = NULL)
     CODE:
 
     dXSTARG;
-    rp_http_request_t         *r;
-    rp_http_perl_ctx_t        *ctx;
+    rap_http_request_t         *r;
+    rap_http_perl_ctx_t        *ctx;
     SV                         *name, *value;
     u_char                     *p, *lowcase;
     STRLEN                      len;
-    rp_str_t                   var, val;
-    rp_uint_t                  i, hash;
-    rp_http_perl_var_t        *v;
-    rp_http_variable_value_t  *vv;
+    rap_str_t                   var, val;
+    rap_uint_t                  i, hash;
+    rap_http_perl_var_t        *v;
+    rap_http_variable_value_t  *vv;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     name = ST(1);
 
@@ -1037,39 +1037,39 @@ variable(r, name, value = NULL)
             value = SvRV(value);
         }
 
-        if (rp_http_perl_sv2str(aTHX_ r, &val, value) != RP_OK) {
+        if (rap_http_perl_sv2str(aTHX_ r, &val, value) != RAP_OK) {
             ctx->error = 1;
-            croak("rp_http_perl_sv2str() failed");
+            croak("rap_http_perl_sv2str() failed");
         }
     }
 
     p = (u_char *) SvPV(name, len);
 
-    lowcase = rp_pnalloc(r->pool, len);
+    lowcase = rap_pnalloc(r->pool, len);
     if (lowcase == NULL) {
         ctx->error = 1;
-        croak("rp_pnalloc() failed");
+        croak("rap_pnalloc() failed");
     }
 
-    hash = rp_hash_strlow(lowcase, p, len);
+    hash = rap_hash_strlow(lowcase, p, len);
 
     var.len = len;
     var.data = lowcase;
-#if (RP_DEBUG)
+#if (RAP_DEBUG)
 
     if (value) {
-        rp_log_debug2(RP_LOG_DEBUG_HTTP, r->connection->log, 0,
+        rap_log_debug2(RAP_LOG_DEBUG_HTTP, r->connection->log, 0,
                        "perl variable: \"%V\"=\"%V\"", &var, &val);
     } else {
-        rp_log_debug1(RP_LOG_DEBUG_HTTP, r->connection->log, 0,
+        rap_log_debug1(RAP_LOG_DEBUG_HTTP, r->connection->log, 0,
                        "perl variable: \"%V\"", &var);
     }
 #endif
 
-    vv = rp_http_get_variable(r, &var, hash);
+    vv = rap_http_get_variable(r, &var, hash);
     if (vv == NULL) {
         ctx->error = 1;
-        croak("rp_http_get_variable() failed");
+        croak("rap_http_get_variable() failed");
     }
 
     if (vv->not_found) {
@@ -1081,7 +1081,7 @@ variable(r, name, value = NULL)
 
                 if (hash != v[i].hash
                     || len != v[i].name.len
-                    || rp_strncmp(lowcase, v[i].name.data, len) != 0)
+                    || rap_strncmp(lowcase, v[i].name.data, len) != 0)
                 {
                     continue;
                 }
@@ -1091,7 +1091,7 @@ variable(r, name, value = NULL)
                     XSRETURN_UNDEF;
                 }
 
-                rp_http_perl_set_targ(v[i].value.data, v[i].value.len);
+                rap_http_perl_set_targ(v[i].value.data, v[i].value.len);
 
                 goto done;
             }
@@ -1099,18 +1099,18 @@ variable(r, name, value = NULL)
 
         if (value) {
             if (ctx->variables == NULL) {
-                ctx->variables = rp_array_create(r->pool, 1,
-                                                  sizeof(rp_http_perl_var_t));
+                ctx->variables = rap_array_create(r->pool, 1,
+                                                  sizeof(rap_http_perl_var_t));
                 if (ctx->variables == NULL) {
                     ctx->error = 1;
-                    croak("rp_array_create() failed");
+                    croak("rap_array_create() failed");
                 }
             }
 
-            v = rp_array_push(ctx->variables);
+            v = rap_array_push(ctx->variables);
             if (v == NULL) {
                 ctx->error = 1;
-                croak("rp_array_push() failed");
+                croak("rap_array_push() failed");
             }
 
             v->hash = hash;
@@ -1134,7 +1134,7 @@ variable(r, name, value = NULL)
         XSRETURN_UNDEF;
     }
 
-    rp_http_perl_set_targ(vv->data, vv->len);
+    rap_http_perl_set_targ(vv->data, vv->len);
 
     done:
 
@@ -1145,11 +1145,11 @@ void
 sleep(r, sleep, next)
     CODE:
 
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
-    rp_msec_t            sleep;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
+    rap_msec_t            sleep;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     if (ctx->variable) {
         croak("sleep(): cannot be used in variable handler");
@@ -1159,17 +1159,17 @@ sleep(r, sleep, next)
         croak("sleep(): another handler active");
     }
 
-    sleep = (rp_msec_t) SvIV(ST(1));
+    sleep = (rap_msec_t) SvIV(ST(1));
 
-    rp_log_debug1(RP_LOG_DEBUG_HTTP, r->connection->log, 0,
+    rap_log_debug1(RAP_LOG_DEBUG_HTTP, r->connection->log, 0,
                    "perl sleep: %M", sleep);
 
     ctx->next = SvRV(ST(2));
 
     r->connection->write->delayed = 1;
-    rp_add_timer(r->connection->write, sleep);
+    rap_add_timer(r->connection->write, sleep);
 
-    r->write_event_handler = rp_http_perl_sleep_handler;
+    r->write_event_handler = rap_http_perl_sleep_handler;
     r->main->count++;
 
 
@@ -1177,14 +1177,14 @@ void
 log_error(r, err, msg)
     CODE:
 
-    rp_http_request_t   *r;
-    rp_http_perl_ctx_t  *ctx;
+    rap_http_request_t   *r;
+    rap_http_perl_ctx_t  *ctx;
     SV                   *err, *msg;
     u_char               *p;
     STRLEN                len;
-    rp_err_t             e;
+    rap_err_t             e;
 
-    rp_http_perl_set_request(r, ctx);
+    rap_http_perl_set_request(r, ctx);
 
     err = ST(1);
 
@@ -1202,4 +1202,4 @@ log_error(r, err, msg)
 
     p = (u_char *) SvPV(msg, len);
 
-    rp_log_error(RP_LOG_ERR, r->connection->log, e, "perl: %s", p);
+    rap_log_error(RAP_LOG_ERR, r->connection->log, e, "perl: %s", p);

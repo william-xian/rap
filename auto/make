@@ -3,22 +3,22 @@
 # Copyright (C) Rap, Inc.
 
 
-echo "creating $RP_MAKEFILE"
+echo "creating $RAP_MAKEFILE"
 
-mkdir -p $RP_OBJS/src/core $RP_OBJS/src/event $RP_OBJS/src/event/modules \
-         $RP_OBJS/src/os/unix $RP_OBJS/src/os/win32 \
-         $RP_OBJS/src/http $RP_OBJS/src/http/v2 $RP_OBJS/src/http/modules \
-         $RP_OBJS/src/http/modules/perl \
-         $RP_OBJS/src/mail \
-         $RP_OBJS/src/stream \
-         $RP_OBJS/src/misc
-
-
-rp_objs_dir=$RP_OBJS$rp_regex_dirsep
-rp_use_pch=`echo $RP_USE_PCH | sed -e "s/\//$rp_regex_dirsep/g"`
+mkdir -p $RAP_OBJS/src/core $RAP_OBJS/src/event $RAP_OBJS/src/event/modules \
+         $RAP_OBJS/src/os/unix $RAP_OBJS/src/os/win32 \
+         $RAP_OBJS/src/http $RAP_OBJS/src/http/v2 $RAP_OBJS/src/http/modules \
+         $RAP_OBJS/src/http/modules/perl \
+         $RAP_OBJS/src/mail \
+         $RAP_OBJS/src/stream \
+         $RAP_OBJS/src/misc
 
 
-cat << END                                                     > $RP_MAKEFILE
+rap_objs_dir=$RAP_OBJS$rap_regex_dirsep
+rap_use_pch=`echo $RAP_USE_PCH | sed -e "s/\//$rap_regex_dirsep/g"`
+
+
+cat << END                                                     > $RAP_MAKEFILE
 
 CC =	$CC
 CFLAGS = $CFLAGS
@@ -28,45 +28,45 @@ LINK =	$LINK
 END
 
 
-if test -n "$RP_PERL_CFLAGS"; then
-    echo RP_PERL_CFLAGS = $RP_PERL_CFLAGS                   >> $RP_MAKEFILE
-    echo RP_PM_CFLAGS = $RP_PM_CFLAGS                       >> $RP_MAKEFILE
-    echo RP_PM_LDFLAGS = $RP_PM_LDFLAGS                     >> $RP_MAKEFILE
+if test -n "$RAP_PERL_CFLAGS"; then
+    echo RAP_PERL_CFLAGS = $RAP_PERL_CFLAGS                   >> $RAP_MAKEFILE
+    echo RAP_PM_CFLAGS = $RAP_PM_CFLAGS                       >> $RAP_MAKEFILE
+    echo RAP_PM_LDFLAGS = $RAP_PM_LDFLAGS                     >> $RAP_MAKEFILE
 fi
 
 
 # ALL_INCS, required by the addons and by OpenWatcom C precompiled headers
 
-rp_incs=`echo $CORE_INCS $RP_OBJS $HTTP_INCS $MAIL_INCS $STREAM_INCS\
-    | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont$rp_include_opt\1/g" \
-          -e "s/\//$rp_regex_dirsep/g"`
+rap_incs=`echo $CORE_INCS $RAP_OBJS $HTTP_INCS $MAIL_INCS $STREAM_INCS\
+    | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont$rap_include_opt\1/g" \
+          -e "s/\//$rap_regex_dirsep/g"`
 
-cat << END                                                    >> $RP_MAKEFILE
+cat << END                                                    >> $RAP_MAKEFILE
 
-ALL_INCS = $rp_include_opt$rp_incs
+ALL_INCS = $rap_include_opt$rap_incs
 
 END
 
 
-rp_all_srcs="$CORE_SRCS"
+rap_all_srcs="$CORE_SRCS"
 
 
 # the core dependencies and include paths
 
-rp_deps=`echo $CORE_DEPS $RP_AUTO_CONFIG_H $RP_PCH \
-    | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
-          -e "s/\//$rp_regex_dirsep/g"`
+rap_deps=`echo $CORE_DEPS $RAP_AUTO_CONFIG_H $RAP_PCH \
+    | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont\1/g" \
+          -e "s/\//$rap_regex_dirsep/g"`
 
-rp_incs=`echo $CORE_INCS $RP_OBJS \
-    | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont$rp_include_opt\1/g" \
-          -e "s/\//$rp_regex_dirsep/g"`
+rap_incs=`echo $CORE_INCS $RAP_OBJS \
+    | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont$rap_include_opt\1/g" \
+          -e "s/\//$rap_regex_dirsep/g"`
 
-cat << END                                                    >> $RP_MAKEFILE
+cat << END                                                    >> $RAP_MAKEFILE
 
-CORE_DEPS = $rp_deps
+CORE_DEPS = $rap_deps
 
 
-CORE_INCS = $rp_include_opt$rp_incs
+CORE_INCS = $rap_include_opt$rap_incs
 
 END
 
@@ -75,22 +75,22 @@ END
 
 if [ $HTTP = YES ]; then
 
-    rp_all_srcs="$rp_all_srcs $HTTP_SRCS"
+    rap_all_srcs="$rap_all_srcs $HTTP_SRCS"
 
-    rp_deps=`echo $HTTP_DEPS \
-        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
-              -e "s/\//$rp_regex_dirsep/g"`
+    rap_deps=`echo $HTTP_DEPS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont\1/g" \
+              -e "s/\//$rap_regex_dirsep/g"`
 
-    rp_incs=`echo $HTTP_INCS \
-        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont$rp_include_opt\1/g" \
-              -e "s/\//$rp_regex_dirsep/g"`
+    rap_incs=`echo $HTTP_INCS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont$rap_include_opt\1/g" \
+              -e "s/\//$rap_regex_dirsep/g"`
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
-HTTP_DEPS = $rp_deps
+HTTP_DEPS = $rap_deps
 
 
-HTTP_INCS = $rp_include_opt$rp_incs
+HTTP_INCS = $rap_include_opt$rap_incs
 
 END
 
@@ -102,23 +102,23 @@ fi
 if [ $MAIL != NO ]; then
 
     if [ $MAIL = YES ]; then
-        rp_all_srcs="$rp_all_srcs $MAIL_SRCS"
+        rap_all_srcs="$rap_all_srcs $MAIL_SRCS"
     fi
 
-    rp_deps=`echo $MAIL_DEPS \
-        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
-              -e "s/\//$rp_regex_dirsep/g"`
+    rap_deps=`echo $MAIL_DEPS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont\1/g" \
+              -e "s/\//$rap_regex_dirsep/g"`
 
-    rp_incs=`echo $MAIL_INCS \
-        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont$rp_include_opt\1/g" \
-              -e "s/\//$rp_regex_dirsep/g"`
+    rap_incs=`echo $MAIL_INCS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont$rap_include_opt\1/g" \
+              -e "s/\//$rap_regex_dirsep/g"`
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
-MAIL_DEPS = $rp_deps
+MAIL_DEPS = $rap_deps
 
 
-MAIL_INCS = $rp_include_opt$rp_incs
+MAIL_INCS = $rap_include_opt$rap_incs
 
 END
 
@@ -130,37 +130,37 @@ fi
 if [ $STREAM != NO ]; then
 
     if [ $STREAM = YES ]; then
-        rp_all_srcs="$rp_all_srcs $STREAM_SRCS"
+        rap_all_srcs="$rap_all_srcs $STREAM_SRCS"
     fi
 
-    rp_deps=`echo $STREAM_DEPS \
-        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
-              -e "s/\//$rp_regex_dirsep/g"`
+    rap_deps=`echo $STREAM_DEPS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont\1/g" \
+              -e "s/\//$rap_regex_dirsep/g"`
 
-    rp_incs=`echo $STREAM_INCS \
-        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont$rp_include_opt\1/g" \
-              -e "s/\//$rp_regex_dirsep/g"`
+    rap_incs=`echo $STREAM_INCS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont$rap_include_opt\1/g" \
+              -e "s/\//$rap_regex_dirsep/g"`
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
-STREAM_DEPS = $rp_deps
+STREAM_DEPS = $rap_deps
 
 
-STREAM_INCS = $rp_include_opt$rp_incs
+STREAM_INCS = $rap_include_opt$rap_incs
 
 END
 
 fi
 
 
-rp_all_srcs="$rp_all_srcs $MISC_SRCS"
+rap_all_srcs="$rap_all_srcs $MISC_SRCS"
 
 
-if test -n "$RP_ADDON_SRCS$DYNAMIC_MODULES"; then
+if test -n "$RAP_ADDON_SRCS$DYNAMIC_MODULES"; then
 
-cat << END                                                >> $RP_MAKEFILE
+cat << END                                                >> $RAP_MAKEFILE
 
-ADDON_DEPS = \$(CORE_DEPS) $RP_ADDON_DEPS
+ADDON_DEPS = \$(CORE_DEPS) $RAP_ADDON_DEPS
 
 END
 
@@ -169,105 +169,105 @@ fi
 
 # rap
 
-rp_all_srcs=`echo $rp_all_srcs | sed -e "s/\//$rp_regex_dirsep/g"`
+rap_all_srcs=`echo $rap_all_srcs | sed -e "s/\//$rap_regex_dirsep/g"`
 
-for rp_src in $RP_ADDON_SRCS
+for rap_src in $RAP_ADDON_SRCS
 do
-    rp_obj="addon/`basename \`dirname $rp_src\``"
+    rap_obj="addon/`basename \`dirname $rap_src\``"
 
-    test -d $RP_OBJS/$rp_obj || mkdir -p $RP_OBJS/$rp_obj
+    test -d $RAP_OBJS/$rap_obj || mkdir -p $RAP_OBJS/$rap_obj
 
-    rp_obj=`echo $rp_obj/\`basename $rp_src\` \
-        | sed -e "s/\//$rp_regex_dirsep/g"`
+    rap_obj=`echo $rap_obj/\`basename $rap_src\` \
+        | sed -e "s/\//$rap_regex_dirsep/g"`
 
-    rp_all_srcs="$rp_all_srcs $rp_obj"
+    rap_all_srcs="$rap_all_srcs $rap_obj"
 done
 
-rp_all_objs=`echo $rp_all_srcs \
-    | sed -e "s#\([^ ]*\.\)cpp#$RP_OBJS\/\1$rp_objext#g" \
-          -e "s#\([^ ]*\.\)cc#$RP_OBJS\/\1$rp_objext#g" \
-          -e "s#\([^ ]*\.\)c#$RP_OBJS\/\1$rp_objext#g" \
-          -e "s#\([^ ]*\.\)S#$RP_OBJS\/\1$rp_objext#g"`
+rap_all_objs=`echo $rap_all_srcs \
+    | sed -e "s#\([^ ]*\.\)cpp#$RAP_OBJS\/\1$rap_objext#g" \
+          -e "s#\([^ ]*\.\)cc#$RAP_OBJS\/\1$rap_objext#g" \
+          -e "s#\([^ ]*\.\)c#$RAP_OBJS\/\1$rap_objext#g" \
+          -e "s#\([^ ]*\.\)S#$RAP_OBJS\/\1$rap_objext#g"`
 
-rp_modules_c=`echo $RP_MODULES_C | sed -e "s/\//$rp_regex_dirsep/g"`
+rap_modules_c=`echo $RAP_MODULES_C | sed -e "s/\//$rap_regex_dirsep/g"`
 
-rp_modules_obj=`echo $rp_modules_c | sed -e "s/\(.*\.\)c/\1$rp_objext/"`
+rap_modules_obj=`echo $rap_modules_c | sed -e "s/\(.*\.\)c/\1$rap_objext/"`
 
 
-if test -n "$RP_RES"; then
-   rp_res=$RP_RES
+if test -n "$RAP_RES"; then
+   rap_res=$RAP_RES
 else
-   rp_res="$RP_RC $RP_ICONS"
-   rp_rcc=`echo $RP_RCC | sed -e "s/\//$rp_regex_dirsep/g"`
+   rap_res="$RAP_RC $RAP_ICONS"
+   rap_rcc=`echo $RAP_RCC | sed -e "s/\//$rap_regex_dirsep/g"`
 fi
 
-rp_deps=`echo $rp_all_objs $rp_modules_obj $rp_res $LINK_DEPS \
-    | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
-          -e "s/\//$rp_regex_dirsep/g"`
+rap_deps=`echo $rap_all_objs $rap_modules_obj $rap_res $LINK_DEPS \
+    | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont\1/g" \
+          -e "s/\//$rap_regex_dirsep/g"`
 
-rp_objs=`echo $rp_all_objs $rp_modules_obj \
-    | sed -e "s/  *\([^ ][^ ]*\)/$rp_long_regex_cont\1/g" \
-          -e "s/\//$rp_regex_dirsep/g"`
+rap_objs=`echo $rap_all_objs $rap_modules_obj \
+    | sed -e "s/  *\([^ ][^ ]*\)/$rap_long_regex_cont\1/g" \
+          -e "s/\//$rap_regex_dirsep/g"`
 
-rp_libs=
-if test -n "$RP_LD_OPT$CORE_LIBS"; then
-    rp_libs=`echo $RP_LD_OPT $CORE_LIBS \
-        | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`
+rap_libs=
+if test -n "$RAP_LD_OPT$CORE_LIBS"; then
+    rap_libs=`echo $RAP_LD_OPT $CORE_LIBS \
+        | sed -e "s/\//$rap_regex_dirsep/g" -e "s/^/$rap_long_regex_cont/"`
 fi
 
-rp_link=${CORE_LINK:+`echo $CORE_LINK \
-    | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`}
+rap_link=${CORE_LINK:+`echo $CORE_LINK \
+    | sed -e "s/\//$rap_regex_dirsep/g" -e "s/^/$rap_long_regex_cont/"`}
 
-rp_main_link=${MAIN_LINK:+`echo $MAIN_LINK \
-    | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`}
+rap_main_link=${MAIN_LINK:+`echo $MAIN_LINK \
+    | sed -e "s/\//$rap_regex_dirsep/g" -e "s/^/$rap_long_regex_cont/"`}
 
 
-cat << END                                                    >> $RP_MAKEFILE
+cat << END                                                    >> $RAP_MAKEFILE
 
 build:	binary modules manpage
 
-binary:	$RP_OBJS${rp_dirsep}rap$rp_binext
+binary:	$RAP_OBJS${rap_dirsep}rap$rap_binext
 
-$RP_OBJS${rp_dirsep}rap$rp_binext:	$rp_deps$rp_spacer
-	\$(LINK) $rp_long_start$rp_binout$RP_OBJS${rp_dirsep}rap$rp_binext$rp_long_cont$rp_objs$rp_libs$rp_link$rp_main_link
-	$rp_rcc
-$rp_long_end
+$RAP_OBJS${rap_dirsep}rap$rap_binext:	$rap_deps$rap_spacer
+	\$(LINK) $rap_long_start$rap_binout$RAP_OBJS${rap_dirsep}rap$rap_binext$rap_long_cont$rap_objs$rap_libs$rap_link$rap_main_link
+	$rap_rcc
+$rap_long_end
 
 modules:
 END
 
 
-# rp_modules.c
+# rap_modules.c
 
-if test -n "$RP_PCH"; then
-    rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+if test -n "$RAP_PCH"; then
+    rap_cc="\$(CC) $rap_compile_opt \$(CFLAGS) $rap_use_pch \$(ALL_INCS)"
 else
-    rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) \$(CORE_INCS)"
+    rap_cc="\$(CC) $rap_compile_opt \$(CFLAGS) \$(CORE_INCS)"
 fi
 
-cat << END                                                    >> $RP_MAKEFILE
+cat << END                                                    >> $RAP_MAKEFILE
 
-$rp_modules_obj:	\$(CORE_DEPS)$rp_cont$rp_modules_c
-	$rp_cc$rp_tab$rp_objout$rp_modules_obj$rp_tab$rp_modules_c$RP_AUX
+$rap_modules_obj:	\$(CORE_DEPS)$rap_cont$rap_modules_c
+	$rap_cc$rap_tab$rap_objout$rap_modules_obj$rap_tab$rap_modules_c$RAP_AUX
 
 END
 
 
 # the core sources
 
-for rp_src in $CORE_SRCS
+for rap_src in $CORE_SRCS
 do
-    rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
-    rp_obj=`echo $rp_src \
-        | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
-              -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
-              -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
-              -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+    rap_src=`echo $rap_src | sed -e "s/\//$rap_regex_dirsep/g"`
+    rap_obj=`echo $rap_src \
+        | sed -e "s#^\(.*\.\)cpp\\$#$rap_objs_dir\1$rap_objext#g" \
+              -e "s#^\(.*\.\)cc\\$#$rap_objs_dir\1$rap_objext#g" \
+              -e "s#^\(.*\.\)c\\$#$rap_objs_dir\1$rap_objext#g" \
+              -e "s#^\(.*\.\)S\\$#$rap_objs_dir\1$rap_objext#g"`
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
-$rp_obj:	\$(CORE_DEPS)$rp_cont$rp_src
-	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+$rap_obj:	\$(CORE_DEPS)$rap_cont$rap_src
+	$rap_cc$rap_tab$rap_objout$rap_obj$rap_tab$rap_src$RAP_AUX
 
 END
 
@@ -278,37 +278,37 @@ done
 
 if [ $HTTP = YES ]; then
 
-    if test -n "$RP_PCH"; then
-        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+    if test -n "$RAP_PCH"; then
+        rap_cc="\$(CC) $rap_compile_opt \$(CFLAGS) $rap_use_pch \$(ALL_INCS)"
     else
-        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) \$(CORE_INCS) \$(HTTP_INCS)"
-        rp_perl_cc="\$(CC) $rp_compile_opt \$(RP_PERL_CFLAGS)"
-        rp_perl_cc="$rp_perl_cc \$(CORE_INCS) \$(HTTP_INCS)"
+        rap_cc="\$(CC) $rap_compile_opt \$(CFLAGS) \$(CORE_INCS) \$(HTTP_INCS)"
+        rap_perl_cc="\$(CC) $rap_compile_opt \$(RAP_PERL_CFLAGS)"
+        rap_perl_cc="$rap_perl_cc \$(CORE_INCS) \$(HTTP_INCS)"
     fi
 
-    for rp_source in $HTTP_SRCS
+    for rap_source in $HTTP_SRCS
     do
-        rp_src=`echo $rp_source | sed -e "s/\//$rp_regex_dirsep/g"`
-        rp_obj=`echo $rp_src \
-            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+        rap_src=`echo $rap_source | sed -e "s/\//$rap_regex_dirsep/g"`
+        rap_obj=`echo $rap_src \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rap_objs_dir\1$rap_objext#g"`
 
-        if [ $rp_source = src/http/modules/perl/rp_http_perl_module.c ]; then
+        if [ $rap_source = src/http/modules/perl/rap_http_perl_module.c ]; then
 
-            cat << END                                        >> $RP_MAKEFILE
+            cat << END                                        >> $RAP_MAKEFILE
 
-$rp_obj:	\$(CORE_DEPS) \$(HTTP_DEPS)$rp_cont$rp_src
-	$rp_perl_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+$rap_obj:	\$(CORE_DEPS) \$(HTTP_DEPS)$rap_cont$rap_src
+	$rap_perl_cc$rap_tab$rap_objout$rap_obj$rap_tab$rap_src$RAP_AUX
 
 END
         else
 
-            cat << END                                        >> $RP_MAKEFILE
+            cat << END                                        >> $RAP_MAKEFILE
 
-$rp_obj:	\$(CORE_DEPS) \$(HTTP_DEPS)$rp_cont$rp_src
-	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+$rap_obj:	\$(CORE_DEPS) \$(HTTP_DEPS)$rap_cont$rap_src
+	$rap_cc$rap_tab$rap_objout$rap_obj$rap_tab$rap_src$RAP_AUX
 
 END
 
@@ -322,25 +322,25 @@ fi
 
 if [ $MAIL = YES ]; then
 
-    if test -n "$RP_PCH"; then
-        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+    if test -n "$RAP_PCH"; then
+        rap_cc="\$(CC) $rap_compile_opt \$(CFLAGS) $rap_use_pch \$(ALL_INCS)"
     else
-        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) \$(CORE_INCS) \$(MAIL_INCS)"
+        rap_cc="\$(CC) $rap_compile_opt \$(CFLAGS) \$(CORE_INCS) \$(MAIL_INCS)"
     fi
 
-    for rp_src in $MAIL_SRCS
+    for rap_src in $MAIL_SRCS
     do
-        rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
-        rp_obj=`echo $rp_src \
-            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+        rap_src=`echo $rap_src | sed -e "s/\//$rap_regex_dirsep/g"`
+        rap_obj=`echo $rap_src \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rap_objs_dir\1$rap_objext#g"`
 
-        cat << END                                            >> $RP_MAKEFILE
+        cat << END                                            >> $RAP_MAKEFILE
 
-$rp_obj:	\$(CORE_DEPS) \$(MAIL_DEPS)$rp_cont$rp_src
-	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+$rap_obj:	\$(CORE_DEPS) \$(MAIL_DEPS)$rap_cont$rap_src
+	$rap_cc$rap_tab$rap_objout$rap_obj$rap_tab$rap_src$RAP_AUX
 
 END
      done
@@ -352,25 +352,25 @@ fi
 
 if [ $STREAM = YES ]; then
 
-    if test -n "$RP_PCH"; then
-        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+    if test -n "$RAP_PCH"; then
+        rap_cc="\$(CC) $rap_compile_opt \$(CFLAGS) $rap_use_pch \$(ALL_INCS)"
     else
-        rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) \$(CORE_INCS) \$(STREAM_INCS)"
+        rap_cc="\$(CC) $rap_compile_opt \$(CFLAGS) \$(CORE_INCS) \$(STREAM_INCS)"
     fi
 
-    for rp_src in $STREAM_SRCS
+    for rap_src in $STREAM_SRCS
     do
-        rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
-        rp_obj=`echo $rp_src \
-            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+        rap_src=`echo $rap_src | sed -e "s/\//$rap_regex_dirsep/g"`
+        rap_obj=`echo $rap_src \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rap_objs_dir\1$rap_objext#g"`
 
-        cat << END                                            >> $RP_MAKEFILE
+        cat << END                                            >> $RAP_MAKEFILE
 
-$rp_obj:	\$(CORE_DEPS) \$(STREAM_DEPS)$rp_cont$rp_src
-	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+$rap_obj:	\$(CORE_DEPS) \$(STREAM_DEPS)$rap_cont$rap_src
+	$rap_cc$rap_tab$rap_objout$rap_obj$rap_tab$rap_src$RAP_AUX
 
 END
      done
@@ -382,21 +382,21 @@ fi
 
 if test -n "$MISC_SRCS"; then
 
-    rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+    rap_cc="\$(CC) $rap_compile_opt \$(CFLAGS) $rap_use_pch \$(ALL_INCS)"
 
-    for rp_src in $MISC_SRCS
+    for rap_src in $MISC_SRCS
     do
-        rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
-        rp_obj=`echo $rp_src \
-            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+        rap_src=`echo $rap_src | sed -e "s/\//$rap_regex_dirsep/g"`
+        rap_obj=`echo $rap_src \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rap_objs_dir\1$rap_objext#g"`
 
-        cat << END                                            >> $RP_MAKEFILE
+        cat << END                                            >> $RAP_MAKEFILE
 
-$rp_obj:	\$(CORE_DEPS) $rp_cont$rp_src
-	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+$rap_obj:	\$(CORE_DEPS) $rap_cont$rap_src
+	$rap_cc$rap_tab$rap_objout$rap_obj$rap_tab$rap_src$RAP_AUX
 
 END
      done
@@ -406,29 +406,29 @@ fi
 
 # the addons sources
 
-if test -n "$RP_ADDON_SRCS"; then
+if test -n "$RAP_ADDON_SRCS"; then
 
-    rp_cc="\$(CC) $rp_compile_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+    rap_cc="\$(CC) $rap_compile_opt \$(CFLAGS) $rap_use_pch \$(ALL_INCS)"
 
-    for rp_src in $RP_ADDON_SRCS
+    for rap_src in $RAP_ADDON_SRCS
     do
-        rp_obj="addon/`basename \`dirname $rp_src\``"
+        rap_obj="addon/`basename \`dirname $rap_src\``"
 
-        rp_obj=`echo $rp_obj/\`basename $rp_src\` \
-            | sed -e "s/\//$rp_regex_dirsep/g"`
+        rap_obj=`echo $rap_obj/\`basename $rap_src\` \
+            | sed -e "s/\//$rap_regex_dirsep/g"`
 
-        rp_obj=`echo $rp_obj \
-            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+        rap_obj=`echo $rap_obj \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rap_objs_dir\1$rap_objext#g"`
 
-        rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
+        rap_src=`echo $rap_src | sed -e "s/\//$rap_regex_dirsep/g"`
 
-        cat << END                                            >> $RP_MAKEFILE
+        cat << END                                            >> $RAP_MAKEFILE
 
-$rp_obj:	\$(ADDON_DEPS)$rp_cont$rp_src
-	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+$rap_obj:	\$(ADDON_DEPS)$rap_cont$rap_src
+	$rap_cc$rap_tab$rap_objout$rap_obj$rap_tab$rap_src$RAP_AUX
 
 END
      done
@@ -438,12 +438,12 @@ fi
 
 # the addons config.make
 
-if test -n "$RP_ADDONS$DYNAMIC_ADDONS"; then
+if test -n "$RAP_ADDONS$DYNAMIC_ADDONS"; then
 
-    for rp_addon_dir in $RP_ADDONS $DYNAMIC_ADDONS
+    for rap_addon_dir in $RAP_ADDONS $DYNAMIC_ADDONS
     do
-        if test -f $rp_addon_dir/config.make; then
-            . $rp_addon_dir/config.make
+        if test -f $rap_addon_dir/config.make; then
+            . $rap_addon_dir/config.make
         fi
     done
 fi
@@ -451,16 +451,16 @@ fi
 
 # Win32 resource file
 
-if test -n "$RP_RES"; then
+if test -n "$RAP_RES"; then
 
-    rp_res=`echo "$RP_RES:	$RP_RC $RP_ICONS" \
-                 | sed -e "s/\//$rp_regex_dirsep/g"`
-    rp_rcc=`echo $RP_RCC | sed -e "s/\//$rp_regex_dirsep/g"`
+    rap_res=`echo "$RAP_RES:	$RAP_RC $RAP_ICONS" \
+                 | sed -e "s/\//$rap_regex_dirsep/g"`
+    rap_rcc=`echo $RAP_RCC | sed -e "s/\//$rap_regex_dirsep/g"`
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
-$rp_res
-	$rp_rcc
+$rap_res
+	$rap_rcc
 
 END
 
@@ -469,20 +469,20 @@ fi
 
 # the precompiled headers
 
-if test -n "$RP_PCH"; then
-    echo "#include <rp_config.h>" > $RP_OBJS/rp_pch.c
+if test -n "$RAP_PCH"; then
+    echo "#include <rap_config.h>" > $RAP_OBJS/rap_pch.c
 
-    rp_pch="src/core/rp_config.h $OS_CONFIG $RP_OBJS/rp_auto_config.h"
-    rp_pch=`echo "$RP_PCH:	$rp_pch" | sed -e "s/\//$rp_regex_dirsep/g"`
+    rap_pch="src/core/rap_config.h $OS_CONFIG $RAP_OBJS/rap_auto_config.h"
+    rap_pch=`echo "$RAP_PCH:	$rap_pch" | sed -e "s/\//$rap_regex_dirsep/g"`
 
-    rp_src="\$(CC) \$(CFLAGS) $RP_BUILD_PCH $rp_compile_opt \$(ALL_INCS)"
-    rp_src="$rp_src $rp_objout$RP_OBJS/rp_pch.obj $RP_OBJS/rp_pch.c"
-    rp_src=`echo $rp_src | sed -e "s/\//$rp_regex_dirsep/g"`
+    rap_src="\$(CC) \$(CFLAGS) $RAP_BUILD_PCH $rap_compile_opt \$(ALL_INCS)"
+    rap_src="$rap_src $rap_objout$RAP_OBJS/rap_pch.obj $RAP_OBJS/rap_pch.c"
+    rap_src=`echo $rap_src | sed -e "s/\//$rap_regex_dirsep/g"`
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
-$rp_pch
-	$rp_src
+$rap_pch
+	$rap_src
 
 END
 
@@ -491,179 +491,179 @@ fi
 
 # dynamic modules
 
-if test -n "$RP_PCH"; then
-    rp_cc="\$(CC) $rp_compile_opt $rp_pic_opt \$(CFLAGS) $rp_use_pch \$(ALL_INCS)"
+if test -n "$RAP_PCH"; then
+    rap_cc="\$(CC) $rap_compile_opt $rap_pic_opt \$(CFLAGS) $rap_use_pch \$(ALL_INCS)"
 else
-    rp_cc="\$(CC) $rp_compile_opt $rp_pic_opt \$(CFLAGS) \$(ALL_INCS)"
-    rp_perl_cc="\$(CC) $rp_compile_opt $rp_pic_opt \$(RP_PERL_CFLAGS)"
-    rp_perl_cc="$rp_perl_cc \$(ALL_INCS)"
+    rap_cc="\$(CC) $rap_compile_opt $rap_pic_opt \$(CFLAGS) \$(ALL_INCS)"
+    rap_perl_cc="\$(CC) $rap_compile_opt $rap_pic_opt \$(RAP_PERL_CFLAGS)"
+    rap_perl_cc="$rap_perl_cc \$(ALL_INCS)"
 fi
 
-for rp_module in $DYNAMIC_MODULES
+for rap_module in $DYNAMIC_MODULES
 do
-    eval rp_module_srcs="\$${rp_module}_SRCS"
-    eval eval rp_module_libs="\\\"\$${rp_module}_LIBS\\\""
+    eval rap_module_srcs="\$${rap_module}_SRCS"
+    eval eval rap_module_libs="\\\"\$${rap_module}_LIBS\\\""
 
-    eval rp_module_modules="\$${rp_module}_MODULES"
-    eval rp_module_order="\$${rp_module}_ORDER"
+    eval rap_module_modules="\$${rap_module}_MODULES"
+    eval rap_module_order="\$${rap_module}_ORDER"
 
-    rp_modules_c=$RP_OBJS/${rp_module}_modules.c
+    rap_modules_c=$RAP_OBJS/${rap_module}_modules.c
 
-    cat << END                                    > $rp_modules_c
+    cat << END                                    > $rap_modules_c
 
-#include <rp_config.h>
-#include <rp_core.h>
+#include <rap_config.h>
+#include <rap_core.h>
 
 END
 
-    for mod in $rp_module_modules
+    for mod in $rap_module_modules
     do
-        echo "extern rp_module_t  $mod;"         >> $rp_modules_c
+        echo "extern rap_module_t  $mod;"         >> $rap_modules_c
     done
 
-    echo                                          >> $rp_modules_c
-    echo 'rp_module_t *rp_modules[] = {'        >> $rp_modules_c
+    echo                                          >> $rap_modules_c
+    echo 'rap_module_t *rap_modules[] = {'        >> $rap_modules_c
 
-    for mod in $rp_module_modules
+    for mod in $rap_module_modules
     do
-        echo "    &$mod,"                         >> $rp_modules_c
+        echo "    &$mod,"                         >> $rap_modules_c
     done
 
-    cat << END                                    >> $rp_modules_c
+    cat << END                                    >> $rap_modules_c
     NULL
 };
 
 END
 
-    echo 'char *rp_module_names[] = {'           >> $rp_modules_c
+    echo 'char *rap_module_names[] = {'           >> $rap_modules_c
 
-    for mod in $rp_module_modules
+    for mod in $rap_module_modules
     do
-        echo "    \"$mod\","                      >> $rp_modules_c
+        echo "    \"$mod\","                      >> $rap_modules_c
     done
 
-    cat << END                                    >> $rp_modules_c
+    cat << END                                    >> $rap_modules_c
     NULL
 };
 
 END
 
-    echo 'char *rp_module_order[] = {'           >> $rp_modules_c
+    echo 'char *rap_module_order[] = {'           >> $rap_modules_c
 
-    for mod in $rp_module_order
+    for mod in $rap_module_order
     do
-        echo "    \"$mod\","                      >> $rp_modules_c
+        echo "    \"$mod\","                      >> $rap_modules_c
     done
 
-    cat << END                                    >> $rp_modules_c
+    cat << END                                    >> $rap_modules_c
     NULL
 };
 
 END
 
-    rp_modules_c=`echo $rp_modules_c | sed -e "s/\//$rp_regex_dirsep/g"`
+    rap_modules_c=`echo $rap_modules_c | sed -e "s/\//$rap_regex_dirsep/g"`
 
-    rp_modules_obj=`echo $rp_modules_c \
-        | sed -e "s/\(.*\.\)c/\1$rp_objext/"`
+    rap_modules_obj=`echo $rap_modules_c \
+        | sed -e "s/\(.*\.\)c/\1$rap_objext/"`
 
-    rp_module_objs=
-    for rp_src in $rp_module_srcs
+    rap_module_objs=
+    for rap_src in $rap_module_srcs
     do
-        case "$rp_src" in
+        case "$rap_src" in
             src/*)
-                rp_obj=$rp_src
+                rap_obj=$rap_src
                 ;;
             *)
-                rp_obj="addon/`basename \`dirname $rp_src\``"
-                mkdir -p $RP_OBJS/$rp_obj
-                rp_obj="$rp_obj/`basename $rp_src`"
+                rap_obj="addon/`basename \`dirname $rap_src\``"
+                mkdir -p $RAP_OBJS/$rap_obj
+                rap_obj="$rap_obj/`basename $rap_src`"
                 ;;
         esac
 
-        rp_module_objs="$rp_module_objs $rp_obj"
+        rap_module_objs="$rap_module_objs $rap_obj"
     done
 
-    rp_module_objs=`echo $rp_module_objs \
-        | sed -e "s#\([^ ]*\.\)cpp#$RP_OBJS\/\1$rp_objext#g" \
-              -e "s#\([^ ]*\.\)cc#$RP_OBJS\/\1$rp_objext#g" \
-              -e "s#\([^ ]*\.\)c#$RP_OBJS\/\1$rp_objext#g" \
-              -e "s#\([^ ]*\.\)S#$RP_OBJS\/\1$rp_objext#g"`
+    rap_module_objs=`echo $rap_module_objs \
+        | sed -e "s#\([^ ]*\.\)cpp#$RAP_OBJS\/\1$rap_objext#g" \
+              -e "s#\([^ ]*\.\)cc#$RAP_OBJS\/\1$rap_objext#g" \
+              -e "s#\([^ ]*\.\)c#$RAP_OBJS\/\1$rap_objext#g" \
+              -e "s#\([^ ]*\.\)S#$RAP_OBJS\/\1$rap_objext#g"`
 
-    rp_deps=`echo $rp_module_objs $rp_modules_obj $LINK_DEPS \
-        | sed -e "s/  *\([^ ][^ ]*\)/$rp_regex_cont\1/g" \
-              -e "s/\//$rp_regex_dirsep/g"`
+    rap_deps=`echo $rap_module_objs $rap_modules_obj $LINK_DEPS \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rap_regex_cont\1/g" \
+              -e "s/\//$rap_regex_dirsep/g"`
 
-    rp_objs=`echo $rp_module_objs $rp_modules_obj \
-        | sed -e "s/  *\([^ ][^ ]*\)/$rp_long_regex_cont\1/g" \
-              -e "s/\//$rp_regex_dirsep/g"`
+    rap_objs=`echo $rap_module_objs $rap_modules_obj \
+        | sed -e "s/  *\([^ ][^ ]*\)/$rap_long_regex_cont\1/g" \
+              -e "s/\//$rap_regex_dirsep/g"`
 
-    rp_obj=$RP_OBJS$rp_dirsep$rp_module$rp_modext
+    rap_obj=$RAP_OBJS$rap_dirsep$rap_module$rap_modext
 
-    if [ "$RP_PLATFORM" = win32 ]; then
-        rp_module_libs="$CORE_LIBS $rp_module_libs"
+    if [ "$RAP_PLATFORM" = win32 ]; then
+        rap_module_libs="$CORE_LIBS $rap_module_libs"
     fi
 
-    rp_libs=
-    if test -n "$RP_LD_OPT$rp_module_libs"; then
-        rp_libs=`echo $RP_LD_OPT $rp_module_libs \
-            | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`
+    rap_libs=
+    if test -n "$RAP_LD_OPT$rap_module_libs"; then
+        rap_libs=`echo $RAP_LD_OPT $rap_module_libs \
+            | sed -e "s/\//$rap_regex_dirsep/g" -e "s/^/$rap_long_regex_cont/"`
     fi
 
-    rp_link=${CORE_LINK:+`echo $CORE_LINK \
-        | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`}
+    rap_link=${CORE_LINK:+`echo $CORE_LINK \
+        | sed -e "s/\//$rap_regex_dirsep/g" -e "s/^/$rap_long_regex_cont/"`}
 
-    rp_module_link=${MODULE_LINK:+`echo $MODULE_LINK \
-        | sed -e "s/\//$rp_regex_dirsep/g" -e "s/^/$rp_long_regex_cont/"`}
+    rap_module_link=${MODULE_LINK:+`echo $MODULE_LINK \
+        | sed -e "s/\//$rap_regex_dirsep/g" -e "s/^/$rap_long_regex_cont/"`}
 
 
-    cat << END                                            >> $RP_MAKEFILE
+    cat << END                                            >> $RAP_MAKEFILE
 
-modules:	$rp_obj
+modules:	$rap_obj
 
-$rp_obj:	$rp_deps$rp_spacer
-	\$(LINK) $rp_long_start$rp_binout$rp_obj$rp_long_cont$rp_objs$rp_libs$rp_link$rp_module_link
-$rp_long_end
+$rap_obj:	$rap_deps$rap_spacer
+	\$(LINK) $rap_long_start$rap_binout$rap_obj$rap_long_cont$rap_objs$rap_libs$rap_link$rap_module_link
+$rap_long_end
 
-$rp_modules_obj:	\$(CORE_DEPS)$rp_cont$rp_modules_c
-	$rp_cc$rp_tab$rp_objout$rp_modules_obj$rp_tab$rp_modules_c$RP_AUX
+$rap_modules_obj:	\$(CORE_DEPS)$rap_cont$rap_modules_c
+	$rap_cc$rap_tab$rap_objout$rap_modules_obj$rap_tab$rap_modules_c$RAP_AUX
 
 END
 
-    for rp_source in $rp_module_srcs
+    for rap_source in $rap_module_srcs
     do
-        case "$rp_source" in
+        case "$rap_source" in
             src/*)
-                rp_obj=`echo $rp_source | sed -e "s/\//$rp_regex_dirsep/g"`
+                rap_obj=`echo $rap_source | sed -e "s/\//$rap_regex_dirsep/g"`
                 ;;
             *)
-                rp_obj="addon/`basename \`dirname $rp_source\``"
-                rp_obj=`echo $rp_obj/\`basename $rp_source\` \
-                    | sed -e "s/\//$rp_regex_dirsep/g"`
+                rap_obj="addon/`basename \`dirname $rap_source\``"
+                rap_obj=`echo $rap_obj/\`basename $rap_source\` \
+                    | sed -e "s/\//$rap_regex_dirsep/g"`
                 ;;
         esac
 
-        rp_obj=`echo $rp_obj \
-            | sed -e "s#^\(.*\.\)cpp\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)cc\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)c\\$#$rp_objs_dir\1$rp_objext#g" \
-                  -e "s#^\(.*\.\)S\\$#$rp_objs_dir\1$rp_objext#g"`
+        rap_obj=`echo $rap_obj \
+            | sed -e "s#^\(.*\.\)cpp\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)cc\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)c\\$#$rap_objs_dir\1$rap_objext#g" \
+                  -e "s#^\(.*\.\)S\\$#$rap_objs_dir\1$rap_objext#g"`
 
-        rp_src=`echo $rp_source | sed -e "s/\//$rp_regex_dirsep/g"`
+        rap_src=`echo $rap_source | sed -e "s/\//$rap_regex_dirsep/g"`
 
-        if [ $rp_source = src/http/modules/perl/rp_http_perl_module.c ]; then
+        if [ $rap_source = src/http/modules/perl/rap_http_perl_module.c ]; then
 
-            cat << END                                        >> $RP_MAKEFILE
+            cat << END                                        >> $RAP_MAKEFILE
 
-$rp_obj:	\$(ADDON_DEPS)$rp_cont$rp_src
-	$rp_perl_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+$rap_obj:	\$(ADDON_DEPS)$rap_cont$rap_src
+	$rap_perl_cc$rap_tab$rap_objout$rap_obj$rap_tab$rap_src$RAP_AUX
 
 END
         else
 
-            cat << END                                        >> $RP_MAKEFILE
+            cat << END                                        >> $RAP_MAKEFILE
 
-$rp_obj:	\$(ADDON_DEPS)$rp_cont$rp_src
-	$rp_cc$rp_tab$rp_objout$rp_obj$rp_tab$rp_src$RP_AUX
+$rap_obj:	\$(ADDON_DEPS)$rap_cont$rap_src
+	$rap_cc$rap_tab$rap_objout$rap_obj$rap_tab$rap_src$RAP_AUX
 
 END
 

@@ -3,13 +3,13 @@
 # Copyright (C) Rap, Inc.
 
 
-    cat << END                                            >> $RP_MAKEFILE
+    cat << END                                            >> $RAP_MAKEFILE
 
-$RP_LIBATOMIC/src/libatomic_ops.a:	$RP_LIBATOMIC/Makefile
-	cd $RP_LIBATOMIC && \$(MAKE)
+$RAP_LIBATOMIC/src/libatomic_ops.a:	$RAP_LIBATOMIC/Makefile
+	cd $RAP_LIBATOMIC && \$(MAKE)
 
-$RP_LIBATOMIC/Makefile:	$RP_MAKEFILE
-	cd $RP_LIBATOMIC \\
+$RAP_LIBATOMIC/Makefile:	$RAP_MAKEFILE
+	cd $RAP_LIBATOMIC \\
 	&& if [ -f Makefile ]; then \$(MAKE) distclean; fi \\
 	&& ./configure
 

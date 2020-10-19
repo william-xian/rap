@@ -3,85 +3,85 @@
 # Copyright (C) Rap, Inc.
 
 
-    rp_feature="GeoIP library"
-    rp_feature_name=
-    rp_feature_run=no
-    rp_feature_incs="#include <GeoIP.h>"
-    rp_feature_path=
-    rp_feature_libs="-lGeoIP"
-    rp_feature_test="GeoIP_open(NULL, 0)"
+    rap_feature="GeoIP library"
+    rap_feature_name=
+    rap_feature_run=no
+    rap_feature_incs="#include <GeoIP.h>"
+    rap_feature_path=
+    rap_feature_libs="-lGeoIP"
+    rap_feature_test="GeoIP_open(NULL, 0)"
     . auto/feature
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # FreeBSD port
 
-    rp_feature="GeoIP library in /usr/local/"
-    rp_feature_path="/usr/local/include"
+    rap_feature="GeoIP library in /usr/local/"
+    rap_feature_path="/usr/local/include"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/usr/local/lib -L/usr/local/lib -lGeoIP"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/usr/local/lib -L/usr/local/lib -lGeoIP"
     else
-        rp_feature_libs="-L/usr/local/lib -lGeoIP"
+        rap_feature_libs="-L/usr/local/lib -lGeoIP"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # NetBSD port
 
-    rp_feature="GeoIP library in /usr/pkg/"
-    rp_feature_path="/usr/pkg/include"
+    rap_feature="GeoIP library in /usr/pkg/"
+    rap_feature_path="/usr/pkg/include"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lGeoIP"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lGeoIP"
     else
-        rp_feature_libs="-L/usr/pkg/lib -lGeoIP"
+        rap_feature_libs="-L/usr/pkg/lib -lGeoIP"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # MacPorts
 
-    rp_feature="GeoIP library in /opt/local/"
-    rp_feature_path="/opt/local/include"
+    rap_feature="GeoIP library in /opt/local/"
+    rap_feature_path="/opt/local/include"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/opt/local/lib -L/opt/local/lib -lGeoIP"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/opt/local/lib -L/opt/local/lib -lGeoIP"
     else
-        rp_feature_libs="-L/opt/local/lib -lGeoIP"
+        rap_feature_libs="-L/opt/local/lib -lGeoIP"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = yes ]; then
+if [ $rap_found = yes ]; then
 
-    CORE_INCS="$CORE_INCS $rp_feature_path"
+    CORE_INCS="$CORE_INCS $rap_feature_path"
 
     if [ $USE_GEOIP = YES ]; then
-        CORE_LIBS="$CORE_LIBS $rp_feature_libs"
+        CORE_LIBS="$CORE_LIBS $rap_feature_libs"
     fi
 
-    RP_LIB_GEOIP=$rp_feature_libs
+    RAP_LIB_GEOIP=$rap_feature_libs
 
-    rp_feature="GeoIP IPv6 support"
-    rp_feature_name="RP_HAVE_GEOIP_V6"
-    rp_feature_run=no
-    rp_feature_incs="#include <stdio.h>
+    rap_feature="GeoIP IPv6 support"
+    rap_feature_name="RAP_HAVE_GEOIP_V6"
+    rap_feature_run=no
+    rap_feature_incs="#include <stdio.h>
                       #include <GeoIP.h>"
-    #rp_feature_path=
-    #rp_feature_libs=
-    rp_feature_test="printf(\"%d\", GEOIP_CITY_EDITION_REV0_V6);"
+    #rap_feature_path=
+    #rap_feature_libs=
+    rap_feature_test="printf(\"%d\", GEOIP_CITY_EDITION_REV0_V6);"
     . auto/feature
 
 else

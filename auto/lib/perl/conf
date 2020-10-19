@@ -6,13 +6,13 @@
 echo "checking for perl"
 
 
-RP_PERL_VER=`$RP_PERL -v 2>&1 | grep '^This is perl' 2>&1 \
+RAP_PERL_VER=`$RAP_PERL -v 2>&1 | grep '^This is perl' 2>&1 \
                                 | sed -e 's/^This is perl, \(.*\)/\1/'`
 
-if test -n "$RP_PERL_VER"; then
-    echo " + perl version: $RP_PERL_VER"
+if test -n "$RAP_PERL_VER"; then
+    echo " + perl version: $RAP_PERL_VER"
 
-    if [ "`$RP_PERL -e 'use 5.008006; print "OK"'`" != "OK" ]; then
+    if [ "`$RAP_PERL -e 'use 5.008006; print "OK"'`" != "OK" ]; then
         echo
         echo "$0: error: perl 5.8.6 or higher is required"
         echo
@@ -20,7 +20,7 @@ if test -n "$RP_PERL_VER"; then
         exit 1;
     fi
 
-    if [ "`$RP_PERL -MExtUtils::Embed -e 'print "OK"'`" != "OK" ]; then
+    if [ "`$RAP_PERL -MExtUtils::Embed -e 'print "OK"'`" != "OK" ]; then
         echo
         echo "$0: error: perl module ExtUtils::Embed is required"
         echo
@@ -28,50 +28,50 @@ if test -n "$RP_PERL_VER"; then
         exit 1;
     fi
 
-    RP_PM_CFLAGS=`$RP_PERL -MExtUtils::Embed -e ccopts`
-    RP_PM_LDFLAGS=`$RP_PERL -MConfig -e 'print $Config{lddlflags}'`
+    RAP_PM_CFLAGS=`$RAP_PERL -MExtUtils::Embed -e ccopts`
+    RAP_PM_LDFLAGS=`$RAP_PERL -MConfig -e 'print $Config{lddlflags}'`
 
-    RP_PERL_CFLAGS="$CFLAGS `$RP_PERL -MExtUtils::Embed -e ccopts`"
+    RAP_PERL_CFLAGS="$CFLAGS `$RAP_PERL -MExtUtils::Embed -e ccopts`"
 
     # gcc 4.1/4.2 warn about unused values in pTHX_
-    RP_PERL_CFLAGS=`echo $RP_PERL_CFLAGS \
+    RAP_PERL_CFLAGS=`echo $RAP_PERL_CFLAGS \
                      | sed -e 's/-Wunused-value/-Wno-unused-value/'`
     # icc8 warns 'declaration hides parameter "my_perl"' in ENTER and LEAVE
-    RP_PERL_CFLAGS=`echo $RP_PERL_CFLAGS \
+    RAP_PERL_CFLAGS=`echo $RAP_PERL_CFLAGS \
                      | sed -e 's/-wd171/-wd171 -wd1599/'`
 
-    rp_perl_ldopts=`$RP_PERL -MExtUtils::Embed -e ldopts`
+    rap_perl_ldopts=`$RAP_PERL -MExtUtils::Embed -e ldopts`
 
-    rp_perl_dlext=`$RP_PERL -MConfig -e 'print $Config{dlext}'`
-    rp_perl_libdir="src/http/modules/perl/blib/arch/auto"
-    rp_perl_module="$rp_perl_libdir/rap/rap.$rp_perl_dlext"
+    rap_perl_dlext=`$RAP_PERL -MConfig -e 'print $Config{dlext}'`
+    rap_perl_libdir="src/http/modules/perl/blib/arch/auto"
+    rap_perl_module="$rap_perl_libdir/rap/rap.$rap_perl_dlext"
 
-    if $RP_PERL -V:usemultiplicity | grep define > /dev/null; then
-        have=RP_HAVE_PERL_MULTIPLICITY . auto/have
+    if $RAP_PERL -V:usemultiplicity | grep define > /dev/null; then
+        have=RAP_HAVE_PERL_MULTIPLICITY . auto/have
         echo " + perl interpreter multiplicity found"
     fi
 
-    if $RP_PERL -V:useithreads | grep undef > /dev/null; then
+    if $RAP_PERL -V:useithreads | grep undef > /dev/null; then
         # FreeBSD port wants to link with -pthread non-threaded perl
-        rp_perl_ldopts=`echo $rp_perl_ldopts | sed 's/ -pthread//'`
+        rap_perl_ldopts=`echo $rap_perl_ldopts | sed 's/ -pthread//'`
     fi
 
-    if [ "$RP_SYSTEM" = "Darwin" ]; then
+    if [ "$RAP_SYSTEM" = "Darwin" ]; then
         # OS X system perl wants to link universal binaries
-        rp_perl_ldopts=`echo $rp_perl_ldopts \
+        rap_perl_ldopts=`echo $rap_perl_ldopts \
                          | sed -e 's/-arch i386//' -e 's/-arch x86_64//'`
     fi
 
     if [ $USE_PERL = YES ]; then
-        CORE_LINK="$CORE_LINK $rp_perl_ldopts"
+        CORE_LINK="$CORE_LINK $rap_perl_ldopts"
     fi
 
-    RP_LIB_PERL="$rp_perl_ldopts"
+    RAP_LIB_PERL="$rap_perl_ldopts"
 
-    if test -n "$RP_PERL_MODULES"; then
-        have=RP_PERL_MODULES value="(u_char *) \"$RP_PERL_MODULES\""
+    if test -n "$RAP_PERL_MODULES"; then
+        have=RAP_PERL_MODULES value="(u_char *) \"$RAP_PERL_MODULES\""
         . auto/define
-        RP_PERL_MODULES_MAN=$RP_PERL_MODULES/man3
+        RAP_PERL_MODULES_MAN=$RAP_PERL_MODULES/man3
     fi
 
 else

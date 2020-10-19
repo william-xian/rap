@@ -3,7 +3,7 @@ geo2rap.pl 		by Andrei Nigmatulin
 
 	The perl script to convert CSV geoip database ( free download
 	at http://www.maxmind.com/app/geoip_country ) to format, suitable
-	for use by the rp_http_geo_module.
+	for use by the rap_http_geo_module.
 
 
 unicode2rap		by Maxim Dounin

@@ -3,6 +3,6 @@
 # Copyright (C) Rap, Inc.
 
 
-have=RP_SUPPRESS_WARN . auto/have
+have=RAP_SUPPRESS_WARN . auto/have
 
-have=RP_SMP . auto/have
+have=RAP_SMP . auto/have

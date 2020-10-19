@@ -3,62 +3,62 @@
 # Copyright (C) Rap, Inc.
 
 
-echo $rp_n "checking for $rp_feature ...$rp_c"
+echo $rap_n "checking for $rap_feature ...$rap_c"
 
-cat << END >> $RP_AUTOCONF_ERR
+cat << END >> $RAP_AUTOCONF_ERR
 
 ----------------------------------------
-checking for $rp_feature
+checking for $rap_feature
 
 END
 
-rp_found=no
+rap_found=no
 
-if test -n "$rp_feature_name"; then
-    rp_have_feature=`echo $rp_feature_name \
+if test -n "$rap_feature_name"; then
+    rap_have_feature=`echo $rap_feature_name \
                    | tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ`
 fi
 
-if test -n "$rp_feature_path"; then
-    for rp_temp in $rp_feature_path; do
-        rp_feature_inc_path="$rp_feature_inc_path -I $rp_temp"
+if test -n "$rap_feature_path"; then
+    for rap_temp in $rap_feature_path; do
+        rap_feature_inc_path="$rap_feature_inc_path -I $rap_temp"
     done
 fi
 
-cat << END > $RP_AUTOTEST.c
+cat << END > $RAP_AUTOTEST.c
 
 #include <sys/types.h>
-$RP_INCLUDE_UNISTD_H
-$rp_feature_incs
+$RAP_INCLUDE_UNISTD_H
+$rap_feature_incs
 
 int main(void) {
-    $rp_feature_test;
+    $rap_feature_test;
     return 0;
 }
 
 END
 
 
-rp_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS $rp_feature_inc_path \
-          -o $RP_AUTOTEST $RP_AUTOTEST.c $RP_TEST_LD_OPT $rp_feature_libs"
+rap_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS $rap_feature_inc_path \
+          -o $RAP_AUTOTEST $RAP_AUTOTEST.c $RAP_TEST_LD_OPT $rap_feature_libs"
 
-rp_feature_inc_path=
+rap_feature_inc_path=
 
-eval "/bin/sh -c \"$rp_test\" >> $RP_AUTOCONF_ERR 2>&1"
+eval "/bin/sh -c \"$rap_test\" >> $RAP_AUTOCONF_ERR 2>&1"
 
 
-if [ -x $RP_AUTOTEST ]; then
+if [ -x $RAP_AUTOTEST ]; then
 
-    case "$rp_feature_run" in
+    case "$rap_feature_run" in
 
         yes)
             # /bin/sh is used to intercept "Killed" or "Abort trap" messages
-            if /bin/sh -c $RP_AUTOTEST >> $RP_AUTOCONF_ERR 2>&1; then
+            if /bin/sh -c $RAP_AUTOTEST >> $RAP_AUTOCONF_ERR 2>&1; then
                 echo " found"
-                rp_found=yes
+                rap_found=yes
 
-                if test -n "$rp_feature_name"; then
-                    have=$rp_have_feature . auto/have
+                if test -n "$rap_feature_name"; then
+                    have=$rap_have_feature . auto/have
                 fi
 
             else
@@ -68,14 +68,14 @@ if [ -x $RP_AUTOTEST ]; then
 
         value)
             # /bin/sh is used to intercept "Killed" or "Abort trap" messages
-            if /bin/sh -c $RP_AUTOTEST >> $RP_AUTOCONF_ERR 2>&1; then
+            if /bin/sh -c $RAP_AUTOTEST >> $RAP_AUTOCONF_ERR 2>&1; then
                 echo " found"
-                rp_found=yes
+                rap_found=yes
 
-                cat << END >> $RP_AUTO_CONFIG_H
+                cat << END >> $RAP_AUTO_CONFIG_H
 
-#ifndef $rp_feature_name
-#define $rp_feature_name  `$RP_AUTOTEST`
+#ifndef $rap_feature_name
+#define $rap_feature_name  `$RAP_AUTOTEST`
 #endif
 
 END
@@ -86,25 +86,25 @@ END
 
         bug)
             # /bin/sh is used to intercept "Killed" or "Abort trap" messages
-            if /bin/sh -c $RP_AUTOTEST >> $RP_AUTOCONF_ERR 2>&1; then
+            if /bin/sh -c $RAP_AUTOTEST >> $RAP_AUTOCONF_ERR 2>&1; then
                 echo " not found"
 
             else
                 echo " found"
-                rp_found=yes
+                rap_found=yes
 
-                if test -n "$rp_feature_name"; then
-                    have=$rp_have_feature . auto/have
+                if test -n "$rap_feature_name"; then
+                    have=$rap_have_feature . auto/have
                 fi
             fi
         ;;
 
         *)
             echo " found"
-            rp_found=yes
+            rap_found=yes
 
-            if test -n "$rp_feature_name"; then
-                have=$rp_have_feature . auto/have
+            if test -n "$rap_feature_name"; then
+                have=$rap_have_feature . auto/have
             fi
         ;;
 
@@ -113,11 +113,11 @@ END
 else
     echo " not found"
 
-    echo "----------"    >> $RP_AUTOCONF_ERR
-    cat $RP_AUTOTEST.c  >> $RP_AUTOCONF_ERR
-    echo "----------"    >> $RP_AUTOCONF_ERR
-    echo $rp_test       >> $RP_AUTOCONF_ERR
-    echo "----------"    >> $RP_AUTOCONF_ERR
+    echo "----------"    >> $RAP_AUTOCONF_ERR
+    cat $RAP_AUTOTEST.c  >> $RAP_AUTOCONF_ERR
+    echo "----------"    >> $RAP_AUTOCONF_ERR
+    echo $rap_test       >> $RAP_AUTOCONF_ERR
+    echo "----------"    >> $RAP_AUTOCONF_ERR
 fi
 
-rm -rf $RP_AUTOTEST*
+rm -rf $RAP_AUTOTEST*

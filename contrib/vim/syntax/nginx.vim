@@ -784,7 +784,7 @@ syn keyword ngxDirectiveThirdParty contained auth_ldap_servers_size
 syn keyword ngxDirectiveThirdParty contained ldap_server
 
 " PAM Authentication
-" https://github.com/sto/rp_http_auth_pam_module
+" https://github.com/sto/rap_http_auth_pam_module
 syn keyword ngxDirectiveThirdParty contained auth_pam
 syn keyword ngxDirectiveThirdParty contained auth_pam_service_name
 syn keyword ngxDirectiveThirdParty contained auth_pam_set_pam_env
@@ -828,7 +828,7 @@ syn keyword ngxDirectiveThirdParty contained ajp_upstream_fail_timeout
 syn keyword ngxDirectiveThirdParty contained ajp_upstream_max_fails
 
 " AWS proxy
-" https://github.com/anomalizer/rp_aws_auth
+" https://github.com/anomalizer/rap_aws_auth
 syn keyword ngxDirectiveThirdParty contained aws_access_key
 syn keyword ngxDirectiveThirdParty contained aws_endpoint
 syn keyword ngxDirectiveThirdParty contained aws_key_scope
@@ -884,7 +884,7 @@ syn keyword ngxDirectiveThirdParty contained write_page_size
 syn keyword ngxDirectiveThirdParty contained ssl_ct
 syn keyword ngxDirectiveThirdParty contained ssl_ct_static_scts
 
-" rp_echo
+" rap_echo
 " https://github.com/openresty/echo-rap-module
 syn keyword ngxDirectiveThirdParty contained echo_abort_parent
 syn keyword ngxDirectiveThirdParty contained echo_after_body
@@ -905,9 +905,9 @@ syn keyword ngxDirectiveThirdParty contained echo_subrequest_async
 
 " FastDFS
 " https://github.com/happyfish100/fastdfs-rap-module
-syn keyword ngxDirectiveThirdParty contained rp_fastdfs_module
+syn keyword ngxDirectiveThirdParty contained rap_fastdfs_module
 
-" rp_headers_more
+" rap_headers_more
 " https://github.com/openresty/headers-more-rap-module
 syn keyword ngxDirectiveThirdParty contained more_clear_headers
 syn keyword ngxDirectiveThirdParty contained more_clear_input_headers
@@ -920,7 +920,7 @@ syn keyword ngxDirectiveThirdParty contained dav_ext_lock
 syn keyword ngxDirectiveThirdParty contained dav_ext_lock_zone
 syn keyword ngxDirectiveThirdParty contained dav_ext_methods
 
-" rp_eval
+" rap_eval
 " https://github.com/openresty/rap-eval-module
 syn keyword ngxDirectiveThirdParty contained eval
 syn keyword ngxDirectiveThirdParty contained eval_buffer_size
@@ -950,8 +950,8 @@ syn keyword ngxDirectiveThirdParty contained fancyindex_time_format
 syn keyword ngxDirectiveThirdParty contained footer
 syn keyword ngxDirectiveThirdParty contained footer_types
 
-" rp_http_geoip2_module
-" https://github.com/leev/rp_http_geoip2_module
+" rap_http_geoip2_module
+" https://github.com/leev/rap_http_geoip2_module
 syn keyword ngxDirectiveThirdParty contained geoip2
 syn keyword ngxDirectiveThirdParty contained geoip2_proxy
 syn keyword ngxDirectiveThirdParty contained geoip2_proxy_recursive
@@ -1127,13 +1127,13 @@ syn keyword ngxDirectiveThirdParty contained redis_pass
 syn keyword ngxDirectiveThirdParty contained redis_read_timeout
 syn keyword ngxDirectiveThirdParty contained redis_send_timeout
 
-" rp_http_response
+" rap_http_response
 " http://catap.ru/downloads/rap/
 syn keyword ngxDirectiveThirdParty contained response
 syn keyword ngxDirectiveThirdParty contained response_type
 
 " rap_substitutions_filter
-" https://github.com/yaoweibin/rp_http_substitutions_filter_module
+" https://github.com/yaoweibin/rap_http_substitutions_filter_module
 syn keyword ngxDirectiveThirdParty contained subs_buffers
 syn keyword ngxDirectiveThirdParty contained subs_filter
 syn keyword ngxDirectiveThirdParty contained subs_filter_bypass
@@ -1276,8 +1276,8 @@ syn keyword ngxDirectiveThirdParty contained drizzle_send_query_timeout
 syn keyword ngxDirectiveThirdParty contained drizzle_server
 syn keyword ngxDirectiveThirdParty contained drizzle_status
 
-" rp_dynamic_upstream
-" https://github.com/cubicdaiya/rp_dynamic_upstream
+" rap_dynamic_upstream
+" https://github.com/cubicdaiya/rap_dynamic_upstream
 syn keyword ngxDirectiveThirdParty contained dynamic_upstream
 
 " encrypt and decrypt rap variable values
@@ -1297,7 +1297,7 @@ syn keyword ngxDirectiveThirdParty contained mongo
 " https://github.com/arut/rap-let-module
 syn keyword ngxDirectiveThirdParty contained let
 
-" rp_http_lua_module - Embed the power of Lua into Rap HTTP Servers
+" rap_http_lua_module - Embed the power of Lua into Rap HTTP Servers
 " https://github.com/openresty/lua-rap-module
 syn keyword ngxDirectiveThirdParty contained access_by_lua
 syn keyword ngxDirectiveThirdParty contained access_by_lua_block
@@ -1368,7 +1368,7 @@ syn keyword ngxDirectiveThirdParty contained ssl_session_fetch_by_lua_file
 syn keyword ngxDirectiveThirdParty contained ssl_session_store_by_lua_block
 syn keyword ngxDirectiveThirdParty contained ssl_session_store_by_lua_file
 
-" rp_memc - An extended version of the standard memcached module
+" rap_memc - An extended version of the standard memcached module
 " https://github.com/openresty/memc-rap-module
 syn keyword ngxDirectiveThirdParty contained memc_buffer_size
 syn keyword ngxDirectiveThirdParty contained memc_cmds_allowed
@@ -1514,8 +1514,8 @@ syn keyword ngxDirectiveThirdPartyDeprecated contained union_station_key
 syn keyword ngxDirectiveThirdPartyDeprecated contained union_station_proxy_address
 syn keyword ngxDirectiveThirdPartyDeprecated contained union_station_support
 
-" rp_postgres is an upstream module that allows rap to communicate directly with PostgreSQL database
-" https://github.com/FRiCKLE/rp_postgres
+" rap_postgres is an upstream module that allows rap to communicate directly with PostgreSQL database
+" https://github.com/FRiCKLE/rap_postgres
 syn keyword ngxDirectiveThirdParty contained postgres_connect_timeout
 syn keyword ngxDirectiveThirdParty contained postgres_escape
 syn keyword ngxDirectiveThirdParty contained postgres_keepalive
@@ -1527,7 +1527,7 @@ syn keyword ngxDirectiveThirdParty contained postgres_rewrite
 syn keyword ngxDirectiveThirdParty contained postgres_server
 syn keyword ngxDirectiveThirdParty contained postgres_set
 
-" rp_rds_csv - Rap output filter module to convert Resty-DBD-Streams (RDS) to Comma-Separated Values (CSV)
+" rap_rds_csv - Rap output filter module to convert Resty-DBD-Streams (RDS) to Comma-Separated Values (CSV)
 " https://github.com/openresty/rds-csv-rap-module
 syn keyword ngxDirectiveThirdParty contained rds_csv
 syn keyword ngxDirectiveThirdParty contained rds_csv_buffer_size
@@ -1536,7 +1536,7 @@ syn keyword ngxDirectiveThirdParty contained rds_csv_field_name_header
 syn keyword ngxDirectiveThirdParty contained rds_csv_field_separator
 syn keyword ngxDirectiveThirdParty contained rds_csv_row_terminator
 
-" rp_rds_json - an output filter that formats Resty DBD Streams generated by rp_drizzle and others to JSON
+" rap_rds_json - an output filter that formats Resty DBD Streams generated by rap_drizzle and others to JSON
 " https://github.com/openresty/rds-json-rap-module
 syn keyword ngxDirectiveThirdParty contained rds_json
 syn keyword ngxDirectiveThirdParty contained rds_json_buffer_size
@@ -1549,7 +1549,7 @@ syn keyword ngxDirectiveThirdParty contained rds_json_root
 syn keyword ngxDirectiveThirdParty contained rds_json_success_property
 syn keyword ngxDirectiveThirdParty contained rds_json_user_property
 
-" rp_redis2 - Rap upstream module for the Redis 2.0 protocol
+" rap_redis2 - Rap upstream module for the Redis 2.0 protocol
 " https://github.com/openresty/redis2-rap-module
 syn keyword ngxDirectiveThirdParty contained redis2_bind
 syn keyword ngxDirectiveThirdParty contained redis2_buffer_size
@@ -1675,7 +1675,7 @@ syn keyword ngxDirectiveThirdParty contained sync
 syn keyword ngxDirectiveThirdParty contained wait_key
 syn keyword ngxDirectiveThirdParty contained wait_video
 
-" rp_set_misc - Various set_xxx directives added to rap's rewrite module (md5/sha1, sql/json quoting, and many more)
+" rap_set_misc - Various set_xxx directives added to rap's rewrite module (md5/sha1, sql/json quoting, and many more)
 " https://github.com/openresty/set-misc-rap-module
 syn keyword ngxDirectiveThirdParty contained set_base32_alphabet
 syn keyword ngxDirectiveThirdParty contained set_base32_padding
@@ -1713,7 +1713,7 @@ syn keyword ngxDirectiveThirdParty contained shib_request_set
 syn keyword ngxDirectiveThirdParty contained shib_request_use_headers
 
 " rap module which adds ability to cache static files
-" https://github.com/FRiCKLE/rp_slowfs_cache
+" https://github.com/FRiCKLE/rap_slowfs_cache
 syn keyword ngxDirectiveThirdParty contained slowfs_big_file_size
 syn keyword ngxDirectiveThirdParty contained slowfs_cache
 syn keyword ngxDirectiveThirdParty contained slowfs_cache_key
@@ -1724,7 +1724,7 @@ syn keyword ngxDirectiveThirdParty contained slowfs_cache_valid
 syn keyword ngxDirectiveThirdParty contained slowfs_temp_path
 
 " Dynamic Image Transformation Module For rap
-" https://github.com/cubicdaiya/rp_small_light
+" https://github.com/cubicdaiya/rap_small_light
 syn keyword ngxDirectiveThirdParty contained small_light
 syn keyword ngxDirectiveThirdParty contained small_light_buffer
 syn keyword ngxDirectiveThirdParty contained small_light_getparam_mode
@@ -1734,7 +1734,7 @@ syn keyword ngxDirectiveThirdParty contained small_light_pattern_define
 syn keyword ngxDirectiveThirdParty contained small_light_radius_max
 syn keyword ngxDirectiveThirdParty contained small_light_sigma_max
 
-" rp_srcache - Transparent subrequest-based caching layout for arbitrary rap locations
+" rap_srcache - Transparent subrequest-based caching layout for arbitrary rap locations
 " https://github.com/openresty/srcache-rap-module
 syn keyword ngxDirectiveThirdParty contained srcache_buffer
 syn keyword ngxDirectiveThirdParty contained srcache_default_expire
@@ -1872,7 +1872,7 @@ syn keyword ngxDirectiveThirdParty contained array_map_op
 syn keyword ngxDirectiveThirdParty contained array_split
 
 " RAP module for Brotli compression
-" https://github.com/eustas/rp_brotli
+" https://github.com/eustas/rap_brotli
 syn keyword ngxDirectiveThirdParty contained brotli
 syn keyword ngxDirectiveThirdParty contained brotli_buffers
 syn keyword ngxDirectiveThirdParty contained brotli_comp_level
@@ -1914,10 +1914,10 @@ syn keyword ngxDirectiveThirdParty contained lua_file
 
 " Rap Audio Track for HTTP Live Streaming
 " https://github.com/flavioribeiro/rap-audio-track-for-hls-module
-syn keyword ngxDirectiveThirdParty contained rp_hls_audio_track
-syn keyword ngxDirectiveThirdParty contained rp_hls_audio_track_output_format
-syn keyword ngxDirectiveThirdParty contained rp_hls_audio_track_output_header
-syn keyword ngxDirectiveThirdParty contained rp_hls_audio_track_rootpath
+syn keyword ngxDirectiveThirdParty contained rap_hls_audio_track
+syn keyword ngxDirectiveThirdParty contained rap_hls_audio_track_output_format
+syn keyword ngxDirectiveThirdParty contained rap_hls_audio_track_output_header
+syn keyword ngxDirectiveThirdParty contained rap_hls_audio_track_rootpath
 
 " A Rap module to dump backtrace when a worker process exits abnormally
 " https://github.com/alibaba/rap-backtrace
@@ -1932,7 +1932,7 @@ syn keyword ngxDirectiveThirdParty contained circle_gif_min_radius
 syn keyword ngxDirectiveThirdParty contained circle_gif_step_radius
 
 " Upstream Consistent Hash
-" https://github.com/replay/rp_http_consistent_hash
+" https://github.com/replay/rap_http_consistent_hash
 syn keyword ngxDirectiveThirdParty contained consistent_hash
 
 " Rap module for etags on dynamic content
@@ -1940,7 +1940,7 @@ syn keyword ngxDirectiveThirdParty contained consistent_hash
 syn keyword ngxDirectiveThirdParty contained dynamic_etags
 
 " Enhanced Rap Memcached Module
-" https://github.com/bpaquet/rp_http_enhanced_memcached_module
+" https://github.com/bpaquet/rap_http_enhanced_memcached_module
 syn keyword ngxDirectiveThirdParty contained enhanced_memcached_allow_delete
 syn keyword ngxDirectiveThirdParty contained enhanced_memcached_allow_put
 syn keyword ngxDirectiveThirdParty contained enhanced_memcached_bind
@@ -1960,15 +1960,15 @@ syn keyword ngxDirectiveThirdParty contained max_connections_max_queue_length
 syn keyword ngxDirectiveThirdParty contained max_connections_queue_timeout
 
 " Rap module for POST authentication and authorization
-" https://github.com/veruu/rp_form_auth
+" https://github.com/veruu/rap_form_auth
 syn keyword ngxDirectiveThirdParty contained form_auth
 syn keyword ngxDirectiveThirdParty contained form_auth_login
 syn keyword ngxDirectiveThirdParty contained form_auth_pam_service
 syn keyword ngxDirectiveThirdParty contained form_auth_password
 syn keyword ngxDirectiveThirdParty contained form_auth_remote_user
 
-" rp_http_accounting_module
-" https://github.com/Lax/rp_http_accounting_module
+" rap_http_accounting_module
+" https://github.com/Lax/rap_http_accounting_module
 syn keyword ngxDirectiveThirdParty contained accounting
 syn keyword ngxDirectiveThirdParty contained accounting_id
 syn keyword ngxDirectiveThirdParty contained accounting_interval
@@ -1985,7 +1985,7 @@ syn keyword ngxDirectiveThirdParty contained concat_types
 syn keyword ngxDirectiveThirdParty contained concat_unique
 
 " update upstreams' config by restful interface
-" https://github.com/yzprofile/rp_http_dyups_module
+" https://github.com/yzprofile/rap_http_dyups_module
 syn keyword ngxDirectiveThirdParty contained dyups_interface
 syn keyword ngxDirectiveThirdParty contained dyups_read_msg_log
 syn keyword ngxDirectiveThirdParty contained dyups_read_msg_timeout
@@ -1994,11 +1994,11 @@ syn keyword ngxDirectiveThirdParty contained dyups_trylock
 syn keyword ngxDirectiveThirdParty contained dyups_upstream_conf
 
 " add given content to the end of the response according to the condition specified
-" https://github.com/flygoast/rp_http_footer_if_filter
+" https://github.com/flygoast/rap_http_footer_if_filter
 syn keyword ngxDirectiveThirdParty contained footer_if
 
 " RAP HTTP Internal Redirect Module
-" https://github.com/flygoast/rp_http_internal_redirect
+" https://github.com/flygoast/rap_http_internal_redirect
 syn keyword ngxDirectiveThirdParty contained internal_redirect_if
 syn keyword ngxDirectiveThirdParty contained internal_redirect_if_no_postpone
 
@@ -2023,7 +2023,7 @@ syn keyword ngxDirectiveThirdParty contained limit_upstream_log_level
 syn keyword ngxDirectiveThirdParty contained limit_upstream_zone
 
 " conditional accesslog for rap
-" https://github.com/cfsego/rp_log_if
+" https://github.com/cfsego/rap_log_if
 syn keyword ngxDirectiveThirdParty contained access_log_bypass_if
 
 " log messages over ZeroMQ
@@ -2034,7 +2034,7 @@ syn keyword ngxDirectiveThirdParty contained log_zmq_off
 syn keyword ngxDirectiveThirdParty contained log_zmq_server
 
 " simple module to uppercase/lowercase strings in the rap config
-" https://github.com/replay/rp_http_lower_upper_case
+" https://github.com/replay/rap_http_lower_upper_case
 syn keyword ngxDirectiveThirdParty contained lower
 syn keyword ngxDirectiveThirdParty contained upper
 
@@ -2043,7 +2043,7 @@ syn keyword ngxDirectiveThirdParty contained upper
 syn keyword ngxDirectiveThirdParty contained md5_filter
 
 " Non-blocking upstream module for Rap to connect to MongoDB
-" https://github.com/simpl/rp_mongo
+" https://github.com/simpl/rap_mongo
 syn keyword ngxDirectiveThirdParty contained mongo_auth
 syn keyword ngxDirectiveThirdParty contained mongo_bind
 syn keyword ngxDirectiveThirdParty contained mongo_buffer_size
@@ -2069,15 +2069,15 @@ syn keyword ngxDirectiveThirdParty contained openssl_builddate_minimum
 syn keyword ngxDirectiveThirdParty contained openssl_version_minimum
 
 " Automatic PageSpeed optimization module for Rap
-" https://github.com/pagespeed/rp_pagespeed
+" https://github.com/pagespeed/rap_pagespeed
 syn keyword ngxDirectiveThirdParty contained pagespeed
 
 " PECL Memcache standard hashing compatible loadbalancer for Rap
-" https://github.com/replay/rp_http_php_memcache_standard_balancer
+" https://github.com/replay/rap_http_php_memcache_standard_balancer
 syn keyword ngxDirectiveThirdParty contained hash_key
 
 " rap module to parse php sessions
-" https://github.com/replay/rp_http_php_session
+" https://github.com/replay/rap_http_php_session
 syn keyword ngxDirectiveThirdParty contained php_session_parse
 syn keyword ngxDirectiveThirdParty contained php_session_strip_formatting
 
@@ -2138,7 +2138,7 @@ syn keyword ngxDirectiveThirdParty contained set_cconv_to_trad
 syn keyword ngxDirectiveThirdParty contained set_pinyin_to_normal
 
 " Rap module that allows the setting of variables to the value of a variety of hashes
-" https://github.com/simpl/rp_http_set_hash
+" https://github.com/simpl/rap_http_set_hash
 syn keyword ngxDirectiveThirdParty contained set_md5
 syn keyword ngxDirectiveThirdParty contained set_md5_upper
 syn keyword ngxDirectiveThirdParty contained set_murmur2
@@ -2147,7 +2147,7 @@ syn keyword ngxDirectiveThirdParty contained set_sha1
 syn keyword ngxDirectiveThirdParty contained set_sha1_upper
 
 " Rap module to set the language of a request based on a number of options
-" https://github.com/simpl/rp_http_set_lang
+" https://github.com/simpl/rap_http_set_lang
 syn keyword ngxDirectiveThirdParty contained lang_cookie
 syn keyword ngxDirectiveThirdParty contained lang_get_var
 syn keyword ngxDirectiveThirdParty contained lang_host
@@ -2172,7 +2172,7 @@ syn keyword ngxDirectiveThirdParty contained sphinx2_read_timeout
 syn keyword ngxDirectiveThirdParty contained sphinx2_send_timeout
 
 " Rap module for retrieving user attributes and groups from SSSD
-" https://github.com/veruu/rp_sssd_info
+" https://github.com/veruu/rap_sssd_info
 syn keyword ngxDirectiveThirdParty contained sssd_info
 syn keyword ngxDirectiveThirdParty contained sssd_info_attribute
 syn keyword ngxDirectiveThirdParty contained sssd_info_attribute_separator
@@ -2189,7 +2189,7 @@ syn keyword ngxDirectiveThirdParty contained statsd_sample_rate
 syn keyword ngxDirectiveThirdParty contained statsd_server
 syn keyword ngxDirectiveThirdParty contained statsd_timing
 
-" rp_stream_echo - TCP/stream echo module for RAP (a port of the rp_http_echo module)
+" rap_stream_echo - TCP/stream echo module for RAP (a port of the rap_http_echo module)
 " https://github.com/openresty/stream-echo-rap-module
 syn keyword ngxDirectiveThirdParty contained echo
 syn keyword ngxDirectiveThirdParty contained echo_client_error_log_level
@@ -2226,7 +2226,7 @@ syn keyword ngxDirectiveThirdParty contained upsync_lb
 syn keyword ngxDirectiveThirdParty contained strip
 
 " Split one big HTTP/Range request to multiple subrange requesets
-" https://github.com/Qihoo360/rp_http_subrange_module
+" https://github.com/Qihoo360/rap_http_subrange_module
 syn keyword ngxDirectiveThirdParty contained subrange
 
 " summarizer-rap-module
@@ -2240,7 +2240,7 @@ syn keyword ngxDirectiveThirdParty contained summarizer_read_timeout
 syn keyword ngxDirectiveThirdParty contained summarizer_send_timeout
 
 " rap module providing API to communicate with supervisord and manage (start/stop) backends on-demand
-" https://github.com/FRiCKLE/rp_supervisord
+" https://github.com/FRiCKLE/rap_supervisord
 syn keyword ngxDirectiveThirdParty contained supervisord
 syn keyword ngxDirectiveThirdParty contained supervisord_inherit_backend_status
 syn keyword ngxDirectiveThirdParty contained supervisord_name
@@ -2276,8 +2276,8 @@ syn keyword ngxDirectiveThirdParty contained testcookie_secure_flag
 syn keyword ngxDirectiveThirdParty contained testcookie_session
 syn keyword ngxDirectiveThirdParty contained testcookie_whitelist
 
-" rp_http_types_filter_module
-" https://github.com/flygoast/rp_http_types_filter
+" rap_http_types_filter_module
+" https://github.com/flygoast/rap_http_types_filter
 syn keyword ngxDirectiveThirdParty contained types_filter
 syn keyword ngxDirectiveThirdParty contained types_filter_use_default
 
@@ -2288,7 +2288,7 @@ syn keyword ngxDirectiveThirdParty contained file_in_unzip_archivefile
 syn keyword ngxDirectiveThirdParty contained file_in_unzip_extract
 
 " An asynchronous domain name resolve module for rap upstream
-" https://github.com/wdaike/rp_upstream_jdomain
+" https://github.com/wdaike/rap_upstream_jdomain
 syn keyword ngxDirectiveThirdParty contained jdomain
 
 " Rap url encoding converting module
@@ -2305,7 +2305,7 @@ syn keyword ngxDirectiveThirdParty contained url_encoding_convert_to
 syn keyword ngxDirectiveThirdParty contained user_agent
 
 " rap load-balancer module implementing ketama consistent hashing
-" https://github.com/flygoast/rp_http_upstream_ketama_chash
+" https://github.com/flygoast/rap_http_upstream_ketama_chash
 syn keyword ngxDirectiveThirdParty contained ketama_chash
 
 

@@ -3,255 +3,255 @@
 # Copyright (C) Rap, Inc.
 
 
-CORE_MODULES="rp_core_module rp_errlog_module rp_conf_module"
+CORE_MODULES="rap_core_module rap_errlog_module rap_conf_module"
 
 CORE_INCS="src/core"
 
 CORE_DEPS="src/core/rap.h \
-           src/core/rp_config.h \
-           src/core/rp_core.h \
-           src/core/rp_log.h \
-           src/core/rp_palloc.h \
-           src/core/rp_array.h \
-           src/core/rp_list.h \
-           src/core/rp_hash.h \
-           src/core/rp_buf.h \
-           src/core/rp_queue.h \
-           src/core/rp_string.h \
-           src/core/rp_parse.h \
-           src/core/rp_parse_time.h \
-           src/core/rp_inet.h \
-           src/core/rp_file.h \
-           src/core/rp_crc.h \
-           src/core/rp_crc32.h \
-           src/core/rp_murmurhash.h \
-           src/core/rp_md5.h \
-           src/core/rp_sha1.h \
-           src/core/rp_rbtree.h \
-           src/core/rp_radix_tree.h \
-           src/core/rp_rwlock.h \
-           src/core/rp_slab.h \
-           src/core/rp_times.h \
-           src/core/rp_shmtx.h \
-           src/core/rp_connection.h \
-           src/core/rp_cycle.h \
-           src/core/rp_conf_file.h \
-           src/core/rp_module.h \
-           src/core/rp_resolver.h \
-           src/core/rp_open_file_cache.h \
-           src/core/rp_crypt.h \
-           src/core/rp_proxy_protocol.h \
-           src/core/rp_syslog.h"
+           src/core/rap_config.h \
+           src/core/rap_core.h \
+           src/core/rap_log.h \
+           src/core/rap_palloc.h \
+           src/core/rap_array.h \
+           src/core/rap_list.h \
+           src/core/rap_hash.h \
+           src/core/rap_buf.h \
+           src/core/rap_queue.h \
+           src/core/rap_string.h \
+           src/core/rap_parse.h \
+           src/core/rap_parse_time.h \
+           src/core/rap_inet.h \
+           src/core/rap_file.h \
+           src/core/rap_crc.h \
+           src/core/rap_crc32.h \
+           src/core/rap_murmurhash.h \
+           src/core/rap_md5.h \
+           src/core/rap_sha1.h \
+           src/core/rap_rbtree.h \
+           src/core/rap_radix_tree.h \
+           src/core/rap_rwlock.h \
+           src/core/rap_slab.h \
+           src/core/rap_times.h \
+           src/core/rap_shmtx.h \
+           src/core/rap_connection.h \
+           src/core/rap_cycle.h \
+           src/core/rap_conf_file.h \
+           src/core/rap_module.h \
+           src/core/rap_resolver.h \
+           src/core/rap_open_file_cache.h \
+           src/core/rap_crypt.h \
+           src/core/rap_proxy_protocol.h \
+           src/core/rap_syslog.h"
 
 
 CORE_SRCS="src/core/rap.c \
-           src/core/rp_log.c \
-           src/core/rp_palloc.c \
-           src/core/rp_array.c \
-           src/core/rp_list.c \
-           src/core/rp_hash.c \
-           src/core/rp_buf.c \
-           src/core/rp_queue.c \
-           src/core/rp_output_chain.c \
-           src/core/rp_string.c \
-           src/core/rp_parse.c \
-           src/core/rp_parse_time.c \
-           src/core/rp_inet.c \
-           src/core/rp_file.c \
-           src/core/rp_crc32.c \
-           src/core/rp_murmurhash.c \
-           src/core/rp_md5.c \
-           src/core/rp_sha1.c \
-           src/core/rp_rbtree.c \
-           src/core/rp_radix_tree.c \
-           src/core/rp_slab.c \
-           src/core/rp_times.c \
-           src/core/rp_shmtx.c \
-           src/core/rp_connection.c \
-           src/core/rp_cycle.c \
-           src/core/rp_spinlock.c \
-           src/core/rp_rwlock.c \
-           src/core/rp_cpuinfo.c \
-           src/core/rp_conf_file.c \
-           src/core/rp_module.c \
-           src/core/rp_resolver.c \
-           src/core/rp_open_file_cache.c \
-           src/core/rp_crypt.c \
-           src/core/rp_proxy_protocol.c \
-           src/core/rp_syslog.c"
+           src/core/rap_log.c \
+           src/core/rap_palloc.c \
+           src/core/rap_array.c \
+           src/core/rap_list.c \
+           src/core/rap_hash.c \
+           src/core/rap_buf.c \
+           src/core/rap_queue.c \
+           src/core/rap_output_chain.c \
+           src/core/rap_string.c \
+           src/core/rap_parse.c \
+           src/core/rap_parse_time.c \
+           src/core/rap_inet.c \
+           src/core/rap_file.c \
+           src/core/rap_crc32.c \
+           src/core/rap_murmurhash.c \
+           src/core/rap_md5.c \
+           src/core/rap_sha1.c \
+           src/core/rap_rbtree.c \
+           src/core/rap_radix_tree.c \
+           src/core/rap_slab.c \
+           src/core/rap_times.c \
+           src/core/rap_shmtx.c \
+           src/core/rap_connection.c \
+           src/core/rap_cycle.c \
+           src/core/rap_spinlock.c \
+           src/core/rap_rwlock.c \
+           src/core/rap_cpuinfo.c \
+           src/core/rap_conf_file.c \
+           src/core/rap_module.c \
+           src/core/rap_resolver.c \
+           src/core/rap_open_file_cache.c \
+           src/core/rap_crypt.c \
+           src/core/rap_proxy_protocol.c \
+           src/core/rap_syslog.c"
 
 
-EVENT_MODULES="rp_events_module rp_event_core_module"
+EVENT_MODULES="rap_events_module rap_event_core_module"
 
 EVENT_INCS="src/event src/event/modules"
 
-EVENT_DEPS="src/event/rp_event.h \
-            src/event/rp_event_timer.h \
-            src/event/rp_event_posted.h \
-            src/event/rp_event_connect.h \
-            src/event/rp_event_pipe.h"
+EVENT_DEPS="src/event/rap_event.h \
+            src/event/rap_event_timer.h \
+            src/event/rap_event_posted.h \
+            src/event/rap_event_connect.h \
+            src/event/rap_event_pipe.h"
 
-EVENT_SRCS="src/event/rp_event.c \
-            src/event/rp_event_timer.c \
-            src/event/rp_event_posted.c \
-            src/event/rp_event_accept.c \
-            src/event/rp_event_udp.c \
-            src/event/rp_event_connect.c \
-            src/event/rp_event_pipe.c"
+EVENT_SRCS="src/event/rap_event.c \
+            src/event/rap_event_timer.c \
+            src/event/rap_event_posted.c \
+            src/event/rap_event_accept.c \
+            src/event/rap_event_udp.c \
+            src/event/rap_event_connect.c \
+            src/event/rap_event_pipe.c"
 
 
-SELECT_MODULE=rp_select_module
-SELECT_SRCS=src/event/modules/rp_select_module.c
-WIN32_SELECT_SRCS=src/event/modules/rp_win32_select_module.c
+SELECT_MODULE=rap_select_module
+SELECT_SRCS=src/event/modules/rap_select_module.c
+WIN32_SELECT_SRCS=src/event/modules/rap_win32_select_module.c
 
-POLL_MODULE=rp_poll_module
-POLL_SRCS=src/event/modules/rp_poll_module.c
-WIN32_POLL_SRCS=src/event/modules/rp_win32_poll_module.c
+POLL_MODULE=rap_poll_module
+POLL_SRCS=src/event/modules/rap_poll_module.c
+WIN32_POLL_SRCS=src/event/modules/rap_win32_poll_module.c
 
-KQUEUE_MODULE=rp_kqueue_module
-KQUEUE_SRCS=src/event/modules/rp_kqueue_module.c
+KQUEUE_MODULE=rap_kqueue_module
+KQUEUE_SRCS=src/event/modules/rap_kqueue_module.c
 
-DEVPOLL_MODULE=rp_devpoll_module
-DEVPOLL_SRCS=src/event/modules/rp_devpoll_module.c
+DEVPOLL_MODULE=rap_devpoll_module
+DEVPOLL_SRCS=src/event/modules/rap_devpoll_module.c
 
-EVENTPORT_MODULE=rp_eventport_module
-EVENTPORT_SRCS=src/event/modules/rp_eventport_module.c
+EVENTPORT_MODULE=rap_eventport_module
+EVENTPORT_SRCS=src/event/modules/rap_eventport_module.c
 
-EPOLL_MODULE=rp_epoll_module
-EPOLL_SRCS=src/event/modules/rp_epoll_module.c
+EPOLL_MODULE=rap_epoll_module
+EPOLL_SRCS=src/event/modules/rap_epoll_module.c
 
-IOCP_MODULE=rp_iocp_module
-IOCP_SRCS=src/event/modules/rp_iocp_module.c
+IOCP_MODULE=rap_iocp_module
+IOCP_SRCS=src/event/modules/rap_iocp_module.c
 
-FILE_AIO_SRCS="src/os/unix/rp_file_aio_read.c"
-LINUX_AIO_SRCS="src/os/unix/rp_linux_aio_read.c"
+FILE_AIO_SRCS="src/os/unix/rap_file_aio_read.c"
+LINUX_AIO_SRCS="src/os/unix/rap_linux_aio_read.c"
 
 UNIX_INCS="$CORE_INCS $EVENT_INCS src/os/unix"
 
 UNIX_DEPS="$CORE_DEPS $EVENT_DEPS \
-            src/os/unix/rp_time.h \
-            src/os/unix/rp_errno.h \
-            src/os/unix/rp_alloc.h \
-            src/os/unix/rp_files.h \
-            src/os/unix/rp_channel.h \
-            src/os/unix/rp_shmem.h \
-            src/os/unix/rp_process.h \
-            src/os/unix/rp_setaffinity.h \
-            src/os/unix/rp_setproctitle.h \
-            src/os/unix/rp_atomic.h \
-            src/os/unix/rp_gcc_atomic_x86.h \
-            src/os/unix/rp_thread.h \
-            src/os/unix/rp_socket.h \
-            src/os/unix/rp_os.h \
-            src/os/unix/rp_user.h \
-            src/os/unix/rp_dlopen.h \
-            src/os/unix/rp_process_cycle.h"
+            src/os/unix/rap_time.h \
+            src/os/unix/rap_errno.h \
+            src/os/unix/rap_alloc.h \
+            src/os/unix/rap_files.h \
+            src/os/unix/rap_channel.h \
+            src/os/unix/rap_shmem.h \
+            src/os/unix/rap_process.h \
+            src/os/unix/rap_setaffinity.h \
+            src/os/unix/rap_setproctitle.h \
+            src/os/unix/rap_atomic.h \
+            src/os/unix/rap_gcc_atomic_x86.h \
+            src/os/unix/rap_thread.h \
+            src/os/unix/rap_socket.h \
+            src/os/unix/rap_os.h \
+            src/os/unix/rap_user.h \
+            src/os/unix/rap_dlopen.h \
+            src/os/unix/rap_process_cycle.h"
 
 # add to UNIX_DEPS
-#            src/os/unix/rp_gcc_atomic_amd64.h \
-#            src/os/unix/rp_gcc_atomic_sparc64.h \
-#            src/os/unix/rp_gcc_atomic_ppc.h \
-#            src/os/unix/rp_sunpro_atomic_sparc64.h \
-#            src/os/unix/rp_sunpro_x86.il \
-#            src/os/unix/rp_sunpro_amd64.il \
-#            src/os/unix/rp_sunpro_sparc64.il \
+#            src/os/unix/rap_gcc_atomic_amd64.h \
+#            src/os/unix/rap_gcc_atomic_sparc64.h \
+#            src/os/unix/rap_gcc_atomic_ppc.h \
+#            src/os/unix/rap_sunpro_atomic_sparc64.h \
+#            src/os/unix/rap_sunpro_x86.il \
+#            src/os/unix/rap_sunpro_amd64.il \
+#            src/os/unix/rap_sunpro_sparc64.il \
 
 
 UNIX_SRCS="$CORE_SRCS $EVENT_SRCS \
-            src/os/unix/rp_time.c \
-            src/os/unix/rp_errno.c \
-            src/os/unix/rp_alloc.c \
-            src/os/unix/rp_files.c \
-            src/os/unix/rp_socket.c \
-            src/os/unix/rp_recv.c \
-            src/os/unix/rp_readv_chain.c \
-            src/os/unix/rp_udp_recv.c \
-            src/os/unix/rp_send.c \
-            src/os/unix/rp_writev_chain.c \
-            src/os/unix/rp_udp_send.c \
-            src/os/unix/rp_udp_sendmsg_chain.c \
-            src/os/unix/rp_channel.c \
-            src/os/unix/rp_shmem.c \
-            src/os/unix/rp_process.c \
-            src/os/unix/rp_daemon.c \
-            src/os/unix/rp_setaffinity.c \
-            src/os/unix/rp_setproctitle.c \
-            src/os/unix/rp_posix_init.c \
-            src/os/unix/rp_user.c \
-            src/os/unix/rp_dlopen.c \
-            src/os/unix/rp_process_cycle.c"
+            src/os/unix/rap_time.c \
+            src/os/unix/rap_errno.c \
+            src/os/unix/rap_alloc.c \
+            src/os/unix/rap_files.c \
+            src/os/unix/rap_socket.c \
+            src/os/unix/rap_recv.c \
+            src/os/unix/rap_readv_chain.c \
+            src/os/unix/rap_udp_recv.c \
+            src/os/unix/rap_send.c \
+            src/os/unix/rap_writev_chain.c \
+            src/os/unix/rap_udp_send.c \
+            src/os/unix/rap_udp_sendmsg_chain.c \
+            src/os/unix/rap_channel.c \
+            src/os/unix/rap_shmem.c \
+            src/os/unix/rap_process.c \
+            src/os/unix/rap_daemon.c \
+            src/os/unix/rap_setaffinity.c \
+            src/os/unix/rap_setproctitle.c \
+            src/os/unix/rap_posix_init.c \
+            src/os/unix/rap_user.c \
+            src/os/unix/rap_dlopen.c \
+            src/os/unix/rap_process_cycle.c"
 
-POSIX_DEPS=src/os/unix/rp_posix_config.h
+POSIX_DEPS=src/os/unix/rap_posix_config.h
 
-THREAD_POOL_MODULE=rp_thread_pool_module
-THREAD_POOL_DEPS=src/core/rp_thread_pool.h
-THREAD_POOL_SRCS="src/core/rp_thread_pool.c
-                  src/os/unix/rp_thread_cond.c
-                  src/os/unix/rp_thread_mutex.c
-                  src/os/unix/rp_thread_id.c"
+THREAD_POOL_MODULE=rap_thread_pool_module
+THREAD_POOL_DEPS=src/core/rap_thread_pool.h
+THREAD_POOL_SRCS="src/core/rap_thread_pool.c
+                  src/os/unix/rap_thread_cond.c
+                  src/os/unix/rap_thread_mutex.c
+                  src/os/unix/rap_thread_id.c"
 
-FREEBSD_DEPS="src/os/unix/rp_freebsd_config.h src/os/unix/rp_freebsd.h"
-FREEBSD_SRCS=src/os/unix/rp_freebsd_init.c
-FREEBSD_SENDFILE_SRCS=src/os/unix/rp_freebsd_sendfile_chain.c
+FREEBSD_DEPS="src/os/unix/rap_freebsd_config.h src/os/unix/rap_freebsd.h"
+FREEBSD_SRCS=src/os/unix/rap_freebsd_init.c
+FREEBSD_SENDFILE_SRCS=src/os/unix/rap_freebsd_sendfile_chain.c
 
-LINUX_DEPS="src/os/unix/rp_linux_config.h src/os/unix/rp_linux.h"
-LINUX_SRCS=src/os/unix/rp_linux_init.c
-LINUX_SENDFILE_SRCS=src/os/unix/rp_linux_sendfile_chain.c
-
-
-SOLARIS_DEPS="src/os/unix/rp_solaris_config.h src/os/unix/rp_solaris.h"
-SOLARIS_SRCS=src/os/unix/rp_solaris_init.c
-SOLARIS_SENDFILEV_SRCS=src/os/unix/rp_solaris_sendfilev_chain.c
+LINUX_DEPS="src/os/unix/rap_linux_config.h src/os/unix/rap_linux.h"
+LINUX_SRCS=src/os/unix/rap_linux_init.c
+LINUX_SENDFILE_SRCS=src/os/unix/rap_linux_sendfile_chain.c
 
 
-DARWIN_DEPS="src/os/unix/rp_darwin_config.h src/os/unix/rp_darwin.h"
-DARWIN_SRCS=src/os/unix/rp_darwin_init.c
-DARWIN_SENDFILE_SRCS=src/os/unix/rp_darwin_sendfile_chain.c
+SOLARIS_DEPS="src/os/unix/rap_solaris_config.h src/os/unix/rap_solaris.h"
+SOLARIS_SRCS=src/os/unix/rap_solaris_init.c
+SOLARIS_SENDFILEV_SRCS=src/os/unix/rap_solaris_sendfilev_chain.c
+
+
+DARWIN_DEPS="src/os/unix/rap_darwin_config.h src/os/unix/rap_darwin.h"
+DARWIN_SRCS=src/os/unix/rap_darwin_init.c
+DARWIN_SENDFILE_SRCS=src/os/unix/rap_darwin_sendfile_chain.c
 
 
 WIN32_INCS="$CORE_INCS $EVENT_INCS src/os/win32"
 
 WIN32_DEPS="$CORE_DEPS $EVENT_DEPS \
-            src/os/win32/rp_win32_config.h \
-            src/os/win32/rp_time.h \
-            src/os/win32/rp_errno.h \
-            src/os/win32/rp_alloc.h \
-            src/os/win32/rp_files.h \
-            src/os/win32/rp_shmem.h \
-            src/os/win32/rp_process.h \
-            src/os/win32/rp_atomic.h \
-            src/os/win32/rp_thread.h \
-            src/os/win32/rp_socket.h \
-            src/os/win32/rp_os.h \
-            src/os/win32/rp_user.h \
-            src/os/win32/rp_dlopen.h \
-            src/os/win32/rp_process_cycle.h"
+            src/os/win32/rap_win32_config.h \
+            src/os/win32/rap_time.h \
+            src/os/win32/rap_errno.h \
+            src/os/win32/rap_alloc.h \
+            src/os/win32/rap_files.h \
+            src/os/win32/rap_shmem.h \
+            src/os/win32/rap_process.h \
+            src/os/win32/rap_atomic.h \
+            src/os/win32/rap_thread.h \
+            src/os/win32/rap_socket.h \
+            src/os/win32/rap_os.h \
+            src/os/win32/rap_user.h \
+            src/os/win32/rap_dlopen.h \
+            src/os/win32/rap_process_cycle.h"
 
-WIN32_CONFIG=src/os/win32/rp_win32_config.h
+WIN32_CONFIG=src/os/win32/rap_win32_config.h
 
 WIN32_SRCS="$CORE_SRCS $EVENT_SRCS \
-            src/os/win32/rp_errno.c \
-            src/os/win32/rp_alloc.c \
-            src/os/win32/rp_files.c \
-            src/os/win32/rp_shmem.c \
-            src/os/win32/rp_time.c \
-            src/os/win32/rp_process.c \
-            src/os/win32/rp_thread.c \
-            src/os/win32/rp_socket.c \
-            src/os/win32/rp_wsarecv.c \
-            src/os/win32/rp_wsarecv_chain.c \
-            src/os/win32/rp_udp_wsarecv.c \
-            src/os/win32/rp_wsasend.c \
-            src/os/win32/rp_wsasend_chain.c \
-            src/os/win32/rp_win32_init.c \
-            src/os/win32/rp_user.c \
-            src/os/win32/rp_dlopen.c \
-            src/os/win32/rp_event_log.c \
-            src/os/win32/rp_process_cycle.c \
-            src/event/rp_event_acceptex.c"
+            src/os/win32/rap_errno.c \
+            src/os/win32/rap_alloc.c \
+            src/os/win32/rap_files.c \
+            src/os/win32/rap_shmem.c \
+            src/os/win32/rap_time.c \
+            src/os/win32/rap_process.c \
+            src/os/win32/rap_thread.c \
+            src/os/win32/rap_socket.c \
+            src/os/win32/rap_wsarecv.c \
+            src/os/win32/rap_wsarecv_chain.c \
+            src/os/win32/rap_udp_wsarecv.c \
+            src/os/win32/rap_wsasend.c \
+            src/os/win32/rap_wsasend_chain.c \
+            src/os/win32/rap_win32_init.c \
+            src/os/win32/rap_user.c \
+            src/os/win32/rap_dlopen.c \
+            src/os/win32/rap_event_log.c \
+            src/os/win32/rap_process_cycle.c \
+            src/event/rap_event_acceptex.c"
 
-RP_WIN32_ICONS="src/os/win32/rap.ico"
-RP_WIN32_RC="src/os/win32/rap.rc"
+RAP_WIN32_ICONS="src/os/win32/rap.ico"
+RAP_WIN32_RC="src/os/win32/rap.rc"
 
 
-HTTP_FILE_CACHE_SRCS=src/http/rp_http_file_cache.c
+HTTP_FILE_CACHE_SRCS=src/http/rap_http_file_cache.c

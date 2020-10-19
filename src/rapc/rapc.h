@@ -12,29 +12,29 @@
 #include<assert.h>
 #include<pcre.h>
 
-#define rp_a_(T) \
+#define rap_a_(T) \
 typedef struct { \
 	int capacity; \
 	int size; \
 	T *pAddr; \
-} rp_a_##T;\
+} rap_a_##T;\
 \
-rp_a_##T * rp_a_new_##T\
+rap_a_##T * rap_a_new_##T\
 (int capcaity) { \
-	rp_a_##T *arr = malloc(sizeof(rp_a_int));\
+	rap_a_##T *arr = malloc(sizeof(rap_a_int));\
 	arr->size = 0;\
 	arr->capacity = capcaity;\
 	arr->pAddr = (void*)malloc(sizeof(T)*arr->capacity); \
 	return arr;\
 }\
-void rp_a_init_##T\
-(rp_a_##T arr,int capcaity) { \
+void rap_a_init_##T\
+(rap_a_##T arr,int capcaity) { \
 	arr.size = 0;\
 	arr.capacity = capcaity;\
 	arr.pAddr = (void*)malloc(sizeof(T)*arr.capacity); \
 }\
-void rp_a_push_##T\
-(rp_a_##T *arr, T value) { \
+void rap_a_push_##T\
+(rap_a_##T *arr, T value) { \
 	if(arr == NULL){\
 		return;\
 	}\
@@ -48,8 +48,8 @@ void rp_a_push_##T\
 	arr->pAddr[arr->size] = value;\
 	arr->size++;\
 }\
-void rp_a_push_n_##T\
-(rp_a_##T *arr,int n, T* value) { \
+void rap_a_push_n_##T\
+(rap_a_##T *arr,int n, T* value) { \
 	if(arr == NULL){\
 		return;\
 	}\
@@ -63,7 +63,7 @@ void rp_a_push_n_##T\
 	for(int i =0;i < n; i++) arr->pAddr[arr->size++] = *(value++);\
 }\
 \
-void rp_a_free_##T(rp_a_##T *arr) {\
+void rap_a_free_##T(rap_a_##T *arr) {\
 	if(arr == NULL){\
 		return;\
 	}\
@@ -74,24 +74,24 @@ void rp_a_free_##T(rp_a_##T *arr) {\
 }
 
 
-rp_a_(int)
-rp_a_(char)
+rap_a_(int)
+rap_a_(char)
 
-typedef rp_a_char string;
+typedef rap_a_char string;
 
 string* string_new(const char* src) {
 	int len = strlen(src);
-	string *p = rp_a_new_char(len+1);
+	string *p = rap_a_new_char(len+1);
 	p->size = len;
 	p->capacity = len+1;
 	strcpy(p->pAddr,src);
 	return p;
 }
 
-#define log_d(...) printf("%s:%d D ",__FILE__,__LINE__);printf(__VA_ARGS__);printf("\n");
-#define log_i(...) printf("%s:%d",__FILE__,__LINE__);printf(__VA_ARGS__);printf("\n");
-#define log_w(fmt, args...) printf(fmt,##arg);
-#define log_e(fmt, args...) printf(fmt,##arg);
+#define log_d(...) printf("%s:%-4d D ",__FILE__,__LINE__);printf(__VA_ARGS__);printf("\n");
+#define log_i(...) printf("%s:%-4d I ",__FILE__,__LINE__);printf(__VA_ARGS__);printf("\n");
+#define log_w(...) printf("%s:%-4d W ",__FILE__,__LINE__);printf(__VA_ARGS__);printf("\n");
+#define log_e(...) printf("\033[31m%s:%-4d E ",__FILE__,__LINE__);printf(__VA_ARGS__);printf("\033[0m\n");
  
 #endif /* _RPC_H */
 

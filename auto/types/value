@@ -3,10 +3,10 @@
 # Copyright (C) Rap, Inc.
 
 
-cat << END >> $RP_AUTO_CONFIG_H
+cat << END >> $RAP_AUTO_CONFIG_H
 
-#ifndef $rp_param
-#define $rp_param  $rp_value
+#ifndef $rap_param
+#define $rap_param  $rap_value
 #endif
 
 END

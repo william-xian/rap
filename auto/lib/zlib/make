@@ -3,29 +3,29 @@
 # Copyright (C) Rap, Inc.
 
 
-case "$RP_CC_NAME" in
+case "$RAP_CC_NAME" in
 
     msvc)
-        rp_makefile=makefile.msvc
-        rp_opt="CPU_OPT=\"$CPU_OPT\" LIBC=$LIBC"
-        rp_zlib="ZLIB=\"$ZLIB\""
+        rap_makefile=makefile.msvc
+        rap_opt="CPU_OPT=\"$CPU_OPT\" LIBC=$LIBC"
+        rap_zlib="ZLIB=\"$ZLIB\""
 
     ;;
 
     owc)
-        rp_makefile=makefile.owc
-        rp_opt="CPU_OPT=\"$CPU_OPT\""
-        rp_zlib=`echo ZLIB=\"$ZLIB\" | sed -e "s/\//$rp_regex_dirsep/g"`
+        rap_makefile=makefile.owc
+        rap_opt="CPU_OPT=\"$CPU_OPT\""
+        rap_zlib=`echo ZLIB=\"$ZLIB\" | sed -e "s/\//$rap_regex_dirsep/g"`
     ;;
 
     bcc)
-        rp_makefile=makefile.bcc
-        rp_opt="-DCPU_OPT=\"$CPU_OPT\""
-        rp_zlib=`echo \-DZLIB=\"$ZLIB\" | sed -e "s/\//$rp_regex_dirsep/g"`
+        rap_makefile=makefile.bcc
+        rap_opt="-DCPU_OPT=\"$CPU_OPT\""
+        rap_zlib=`echo \-DZLIB=\"$ZLIB\" | sed -e "s/\//$rap_regex_dirsep/g"`
     ;;
 
     *)
-        rp_makefile=
+        rap_makefile=
     ;;
 
 esac
@@ -34,23 +34,23 @@ esac
 done=NO
 
 
-case "$RP_PLATFORM" in
+case "$RAP_PLATFORM" in
 
     win32)
 
-        if [ -n "$rp_makefile" ]; then
-            cat << END                                        >> $RP_MAKEFILE
+        if [ -n "$rap_makefile" ]; then
+            cat << END                                        >> $RAP_MAKEFILE
 
-`echo "$ZLIB/zlib.lib:	$RP_MAKEFILE" | sed -e "s/\//$rp_regex_dirsep/g"`
-	\$(MAKE) -f auto/lib/zlib/$rp_makefile $rp_opt $rp_zlib
+`echo "$ZLIB/zlib.lib:	$RAP_MAKEFILE" | sed -e "s/\//$rap_regex_dirsep/g"`
+	\$(MAKE) -f auto/lib/zlib/$rap_makefile $rap_opt $rap_zlib
 
 END
 
         else
 
-            cat << END                                        >> $RP_MAKEFILE
+            cat << END                                        >> $RAP_MAKEFILE
 
-$ZLIB/libz.a:	$RP_MAKEFILE
+$ZLIB/libz.a:	$RAP_MAKEFILE
 	cd $ZLIB \\
 	&& \$(MAKE) distclean \\
 	&& \$(MAKE) -f win32/Makefile.gcc \\
@@ -71,9 +71,9 @@ END
         case $ZLIB_ASM in
             pentium)
 
-                cat << END                                    >> $RP_MAKEFILE
+                cat << END                                    >> $RAP_MAKEFILE
 
-$ZLIB/libz.a:	$RP_MAKEFILE
+$ZLIB/libz.a:	$RAP_MAKEFILE
 	cd $ZLIB \\
 	&& \$(MAKE) distclean \\
 	&& cp contrib/asm586/match.S . \\
@@ -88,9 +88,9 @@ END
 
             pentiumpro)
 
-                cat << END                                    >> $RP_MAKEFILE
+                cat << END                                    >> $RAP_MAKEFILE
 
-$ZLIB/libz.a:	$RP_MAKEFILE
+$ZLIB/libz.a:	$RAP_MAKEFILE
 	cd $ZLIB \\
 	&& \$(MAKE) distclean \\
 	&& cp contrib/asm686/match.S . \\
@@ -121,9 +121,9 @@ esac
 
 if [ $done = NO ]; then
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
-$ZLIB/libz.a:	$RP_MAKEFILE
+$ZLIB/libz.a:	$RAP_MAKEFILE
 	cd $ZLIB \\
 	&& \$(MAKE) distclean \\
 	&& CFLAGS="$ZLIB_OPT" CC="\$(CC)" \\

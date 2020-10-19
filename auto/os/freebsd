@@ -3,13 +3,13 @@
 # Copyright (C) Rap, Inc.
 
 
-have=RP_FREEBSD . auto/have_headers
+have=RAP_FREEBSD . auto/have_headers
 
 CORE_INCS="$UNIX_INCS"
 CORE_DEPS="$UNIX_DEPS $FREEBSD_DEPS"
 CORE_SRCS="$UNIX_SRCS $FREEBSD_SRCS"
 
-rp_spacer='
+rap_spacer='
 '
 
 
@@ -32,7 +32,7 @@ then
     echo " + setproctitle() in libutil"
 
     CORE_LIBS="$CORE_LIBS -lutil"
-    RP_SETPROCTITLE_LIB="-lutil"
+    RAP_SETPROCTITLE_LIB="-lutil"
 fi
 
 # sendfile
@@ -40,15 +40,15 @@ fi
 if [ $osreldate -gt 300007 ]; then
     echo " + sendfile() found"
 
-    have=RP_HAVE_SENDFILE . auto/have
+    have=RAP_HAVE_SENDFILE . auto/have
     CORE_SRCS="$CORE_SRCS $FREEBSD_SENDFILE_SRCS"
 fi
 
-if [ $RP_FILE_AIO = YES ]; then
+if [ $RAP_FILE_AIO = YES ]; then
     if [ $osreldate -gt 502103 ]; then
         echo " + sendfile()'s SF_NODISKIO found"
 
-        have=RP_HAVE_AIO_SENDFILE . auto/have
+        have=RAP_HAVE_AIO_SENDFILE . auto/have
     fi
 fi
 
@@ -58,7 +58,7 @@ fi
 if [ $osreldate -ge 701106 ]; then
     echo " + POSIX semaphores should work"
 else
-    have=RP_HAVE_POSIX_SEM . auto/nohave
+    have=RAP_HAVE_POSIX_SEM . auto/nohave
 fi
 
 
@@ -69,15 +69,15 @@ if [ \( $osreldate -lt 500000 -a $osreldate -ge 410000 \) \
 then
     echo " + kqueue found"
 
-    have=RP_HAVE_KQUEUE . auto/have
-    have=RP_HAVE_CLEAR_EVENT . auto/have
+    have=RAP_HAVE_KQUEUE . auto/have
+    have=RAP_HAVE_CLEAR_EVENT . auto/have
     EVENT_MODULES="$EVENT_MODULES $KQUEUE_MODULE"
     CORE_SRCS="$CORE_SRCS $KQUEUE_SRCS"
     EVENT_FOUND=YES
 fi
 
 
-RP_KQUEUE_CHECKED=YES
+RAP_KQUEUE_CHECKED=YES
 
 
 # kqueue's NOTE_LOWAT
@@ -86,7 +86,7 @@ if [ \( $version -lt 500000 -a $version -ge 430000 \) \
      -o $version -ge 500018 ]
 then
     echo " + kqueue's NOTE_LOWAT found"
-    have=RP_HAVE_LOWAT_EVENT . auto/have
+    have=RAP_HAVE_LOWAT_EVENT . auto/have
 fi
 
 # kqueue's EVFILT_TIMER
@@ -95,7 +95,7 @@ if [ \( $version -lt 500000 -a $version -ge 440001 \) \
      -o $version -ge 500023 ]
 then
     echo " + kqueue's EVFILT_TIMER found"
-    have=RP_HAVE_TIMER_EVENT . auto/have
+    have=RAP_HAVE_TIMER_EVENT . auto/have
 fi
 
 
@@ -103,5 +103,5 @@ fi
 
 if [ $version -ge 701000 ]; then
     echo " + cpuset_setaffinity() found"
-    have=RP_HAVE_CPUSET_SETAFFINITY . auto/have
+    have=RAP_HAVE_CPUSET_SETAFFINITY . auto/have
 fi

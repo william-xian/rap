@@ -3,18 +3,18 @@
 # Copyright (C) Rap, Inc.
 
 
-    rp_feature="libxslt"
-    rp_feature_name=
-    rp_feature_run=no
-    rp_feature_incs="#include <libxml/parser.h>
+    rap_feature="libxslt"
+    rap_feature_name=
+    rap_feature_run=no
+    rap_feature_incs="#include <libxml/parser.h>
                       #include <libxml/tree.h>
                       #include <libxslt/xslt.h>
                       #include <libxslt/xsltInternals.h>
                       #include <libxslt/transform.h>
                       #include <libxslt/xsltutils.h>"
-    rp_feature_path="/usr/include/libxml2"
-    rp_feature_libs="-lxml2 -lxslt"
-    rp_feature_test="xmlParserCtxtPtr    ctxt = NULL;
+    rap_feature_path="/usr/include/libxml2"
+    rap_feature_libs="-lxml2 -lxslt"
+    rap_feature_test="xmlParserCtxtPtr    ctxt = NULL;
                       xsltStylesheetPtr   sheet = NULL;
                       xmlDocPtr           doc = NULL;
                       xmlParseChunk(ctxt, NULL, 0, 0);
@@ -22,66 +22,66 @@
     . auto/feature
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # FreeBSD port
 
-    rp_feature="libxslt in /usr/local/"
-    rp_feature_path="/usr/local/include/libxml2 /usr/local/include"
+    rap_feature="libxslt in /usr/local/"
+    rap_feature_path="/usr/local/include/libxml2 /usr/local/include"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/usr/local/lib -L/usr/local/lib -lxml2 -lxslt"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/usr/local/lib -L/usr/local/lib -lxml2 -lxslt"
     else
-        rp_feature_libs="-L/usr/local/lib -lxml2 -lxslt"
+        rap_feature_libs="-L/usr/local/lib -lxml2 -lxslt"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # NetBSD port
 
-    rp_feature="libxslt in /usr/pkg/"
-    rp_feature_path="/usr/pkg/include/libxml2 /usr/pkg/include"
+    rap_feature="libxslt in /usr/pkg/"
+    rap_feature_path="/usr/pkg/include/libxml2 /usr/pkg/include"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lxml2 -lxslt"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lxml2 -lxslt"
     else
-        rp_feature_libs="-L/usr/pkg/lib -lxml2 -lxslt"
+        rap_feature_libs="-L/usr/pkg/lib -lxml2 -lxslt"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # MacPorts
 
-    rp_feature="libxslt in /opt/local/"
-    rp_feature_path="/opt/local/include/libxml2 /opt/local/include"
+    rap_feature="libxslt in /opt/local/"
+    rap_feature_path="/opt/local/include/libxml2 /opt/local/include"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/opt/local/lib -L/opt/local/lib -lxml2 -lxslt"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/opt/local/lib -L/opt/local/lib -lxml2 -lxslt"
     else
-        rp_feature_libs="-L/opt/local/lib -lxml2 -lxslt"
+        rap_feature_libs="-L/opt/local/lib -lxml2 -lxslt"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = yes ]; then
+if [ $rap_found = yes ]; then
 
-    CORE_INCS="$CORE_INCS $rp_feature_path"
+    CORE_INCS="$CORE_INCS $rap_feature_path"
 
     if [ $USE_LIBXSLT = YES ]; then
-        CORE_LIBS="$CORE_LIBS $rp_feature_libs"
+        CORE_LIBS="$CORE_LIBS $rap_feature_libs"
     fi
 
-    RP_LIB_LIBXSLT=$rp_feature_libs
+    RAP_LIB_LIBXSLT=$rap_feature_libs
 
 else
 
@@ -96,70 +96,70 @@ END
 fi
 
 
-    rp_feature="libexslt"
-    rp_feature_name=RP_HAVE_EXSLT
-    rp_feature_run=no
-    rp_feature_incs="#include <libexslt/exslt.h>"
-    rp_feature_path="/usr/include/libxml2"
-    rp_feature_libs="-lexslt"
-    rp_feature_test="exsltRegisterAll();"
+    rap_feature="libexslt"
+    rap_feature_name=RAP_HAVE_EXSLT
+    rap_feature_run=no
+    rap_feature_incs="#include <libexslt/exslt.h>"
+    rap_feature_path="/usr/include/libxml2"
+    rap_feature_libs="-lexslt"
+    rap_feature_test="exsltRegisterAll();"
     . auto/feature
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # FreeBSD port
 
-    rp_feature="libexslt in /usr/local/"
-    rp_feature_path="/usr/local/include/libxml2 /usr/local/include"
+    rap_feature="libexslt in /usr/local/"
+    rap_feature_path="/usr/local/include/libxml2 /usr/local/include"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/usr/local/lib -L/usr/local/lib -lexslt"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/usr/local/lib -L/usr/local/lib -lexslt"
     else
-        rp_feature_libs="-L/usr/local/lib -lexslt"
+        rap_feature_libs="-L/usr/local/lib -lexslt"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # NetBSD port
 
-    rp_feature="libexslt in /usr/pkg/"
-    rp_feature_path="/usr/pkg/include/libxml2 /usr/local/include"
+    rap_feature="libexslt in /usr/pkg/"
+    rap_feature_path="/usr/pkg/include/libxml2 /usr/local/include"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lexslt"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lexslt"
     else
-        rp_feature_libs="-L/usr/pkg/lib -lexslt"
+        rap_feature_libs="-L/usr/pkg/lib -lexslt"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # MacPorts
 
-    rp_feature="libexslt in /opt/local/"
-    rp_feature_path="/opt/local/include/libxml2 /opt/local/include"
+    rap_feature="libexslt in /opt/local/"
+    rap_feature_path="/opt/local/include/libxml2 /opt/local/include"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/opt/local/lib -L/opt/local/lib -lexslt"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/opt/local/lib -L/opt/local/lib -lexslt"
     else
-        rp_feature_libs="-L/opt/local/lib -lexslt"
+        rap_feature_libs="-L/opt/local/lib -lexslt"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = yes ]; then
+if [ $rap_found = yes ]; then
     if [ $USE_LIBXSLT = YES ]; then
         CORE_LIBS="$CORE_LIBS -lexslt"
     fi
 
-    RP_LIB_LIBXSLT="$RP_LIB_LIBXSLT -lexslt"
+    RAP_LIB_LIBXSLT="$RAP_LIB_LIBXSLT -lexslt"
 fi

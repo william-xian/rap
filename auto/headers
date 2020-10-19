@@ -3,11 +3,11 @@
 # Copyright (C) Rap, Inc.
 
 
-rp_include="unistd.h";      . auto/include
-rp_include="inttypes.h";    . auto/include
-rp_include="limits.h";      . auto/include
-rp_include="sys/filio.h";   . auto/include
-rp_include="sys/param.h";   . auto/include
-rp_include="sys/mount.h";   . auto/include
-rp_include="sys/statvfs.h"; . auto/include
-rp_include="crypt.h";       . auto/include
+rap_include="unistd.h";      . auto/include
+rap_include="inttypes.h";    . auto/include
+rap_include="limits.h";      . auto/include
+rap_include="sys/filio.h";   . auto/include
+rap_include="sys/param.h";   . auto/include
+rap_include="sys/mount.h";   . auto/include
+rap_include="sys/statvfs.h"; . auto/include
+rap_include="crypt.h";       . auto/include

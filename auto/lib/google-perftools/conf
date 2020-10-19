@@ -3,51 +3,51 @@
 # Copyright (C) Rap, Inc.
 
 
-    rp_feature="Google perftools"
-    rp_feature_name=
-    rp_feature_run=no
-    rp_feature_incs=
-    rp_feature_path=
-    rp_feature_libs="-lprofiler"
-    rp_feature_test="void ProfilerStop(void);
+    rap_feature="Google perftools"
+    rap_feature_name=
+    rap_feature_run=no
+    rap_feature_incs=
+    rap_feature_path=
+    rap_feature_libs="-lprofiler"
+    rap_feature_test="void ProfilerStop(void);
                       ProfilerStop()"
     . auto/feature
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # FreeBSD port
 
-    rp_feature="Google perftools in /usr/local/"
+    rap_feature="Google perftools in /usr/local/"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/usr/local/lib -L/usr/local/lib -lprofiler"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/usr/local/lib -L/usr/local/lib -lprofiler"
     else
-        rp_feature_libs="-L/usr/local/lib -lprofiler"
+        rap_feature_libs="-L/usr/local/lib -lprofiler"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = no ]; then
+if [ $rap_found = no ]; then
 
     # MacPorts
 
-    rp_feature="Google perftools in /opt/local/"
+    rap_feature="Google perftools in /opt/local/"
 
-    if [ $RP_RPATH = YES ]; then
-        rp_feature_libs="-R/opt/local/lib -L/opt/local/lib -lprofiler"
+    if [ $RAP_RPATH = YES ]; then
+        rap_feature_libs="-R/opt/local/lib -L/opt/local/lib -lprofiler"
     else
-        rp_feature_libs="-L/opt/local/lib -lprofiler"
+        rap_feature_libs="-L/opt/local/lib -lprofiler"
     fi
 
     . auto/feature
 fi
 
 
-if [ $rp_found = yes ]; then
-    CORE_LIBS="$CORE_LIBS $rp_feature_libs"
+if [ $rap_found = yes ]; then
+    CORE_LIBS="$CORE_LIBS $rap_feature_libs"
 
 else
 

@@ -13,15 +13,15 @@
 # Sun C 5.13 SunOS_i386 2014/10/20        Oracle Solaris Studio 12.4
 # Sun C 5.14 SunOS_i386 2016/05/31        Oracle Developer Studio 12.5
 
-RP_SUNC_VER=`$CC -V 2>&1 | grep 'Sun C' 2>&1 \
+RAP_SUNC_VER=`$CC -V 2>&1 | grep 'Sun C' 2>&1 \
                           | sed -e 's/^.* Sun C \(.*\)/\1/'`
 
-echo " + Sun C version: $RP_SUNC_VER"
+echo " + Sun C version: $RAP_SUNC_VER"
 
-have=RP_COMPILER value="\"Sun C $RP_SUNC_VER\"" . auto/define
+have=RAP_COMPILER value="\"Sun C $RAP_SUNC_VER\"" . auto/define
 
 
-cat << END > $RP_AUTOTEST.c
+cat << END > $RAP_AUTOTEST.c
 
 int main(void) {
     printf("%d", __SUNPRO_C);
@@ -30,35 +30,35 @@ int main(void) {
 
 END
 
-eval "$CC -o $RP_AUTOTEST $RP_AUTOTEST.c >> $RP_ERR 2>&1"
+eval "$CC -o $RAP_AUTOTEST $RAP_AUTOTEST.c >> $RAP_ERR 2>&1"
 
-if [ -x $RP_AUTOTEST ]; then
-    rp_sunc_ver=`$RP_AUTOTEST`
+if [ -x $RAP_AUTOTEST ]; then
+    rap_sunc_ver=`$RAP_AUTOTEST`
 fi
 
-rm -rf $RP_AUTOTEST*
+rm -rf $RAP_AUTOTEST*
 
 # 1424 == 0x590, Sun Studio 12
 
-if [ "$rp_sunc_ver" -ge 1424 ]; then
-    rp_sparc32="-m32"
-    rp_sparc64="-m64"
-    rp_amd64="-m64"
+if [ "$rap_sunc_ver" -ge 1424 ]; then
+    rap_sparc32="-m32"
+    rap_sparc64="-m64"
+    rap_amd64="-m64"
 
 else
-    rp_sparc32="-xarch=v8plus"
-    rp_sparc64="-xarch=v9"
-    rp_amd64="-xarch=amd64"
+    rap_sparc32="-xarch=v8plus"
+    rap_sparc64="-xarch=v9"
+    rap_amd64="-xarch=amd64"
 fi
 
-case "$RP_MACHINE" in
+case "$RAP_MACHINE" in
 
     i86pc)
-        RP_AUX=" src/os/unix/rp_sunpro_x86.il"
+        RAP_AUX=" src/os/unix/rap_sunpro_x86.il"
     ;;
 
     sun4u | sun4v)
-        RP_AUX=" src/os/unix/rp_sunpro_sparc64.il"
+        RAP_AUX=" src/os/unix/rap_sunpro_sparc64.il"
     ;;
 
 esac
@@ -71,17 +71,17 @@ MODULE_LINK="-G"
 
 # 20736 == 0x5100, Sun Studio 12.1
 
-if [ "$rp_sunc_ver" -ge 20736 ]; then
-    rp_fast="-fast"
+if [ "$rap_sunc_ver" -ge 20736 ]; then
+    rap_fast="-fast"
 
 else
     # older versions had problems with bit-fields
-    rp_fast="-fast -xalias_level=any"
+    rap_fast="-fast -xalias_level=any"
 fi
 
 IPO=-xipo
-CFLAGS="$CFLAGS $rp_fast $IPO"
-CORE_LINK="$CORE_LINK $rp_fast $IPO"
+CFLAGS="$CFLAGS $rap_fast $IPO"
+CORE_LINK="$CORE_LINK $rap_fast $IPO"
 
 
 case $CPU in
@@ -118,27 +118,27 @@ case $CPU in
 
     sparc32)
         # build 32-bit UltraSparc binary
-        CPU_OPT="$rp_sparc32"
-        CORE_LINK="$CORE_LINK $rp_sparc32"
-        CC_AUX_FLAGS="$CC_AUX_FLAGS $rp_sparc32"
-        RP_CPU_CACHE_LINE=64
+        CPU_OPT="$rap_sparc32"
+        CORE_LINK="$CORE_LINK $rap_sparc32"
+        CC_AUX_FLAGS="$CC_AUX_FLAGS $rap_sparc32"
+        RAP_CPU_CACHE_LINE=64
     ;;
 
     sparc64)
         # build 64-bit UltraSparc binary
-        CPU_OPT="$rp_sparc64"
-        CORE_LINK="$CORE_LINK $rp_sparc64"
-        CC_AUX_FLAGS="$CC_AUX_FLAGS $rp_sparc64"
-        RP_CPU_CACHE_LINE=64
+        CPU_OPT="$rap_sparc64"
+        CORE_LINK="$CORE_LINK $rap_sparc64"
+        CC_AUX_FLAGS="$CC_AUX_FLAGS $rap_sparc64"
+        RAP_CPU_CACHE_LINE=64
     ;;
 
     amd64)
         # build 64-bit amd64 binary
-        CPU_OPT="$rp_amd64"
-        CORE_LINK="$CORE_LINK $rp_amd64"
-        CC_AUX_FLAGS="$CC_AUX_FLAGS $rp_amd64"
-        RP_AUX=" src/os/unix/rp_sunpro_amd64.il"
-        RP_CPU_CACHE_LINE=64
+        CPU_OPT="$rap_amd64"
+        CORE_LINK="$CORE_LINK $rap_amd64"
+        CC_AUX_FLAGS="$CC_AUX_FLAGS $rap_amd64"
+        RAP_AUX=" src/os/unix/rap_sunpro_amd64.il"
+        RAP_CPU_CACHE_LINE=64
     ;;
 
 esac
@@ -148,11 +148,11 @@ CFLAGS="$CFLAGS $CPU_OPT"
 
 
 if [ ".$PCRE_OPT" = "." ]; then
-    PCRE_OPT="$rp_fast $IPO $CPU_OPT"
+    PCRE_OPT="$rap_fast $IPO $CPU_OPT"
 fi
 
 if [ ".$ZLIB_OPT" = "." ]; then
-    ZLIB_OPT="$rp_fast $IPO $CPU_OPT"
+    ZLIB_OPT="$rap_fast $IPO $CPU_OPT"
 fi
 
 

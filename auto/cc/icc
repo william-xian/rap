@@ -5,19 +5,19 @@
 
 # Intel C++ compiler 7.1, 8.0, 8.1, 9.0, 11.1
 
-RP_ICC_VER=`$CC -V 2>&1 | grep 'Version' 2>&1 \
+RAP_ICC_VER=`$CC -V 2>&1 | grep 'Version' 2>&1 \
                          | sed -e 's/^.* Version \([^ ]*\) *Build.*$/\1/'`
 
-echo " + icc version: $RP_ICC_VER"
+echo " + icc version: $RAP_ICC_VER"
 
-have=RP_COMPILER value="\"Intel C Compiler $RP_ICC_VER\"" . auto/define
+have=RAP_COMPILER value="\"Intel C Compiler $RAP_ICC_VER\"" . auto/define
 
 
 # optimizations
 
 CFLAGS="$CFLAGS -O"
 
-CORE_LINK="$CORE_LINK -opt_report_file=$RP_OBJS/opt_report_file"
+CORE_LINK="$CORE_LINK -opt_report_file=$RAP_OBJS/opt_report_file"
 
 
 case $CPU in
@@ -83,7 +83,7 @@ CFLAGS="$CFLAGS -wd1418"
 # external declaration in primary source file
 CFLAGS="$CFLAGS -wd1419"
 
-case "$RP_ICC_VER" in
+case "$RAP_ICC_VER" in
     9.*)
         # "cc" clobber ignored, warnings for Linux's htonl()/htons()
         CFLAGS="$CFLAGS -wd1469"

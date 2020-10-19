@@ -3,53 +3,53 @@
 # Copyright (C) Rap, Inc.
 
 
-case "$RP_CC_NAME" in
+case "$RAP_CC_NAME" in
 
     msvc)
-        rp_makefile=makefile.msvc
-        rp_opt="CPU_OPT=\"$CPU_OPT\" LIBC=$LIBC"
-        rp_pcre="PCRE=\"$PCRE\""
+        rap_makefile=makefile.msvc
+        rap_opt="CPU_OPT=\"$CPU_OPT\" LIBC=$LIBC"
+        rap_pcre="PCRE=\"$PCRE\""
     ;;
 
     owc)
-        rp_makefile=makefile.owc
-        rp_opt="CPU_OPT=\"$CPU_OPT\""
-        rp_pcre=`echo PCRE=\"$PCRE\" | sed -e "s/\//$rp_regex_dirsep/g"`
+        rap_makefile=makefile.owc
+        rap_opt="CPU_OPT=\"$CPU_OPT\""
+        rap_pcre=`echo PCRE=\"$PCRE\" | sed -e "s/\//$rap_regex_dirsep/g"`
     ;;
 
     bcc)
-        rp_makefile=makefile.bcc
-        rp_opt="-DCPU_OPT=\"$CPU_OPT\""
-        rp_pcre=`echo \-DPCRE=\"$PCRE\" | sed -e "s/\//$rp_regex_dirsep/g"`
+        rap_makefile=makefile.bcc
+        rap_opt="-DCPU_OPT=\"$CPU_OPT\""
+        rap_pcre=`echo \-DPCRE=\"$PCRE\" | sed -e "s/\//$rap_regex_dirsep/g"`
     ;;
 
     *)
-        rp_makefile=
+        rap_makefile=
     ;;
 
 esac
 
 
-if [ -n "$rp_makefile" ]; then
+if [ -n "$rap_makefile" ]; then
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
-`echo "$PCRE/pcre.lib:	$PCRE/pcre.h $RP_MAKEFILE"			\
-	| sed -e "s/\//$rp_regex_dirsep/g"`
-	\$(MAKE) -f auto/lib/pcre/$rp_makefile $rp_pcre $rp_opt
+`echo "$PCRE/pcre.lib:	$PCRE/pcre.h $RAP_MAKEFILE"			\
+	| sed -e "s/\//$rap_regex_dirsep/g"`
+	\$(MAKE) -f auto/lib/pcre/$rap_makefile $rap_pcre $rap_opt
 
-`echo "$PCRE/pcre.h:" | sed -e "s/\//$rp_regex_dirsep/g"`
-	\$(MAKE) -f auto/lib/pcre/$rp_makefile $rp_pcre pcre.h
+`echo "$PCRE/pcre.h:" | sed -e "s/\//$rap_regex_dirsep/g"`
+	\$(MAKE) -f auto/lib/pcre/$rap_makefile $rap_pcre pcre.h
 
 END
 
 else
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
 $PCRE/pcre.h:	$PCRE/Makefile
 
-$PCRE/Makefile:	$RP_MAKEFILE
+$PCRE/Makefile:	$RAP_MAKEFILE
 	cd $PCRE \\
 	&& if [ -f Makefile ]; then \$(MAKE) distclean; fi \\
 	&& CC="\$(CC)" CFLAGS="$PCRE_OPT" \\

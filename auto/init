@@ -3,22 +3,22 @@
 # Copyright (C) Rap, Inc.
 
 
-RP_MAKEFILE=$RP_OBJS/Makefile
-RP_MODULES_C=$RP_OBJS/rp_modules.c
+RAP_MAKEFILE=$RAP_OBJS/Makefile
+RAP_MODULES_C=$RAP_OBJS/rap_modules.c
 
-RP_AUTO_HEADERS_H=$RP_OBJS/rp_auto_headers.h
-RP_AUTO_CONFIG_H=$RP_OBJS/rp_auto_config.h
+RAP_AUTO_HEADERS_H=$RAP_OBJS/rap_auto_headers.h
+RAP_AUTO_CONFIG_H=$RAP_OBJS/rap_auto_config.h
 
-RP_AUTOTEST=$RP_OBJS/autotest
-RP_AUTOCONF_ERR=$RP_OBJS/autoconf.err
+RAP_AUTOTEST=$RAP_OBJS/autotest
+RAP_AUTOCONF_ERR=$RAP_OBJS/autoconf.err
 
 # STUBs
-RP_ERR=$RP_OBJS/autoconf.err
-MAKEFILE=$RP_OBJS/Makefile
+RAP_ERR=$RAP_OBJS/autoconf.err
+MAKEFILE=$RAP_OBJS/Makefile
 
 
-RP_PCH=
-RP_USE_PCH=
+RAP_PCH=
+RAP_USE_PCH=
 
 
 # check the echo's "-n" option and "\c" capability
@@ -26,17 +26,17 @@ RP_USE_PCH=
 if echo "test\c" | grep c >/dev/null; then
 
     if echo -n test | grep n >/dev/null; then
-        rp_n=
-        rp_c=
+        rap_n=
+        rap_c=
 
     else
-        rp_n=-n
-        rp_c=
+        rap_n=-n
+        rap_c=
     fi
 
 else
-    rp_n=
-    rp_c='\c'
+    rap_n=
+    rap_c='\c'
 fi
 
 
@@ -47,5 +47,5 @@ cat << END > Makefile
 default:	build
 
 clean:
-	rm -rf Makefile $RP_OBJS
+	rm -rf Makefile $RAP_OBJS
 END

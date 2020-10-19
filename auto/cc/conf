@@ -8,44 +8,44 @@ LINK="\$(CC)"
 MAIN_LINK=
 MODULE_LINK="-shared"
 
-rp_include_opt="-I "
-rp_compile_opt="-c"
-rp_pic_opt="-fPIC"
-rp_objout="-o "
-rp_binout="-o "
-rp_objext="o"
-rp_binext=
-rp_modext=".so"
+rap_include_opt="-I "
+rap_compile_opt="-c"
+rap_pic_opt="-fPIC"
+rap_objout="-o "
+rap_binout="-o "
+rap_objext="o"
+rap_binext=
+rap_modext=".so"
 
-rp_long_start=
-rp_long_end=
+rap_long_start=
+rap_long_end=
 
-rp_regex_dirsep="\/"
-rp_dirsep='/'
+rap_regex_dirsep="\/"
+rap_dirsep='/'
 
-rp_regex_cont=' \\\
+rap_regex_cont=' \\\
 	'
-rp_cont=' \
+rap_cont=' \
 	'
-rp_tab=' \
+rap_tab=' \
 		'
-rp_spacer=
+rap_spacer=
 
-rp_long_regex_cont=$rp_regex_cont
-rp_long_cont=$rp_cont
+rap_long_regex_cont=$rap_regex_cont
+rap_long_cont=$rap_cont
 
 . auto/cc/name
 
 if test -n "$CFLAGS"; then
 
-    CC_TEST_FLAGS="$CFLAGS $RP_CC_OPT"
+    CC_TEST_FLAGS="$CFLAGS $RAP_CC_OPT"
 
-    case $RP_CC_NAME in
+    case $RAP_CC_NAME in
 
         ccc)
             # Compaq C V6.5-207
 
-            rp_include_opt="-I"
+            rap_include_opt="-I"
         ;;
 
         sunc)
@@ -53,14 +53,14 @@ if test -n "$CFLAGS"; then
             MAIN_LINK=
             MODULE_LINK="-G"
 
-            case "$RP_MACHINE" in
+            case "$RAP_MACHINE" in
 
                 i86pc)
-                    RP_AUX=" src/os/unix/rp_sunpro_x86.il"
+                    RAP_AUX=" src/os/unix/rap_sunpro_x86.il"
                 ;;
 
                 sun4u | sun4v)
-                    RP_AUX=" src/os/unix/rp_sunpro_sparc64.il"
+                    RAP_AUX=" src/os/unix/rap_sunpro_sparc64.il"
                 ;;
 
             esac
@@ -68,7 +68,7 @@ if test -n "$CFLAGS"; then
             case $CPU in
 
                 amd64)
-                    RP_AUX=" src/os/unix/rp_sunpro_amd64.il"
+                    RAP_AUX=" src/os/unix/rap_sunpro_amd64.il"
                 ;;
 
             esac
@@ -78,7 +78,7 @@ if test -n "$CFLAGS"; then
 
 else
 
-    case $RP_CC_NAME in
+    case $RAP_CC_NAME in
         gcc)
             # gcc 2.7.2.3, 2.8.1, 2.95.4, egcs-1.1.2
             #     3.0.4, 3.1.1, 3.2.3, 3.3.2, 3.3.3, 3.3.4, 3.4.0, 3.4.2
@@ -137,57 +137,57 @@ else
 
     esac
 
-    CC_TEST_FLAGS="$CC_TEST_FLAGS $RP_CC_OPT"
+    CC_TEST_FLAGS="$CC_TEST_FLAGS $RAP_CC_OPT"
 
 fi
 
-CFLAGS="$CFLAGS $RP_CC_OPT"
-RP_TEST_LD_OPT="$RP_LD_OPT"
+CFLAGS="$CFLAGS $RAP_CC_OPT"
+RAP_TEST_LD_OPT="$RAP_LD_OPT"
 
-if [ "$RP_PLATFORM" != win32 ]; then
+if [ "$RAP_PLATFORM" != win32 ]; then
 
-    if test -n "$RP_LD_OPT"; then
-        rp_feature=--with-ld-opt=\"$RP_LD_OPT\"
-        rp_feature_name=
-        rp_feature_run=no
-        rp_feature_incs=
-        rp_feature_path=
-        rp_feature_libs=
-        rp_feature_test=
+    if test -n "$RAP_LD_OPT"; then
+        rap_feature=--with-ld-opt=\"$RAP_LD_OPT\"
+        rap_feature_name=
+        rap_feature_run=no
+        rap_feature_incs=
+        rap_feature_path=
+        rap_feature_libs=
+        rap_feature_test=
         . auto/feature
 
-        if [ $rp_found = no ]; then
-            echo $0: error: the invalid value in --with-ld-opt=\"$RP_LD_OPT\"
+        if [ $rap_found = no ]; then
+            echo $0: error: the invalid value in --with-ld-opt=\"$RAP_LD_OPT\"
             echo
             exit 1
         fi
     fi
 
 
-    rp_feature="-Wl,-E switch"
-    rp_feature_name=
-    rp_feature_run=no
-    rp_feature_incs=
-    rp_feature_path=
-    rp_feature_libs=-Wl,-E
-    rp_feature_test=
+    rap_feature="-Wl,-E switch"
+    rap_feature_name=
+    rap_feature_run=no
+    rap_feature_incs=
+    rap_feature_path=
+    rap_feature_libs=-Wl,-E
+    rap_feature_test=
     . auto/feature
 
-    if [ $rp_found = yes ]; then
+    if [ $rap_found = yes ]; then
         MAIN_LINK="-Wl,-E"
     fi
 
 
-    if [ "$RP_CC_NAME" = "sunc" ]; then
+    if [ "$RAP_CC_NAME" = "sunc" ]; then
         echo "checking for gcc builtin atomic operations ... disabled"
     else
-        rp_feature="gcc builtin atomic operations"
-        rp_feature_name=RP_HAVE_GCC_ATOMIC
-        rp_feature_run=yes
-        rp_feature_incs=
-        rp_feature_path=
-        rp_feature_libs=
-        rp_feature_test="long  n = 0;
+        rap_feature="gcc builtin atomic operations"
+        rap_feature_name=RAP_HAVE_GCC_ATOMIC
+        rap_feature_run=yes
+        rap_feature_incs=
+        rap_feature_path=
+        rap_feature_libs=
+        rap_feature_test="long  n = 0;
                           if (!__sync_bool_compare_and_swap(&n, 0, 1))
                               return 1;
                           if (__sync_fetch_and_add(&n, 1) != 1)
@@ -199,56 +199,56 @@ if [ "$RP_PLATFORM" != win32 ]; then
     fi
 
 
-    if [ "$RP_CC_NAME" = "ccc" ]; then
+    if [ "$RAP_CC_NAME" = "ccc" ]; then
         echo "checking for C99 variadic macros ... disabled"
     else
-        rp_feature="C99 variadic macros"
-        rp_feature_name="RP_HAVE_C99_VARIADIC_MACROS"
-        rp_feature_run=yes
-        rp_feature_incs="#include <stdio.h>
+        rap_feature="C99 variadic macros"
+        rap_feature_name="RAP_HAVE_C99_VARIADIC_MACROS"
+        rap_feature_run=yes
+        rap_feature_incs="#include <stdio.h>
 #define var(dummy, ...)  sprintf(__VA_ARGS__)"
-        rp_feature_path=
-        rp_feature_libs=
-        rp_feature_test="char  buf[30]; buf[0] = '0';
+        rap_feature_path=
+        rap_feature_libs=
+        rap_feature_test="char  buf[30]; buf[0] = '0';
                           var(0, buf, \"%d\", 1);
                           if (buf[0] != '1') return 1"
         . auto/feature
     fi
 
 
-    rp_feature="gcc variadic macros"
-    rp_feature_name="RP_HAVE_GCC_VARIADIC_MACROS"
-    rp_feature_run=yes
-    rp_feature_incs="#include <stdio.h>
+    rap_feature="gcc variadic macros"
+    rap_feature_name="RAP_HAVE_GCC_VARIADIC_MACROS"
+    rap_feature_run=yes
+    rap_feature_incs="#include <stdio.h>
 #define var(dummy, args...)  sprintf(args)"
-    rp_feature_path=
-    rp_feature_libs=
-    rp_feature_test="char  buf[30]; buf[0] = '0';
+    rap_feature_path=
+    rap_feature_libs=
+    rap_feature_test="char  buf[30]; buf[0] = '0';
                       var(0, buf, \"%d\", 1);
                       if (buf[0] != '1') return 1"
     . auto/feature
 
 
-    rp_feature="gcc builtin 64 bit byteswap"
-    rp_feature_name="RP_HAVE_GCC_BSWAP64"
-    rp_feature_run=no
-    rp_feature_incs=
-    rp_feature_path=
-    rp_feature_libs=
-    rp_feature_test="if (__builtin_bswap64(0)) return 1"
+    rap_feature="gcc builtin 64 bit byteswap"
+    rap_feature_name="RAP_HAVE_GCC_BSWAP64"
+    rap_feature_run=no
+    rap_feature_incs=
+    rap_feature_path=
+    rap_feature_libs=
+    rap_feature_test="if (__builtin_bswap64(0)) return 1"
     . auto/feature
 
 
-#    rp_feature="inline"
-#    rp_feature_name=
-#    rp_feature_run=no
-#    rp_feature_incs="int inline f(void) { return 1 }"
-#    rp_feature_path=
-#    rp_feature_libs=
-#    rp_feature_test=
+#    rap_feature="inline"
+#    rap_feature_name=
+#    rap_feature_run=no
+#    rap_feature_incs="int inline f(void) { return 1 }"
+#    rap_feature_path=
+#    rap_feature_libs=
+#    rap_feature_test=
 #    . auto/feature
 #
-#    if [ $rp_found = yes ]; then
+#    if [ $rap_found = yes ]; then
 #    fi
 
 fi

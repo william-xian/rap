@@ -5,190 +5,190 @@
 
 if [ $USE_PERL != NO ]; then
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
 install_perl_modules:
-	cd $RP_OBJS/src/http/modules/perl && \$(MAKE) install
+	cd $RAP_OBJS/src/http/modules/perl && \$(MAKE) install
 END
 
-    RP_INSTALL_PERL_MODULES=install_perl_modules
+    RAP_INSTALL_PERL_MODULES=install_perl_modules
 
 fi
 
 
-case ".$RP_SBIN_PATH" in
+case ".$RAP_SBIN_PATH" in
     ./*)
     ;;
 
     *)
-        RP_SBIN_PATH=$RP_PREFIX/$RP_SBIN_PATH
+        RAP_SBIN_PATH=$RAP_PREFIX/$RAP_SBIN_PATH
     ;;
 esac
 
 
-case ".$RP_MODULES_PATH" in
+case ".$RAP_MODULES_PATH" in
     ./*)
     ;;
 
     *)
-        RP_MODULES_PATH=$RP_PREFIX/$RP_MODULES_PATH
+        RAP_MODULES_PATH=$RAP_PREFIX/$RAP_MODULES_PATH
     ;;
 esac
 
-RP_MODULES_PATH=`dirname $RP_MODULES_PATH/.`
+RAP_MODULES_PATH=`dirname $RAP_MODULES_PATH/.`
 
 
-case ".$RP_CONF_PATH" in
+case ".$RAP_CONF_PATH" in
     ./*)
     ;;
 
     *)
-        RP_CONF_PATH=$RP_PREFIX/$RP_CONF_PATH
+        RAP_CONF_PATH=$RAP_PREFIX/$RAP_CONF_PATH
     ;;
 esac
 
 
-RP_CONF_PREFIX=`dirname $RP_CONF_PATH`
+RAP_CONF_PREFIX=`dirname $RAP_CONF_PATH`
 
 
-case ".$RP_PID_PATH" in
+case ".$RAP_PID_PATH" in
     ./*)
     ;;
 
     *)
-        RP_PID_PATH=$RP_PREFIX/$RP_PID_PATH
+        RAP_PID_PATH=$RAP_PREFIX/$RAP_PID_PATH
     ;;
 esac
 
 
-case ".$RP_ERROR_LOG_PATH" in
+case ".$RAP_ERROR_LOG_PATH" in
     ./* | .)
     ;;
 
     *)
-        RP_ERROR_LOG_PATH=$RP_PREFIX/$RP_ERROR_LOG_PATH
+        RAP_ERROR_LOG_PATH=$RAP_PREFIX/$RAP_ERROR_LOG_PATH
     ;;
 esac
 
 
-case ".$RP_HTTP_LOG_PATH" in
+case ".$RAP_HTTP_LOG_PATH" in
     ./*)
     ;;
 
     *)
-        RP_HTTP_LOG_PATH=$RP_PREFIX/$RP_HTTP_LOG_PATH
+        RAP_HTTP_LOG_PATH=$RAP_PREFIX/$RAP_HTTP_LOG_PATH
     ;;
 esac
 
 
 if test -f man/rap.8 ; then
-    RP_MAN=man/rap.8
+    RAP_MAN=man/rap.8
 else
-    RP_MAN=docs/man/rap.8
+    RAP_MAN=docs/man/rap.8
 fi
 
 if test -d html ; then
-    RP_HTML=html
+    RAP_HTML=html
 else
-    RP_HTML=docs/html
+    RAP_HTML=docs/html
 fi
 
-cat << END                                                    >> $RP_MAKEFILE
+cat << END                                                    >> $RAP_MAKEFILE
 
-manpage:	$RP_OBJS/rap.8
+manpage:	$RAP_OBJS/rap.8
 
-$RP_OBJS/rap.8:	$RP_MAN $RP_AUTO_CONFIG_H
-	sed -e "s|%%PREFIX%%|$RP_PREFIX|" \\
-		-e "s|%%PID_PATH%%|$RP_PID_PATH|" \\
-		-e "s|%%CONF_PATH%%|$RP_CONF_PATH|" \\
-		-e "s|%%ERROR_LOG_PATH%%|${RP_ERROR_LOG_PATH:-stderr}|" \\
-		< $RP_MAN > \$@
+$RAP_OBJS/rap.8:	$RAP_MAN $RAP_AUTO_CONFIG_H
+	sed -e "s|%%PREFIX%%|$RAP_PREFIX|" \\
+		-e "s|%%PID_PATH%%|$RAP_PID_PATH|" \\
+		-e "s|%%CONF_PATH%%|$RAP_CONF_PATH|" \\
+		-e "s|%%ERROR_LOG_PATH%%|${RAP_ERROR_LOG_PATH:-stderr}|" \\
+		< $RAP_MAN > \$@
 
-install:	build $RP_INSTALL_PERL_MODULES
-	test -d '\$(DESTDIR)$RP_PREFIX' || mkdir -p '\$(DESTDIR)$RP_PREFIX'
+install:	build $RAP_INSTALL_PERL_MODULES
+	test -d '\$(DESTDIR)$RAP_PREFIX' || mkdir -p '\$(DESTDIR)$RAP_PREFIX'
 
-	test -d '\$(DESTDIR)`dirname "$RP_SBIN_PATH"`' \\
-		|| mkdir -p '\$(DESTDIR)`dirname "$RP_SBIN_PATH"`'
-	test ! -f '\$(DESTDIR)$RP_SBIN_PATH' \\
-		|| mv '\$(DESTDIR)$RP_SBIN_PATH' \\
-			'\$(DESTDIR)$RP_SBIN_PATH.old'
-	cp $RP_OBJS/rap '\$(DESTDIR)$RP_SBIN_PATH'
+	test -d '\$(DESTDIR)`dirname "$RAP_SBIN_PATH"`' \\
+		|| mkdir -p '\$(DESTDIR)`dirname "$RAP_SBIN_PATH"`'
+	test ! -f '\$(DESTDIR)$RAP_SBIN_PATH' \\
+		|| mv '\$(DESTDIR)$RAP_SBIN_PATH' \\
+			'\$(DESTDIR)$RAP_SBIN_PATH.old'
+	cp $RAP_OBJS/rap '\$(DESTDIR)$RAP_SBIN_PATH'
 
-	test -d '\$(DESTDIR)$RP_CONF_PREFIX' \\
-		|| mkdir -p '\$(DESTDIR)$RP_CONF_PREFIX'
+	test -d '\$(DESTDIR)$RAP_CONF_PREFIX' \\
+		|| mkdir -p '\$(DESTDIR)$RAP_CONF_PREFIX'
 
-	cp conf/koi-win '\$(DESTDIR)$RP_CONF_PREFIX'
-	cp conf/koi-utf '\$(DESTDIR)$RP_CONF_PREFIX'
-	cp conf/win-utf '\$(DESTDIR)$RP_CONF_PREFIX'
+	cp conf/koi-win '\$(DESTDIR)$RAP_CONF_PREFIX'
+	cp conf/koi-utf '\$(DESTDIR)$RAP_CONF_PREFIX'
+	cp conf/win-utf '\$(DESTDIR)$RAP_CONF_PREFIX'
 
-	test -f '\$(DESTDIR)$RP_CONF_PREFIX/mime.types' \\
-		|| cp conf/mime.types '\$(DESTDIR)$RP_CONF_PREFIX'
-	cp conf/mime.types '\$(DESTDIR)$RP_CONF_PREFIX/mime.types.default'
+	test -f '\$(DESTDIR)$RAP_CONF_PREFIX/mime.types' \\
+		|| cp conf/mime.types '\$(DESTDIR)$RAP_CONF_PREFIX'
+	cp conf/mime.types '\$(DESTDIR)$RAP_CONF_PREFIX/mime.types.default'
 
-	test -f '\$(DESTDIR)$RP_CONF_PREFIX/fastcgi_params' \\
-		|| cp conf/fastcgi_params '\$(DESTDIR)$RP_CONF_PREFIX'
+	test -f '\$(DESTDIR)$RAP_CONF_PREFIX/fastcgi_params' \\
+		|| cp conf/fastcgi_params '\$(DESTDIR)$RAP_CONF_PREFIX'
 	cp conf/fastcgi_params \\
-		'\$(DESTDIR)$RP_CONF_PREFIX/fastcgi_params.default'
+		'\$(DESTDIR)$RAP_CONF_PREFIX/fastcgi_params.default'
 
-	test -f '\$(DESTDIR)$RP_CONF_PREFIX/fastcgi.conf' \\
-		|| cp conf/fastcgi.conf '\$(DESTDIR)$RP_CONF_PREFIX'
-	cp conf/fastcgi.conf '\$(DESTDIR)$RP_CONF_PREFIX/fastcgi.conf.default'
+	test -f '\$(DESTDIR)$RAP_CONF_PREFIX/fastcgi.conf' \\
+		|| cp conf/fastcgi.conf '\$(DESTDIR)$RAP_CONF_PREFIX'
+	cp conf/fastcgi.conf '\$(DESTDIR)$RAP_CONF_PREFIX/fastcgi.conf.default'
 
-	test -f '\$(DESTDIR)$RP_CONF_PREFIX/uwsgi_params' \\
-		|| cp conf/uwsgi_params '\$(DESTDIR)$RP_CONF_PREFIX'
+	test -f '\$(DESTDIR)$RAP_CONF_PREFIX/uwsgi_params' \\
+		|| cp conf/uwsgi_params '\$(DESTDIR)$RAP_CONF_PREFIX'
 	cp conf/uwsgi_params \\
-		'\$(DESTDIR)$RP_CONF_PREFIX/uwsgi_params.default'
+		'\$(DESTDIR)$RAP_CONF_PREFIX/uwsgi_params.default'
 
-	test -f '\$(DESTDIR)$RP_CONF_PREFIX/scgi_params' \\
-		|| cp conf/scgi_params '\$(DESTDIR)$RP_CONF_PREFIX'
+	test -f '\$(DESTDIR)$RAP_CONF_PREFIX/scgi_params' \\
+		|| cp conf/scgi_params '\$(DESTDIR)$RAP_CONF_PREFIX'
 	cp conf/scgi_params \\
-		'\$(DESTDIR)$RP_CONF_PREFIX/scgi_params.default'
+		'\$(DESTDIR)$RAP_CONF_PREFIX/scgi_params.default'
 
-	test -f '\$(DESTDIR)$RP_CONF_PATH' \\
-		|| cp conf/rap.conf '\$(DESTDIR)$RP_CONF_PATH'
-	cp conf/rap.conf '\$(DESTDIR)$RP_CONF_PREFIX/rap.conf.default'
+	test -f '\$(DESTDIR)$RAP_CONF_PATH' \\
+		|| cp conf/rap.conf '\$(DESTDIR)$RAP_CONF_PATH'
+	cp conf/rap.conf '\$(DESTDIR)$RAP_CONF_PREFIX/rap.conf.default'
 
-	test -d '\$(DESTDIR)`dirname "$RP_PID_PATH"`' \\
-		|| mkdir -p '\$(DESTDIR)`dirname "$RP_PID_PATH"`'
+	test -d '\$(DESTDIR)`dirname "$RAP_PID_PATH"`' \\
+		|| mkdir -p '\$(DESTDIR)`dirname "$RAP_PID_PATH"`'
 
-	test -d '\$(DESTDIR)`dirname "$RP_HTTP_LOG_PATH"`' \\
-		|| mkdir -p '\$(DESTDIR)`dirname "$RP_HTTP_LOG_PATH"`'
+	test -d '\$(DESTDIR)`dirname "$RAP_HTTP_LOG_PATH"`' \\
+		|| mkdir -p '\$(DESTDIR)`dirname "$RAP_HTTP_LOG_PATH"`'
 
-	test -d '\$(DESTDIR)$RP_PREFIX/html' \\
-		|| cp -R $RP_HTML '\$(DESTDIR)$RP_PREFIX'
+	test -d '\$(DESTDIR)$RAP_PREFIX/html' \\
+		|| cp -R $RAP_HTML '\$(DESTDIR)$RAP_PREFIX'
 END
 
 
-if test -n "$RP_ERROR_LOG_PATH"; then
-    cat << END                                                >> $RP_MAKEFILE
+if test -n "$RAP_ERROR_LOG_PATH"; then
+    cat << END                                                >> $RAP_MAKEFILE
 
-	test -d '\$(DESTDIR)`dirname "$RP_ERROR_LOG_PATH"`' \\
-		|| mkdir -p '\$(DESTDIR)`dirname "$RP_ERROR_LOG_PATH"`'
+	test -d '\$(DESTDIR)`dirname "$RAP_ERROR_LOG_PATH"`' \\
+		|| mkdir -p '\$(DESTDIR)`dirname "$RAP_ERROR_LOG_PATH"`'
 END
 
 fi
 
 
 if test -n "$DYNAMIC_MODULES"; then
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
-	test -d '\$(DESTDIR)$RP_MODULES_PATH' \\
-		|| mkdir -p '\$(DESTDIR)$RP_MODULES_PATH'
+	test -d '\$(DESTDIR)$RAP_MODULES_PATH' \\
+		|| mkdir -p '\$(DESTDIR)$RAP_MODULES_PATH'
 END
 
 fi
 
 
-for rp_module in $DYNAMIC_MODULES
+for rap_module in $DYNAMIC_MODULES
 do
-    rp_module=$rp_module$rp_modext
+    rap_module=$rap_module$rap_modext
 
-    cat << END                                                >> $RP_MAKEFILE
+    cat << END                                                >> $RAP_MAKEFILE
 
-	test ! -f '\$(DESTDIR)$RP_MODULES_PATH/$rp_module' \\
-		|| mv '\$(DESTDIR)$RP_MODULES_PATH/$rp_module' \\
-			'\$(DESTDIR)$RP_MODULES_PATH/$rp_module.old'
-	cp $RP_OBJS/$rp_module '\$(DESTDIR)$RP_MODULES_PATH/$rp_module'
+	test ! -f '\$(DESTDIR)$RAP_MODULES_PATH/$rap_module' \\
+		|| mv '\$(DESTDIR)$RAP_MODULES_PATH/$rap_module' \\
+			'\$(DESTDIR)$RAP_MODULES_PATH/$rap_module.old'
+	cp $RAP_OBJS/$rap_module '\$(DESTDIR)$RAP_MODULES_PATH/$rap_module'
 END
 
 done
@@ -199,20 +199,20 @@ done
 cat << END >> Makefile
 
 build:
-	\$(MAKE) -f $RP_MAKEFILE
+	\$(MAKE) -f $RAP_MAKEFILE
 
 install:
-	\$(MAKE) -f $RP_MAKEFILE install
+	\$(MAKE) -f $RAP_MAKEFILE install
 
 modules:
-	\$(MAKE) -f $RP_MAKEFILE modules
+	\$(MAKE) -f $RAP_MAKEFILE modules
 
 upgrade:
-	$RP_SBIN_PATH -t
+	$RAP_SBIN_PATH -t
 
-	kill -USR2 \`cat $RP_PID_PATH\`
+	kill -USR2 \`cat $RAP_PID_PATH\`
 	sleep 1
-	test -f $RP_PID_PATH.oldbin
+	test -f $RAP_PID_PATH.oldbin
 
-	kill -QUIT \`cat $RP_PID_PATH.oldbin\`
+	kill -QUIT \`cat $RAP_PID_PATH.oldbin\`
 END

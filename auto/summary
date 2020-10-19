@@ -34,49 +34,49 @@ case $ZLIB in
     *)     echo "  + using zlib library: $ZLIB" ;;
 esac
 
-case $RP_LIBATOMIC in
+case $RAP_LIBATOMIC in
     YES)   echo "  + using system libatomic_ops library" ;;
     NO)    ;; # not used
-    *)     echo "  + using libatomic_ops library: $RP_LIBATOMIC" ;;
+    *)     echo "  + using libatomic_ops library: $RAP_LIBATOMIC" ;;
 esac
 
 echo
 
 
 cat << END
-  rap path prefix: "$RP_PREFIX"
-  rap binary file: "$RP_SBIN_PATH"
-  rap modules path: "$RP_MODULES_PATH"
-  rap configuration prefix: "$RP_CONF_PREFIX"
-  rap configuration file: "$RP_CONF_PATH"
-  rap pid file: "$RP_PID_PATH"
+  rap path prefix: "$RAP_PREFIX"
+  rap binary file: "$RAP_SBIN_PATH"
+  rap modules path: "$RAP_MODULES_PATH"
+  rap configuration prefix: "$RAP_CONF_PREFIX"
+  rap configuration file: "$RAP_CONF_PATH"
+  rap pid file: "$RAP_PID_PATH"
 END
 
-if test -n "$RP_ERROR_LOG_PATH"; then
-    echo "  rap error log file: \"$RP_ERROR_LOG_PATH\""
+if test -n "$RAP_ERROR_LOG_PATH"; then
+    echo "  rap error log file: \"$RAP_ERROR_LOG_PATH\""
 else
     echo "  rap logs errors to stderr"
 fi
 
 cat << END
-  rap http access log file: "$RP_HTTP_LOG_PATH"
-  rap http client request body temporary files: "$RP_HTTP_CLIENT_TEMP_PATH"
+  rap http access log file: "$RAP_HTTP_LOG_PATH"
+  rap http client request body temporary files: "$RAP_HTTP_CLIENT_TEMP_PATH"
 END
 
 if [ $HTTP_PROXY = YES ]; then
-    echo "  rap http proxy temporary files: \"$RP_HTTP_PROXY_TEMP_PATH\""
+    echo "  rap http proxy temporary files: \"$RAP_HTTP_PROXY_TEMP_PATH\""
 fi
 
 if [ $HTTP_FASTCGI = YES ]; then
-    echo "  rap http fastcgi temporary files: \"$RP_HTTP_FASTCGI_TEMP_PATH\""
+    echo "  rap http fastcgi temporary files: \"$RAP_HTTP_FASTCGI_TEMP_PATH\""
 fi
 
 if [ $HTTP_UWSGI = YES ]; then
-    echo "  rap http uwsgi temporary files: \"$RP_HTTP_UWSGI_TEMP_PATH\""
+    echo "  rap http uwsgi temporary files: \"$RAP_HTTP_UWSGI_TEMP_PATH\""
 fi
 
 if [ $HTTP_SCGI = YES ]; then
-    echo "  rap http scgi temporary files: \"$RP_HTTP_SCGI_TEMP_PATH\""
+    echo "  rap http scgi temporary files: \"$RAP_HTTP_SCGI_TEMP_PATH\""
 fi
 
-echo "$RP_POST_CONF_MSG"
+echo "$RAP_POST_CONF_MSG"

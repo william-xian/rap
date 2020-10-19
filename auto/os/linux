@@ -3,13 +3,13 @@
 # Copyright (C) Rap, Inc.
 
 
-have=RP_LINUX . auto/have_headers
+have=RAP_LINUX . auto/have_headers
 
 CORE_INCS="$UNIX_INCS"
 CORE_DEPS="$UNIX_DEPS $LINUX_DEPS"
 CORE_SRCS="$UNIX_SRCS $LINUX_SRCS"
 
-rp_spacer='
+rap_spacer='
 '
 
 cc_aux_flags="$CC_AUX_FLAGS"
@@ -29,18 +29,18 @@ version=${version:-0}
 # posix_fadvise64() had been implemented in 2.5.60
 
 if [ $version -lt 132412 ]; then
-    have=RP_HAVE_POSIX_FADVISE . auto/nohave
+    have=RAP_HAVE_POSIX_FADVISE . auto/nohave
 fi
 
 # epoll, EPOLLET version
 
-rp_feature="epoll"
-rp_feature_name="RP_HAVE_EPOLL"
-rp_feature_run=yes
-rp_feature_incs="#include <sys/epoll.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="int efd = 0;
+rap_feature="epoll"
+rap_feature_name="RAP_HAVE_EPOLL"
+rap_feature_run=yes
+rap_feature_incs="#include <sys/epoll.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="int efd = 0;
                   struct epoll_event ee;
                   ee.events = EPOLLIN|EPOLLOUT|EPOLLET;
                   ee.data.ptr = NULL;
@@ -49,8 +49,8 @@ rp_feature_test="int efd = 0;
                   if (efd == -1) return 1;"
 . auto/feature
 
-if [ $rp_found = yes ]; then
-    have=RP_HAVE_CLEAR_EVENT . auto/have
+if [ $rap_found = yes ]; then
+    have=RAP_HAVE_CLEAR_EVENT . auto/have
     CORE_SRCS="$CORE_SRCS $EPOLL_SRCS"
     EVENT_MODULES="$EVENT_MODULES $EPOLL_MODULE"
     EVENT_FOUND=YES
@@ -58,13 +58,13 @@ if [ $rp_found = yes ]; then
 
     # EPOLLRDHUP appeared in Linux 2.6.17, glibc 2.8
 
-    rp_feature="EPOLLRDHUP"
-    rp_feature_name="RP_HAVE_EPOLLRDHUP"
-    rp_feature_run=no
-    rp_feature_incs="#include <sys/epoll.h>"
-    rp_feature_path=
-    rp_feature_libs=
-    rp_feature_test="int efd = 0, fd = 0;
+    rap_feature="EPOLLRDHUP"
+    rap_feature_name="RAP_HAVE_EPOLLRDHUP"
+    rap_feature_run=no
+    rap_feature_incs="#include <sys/epoll.h>"
+    rap_feature_path=
+    rap_feature_libs=
+    rap_feature_test="int efd = 0, fd = 0;
                       struct epoll_event ee;
                       ee.events = EPOLLIN|EPOLLRDHUP|EPOLLET;
                       ee.data.ptr = NULL;
@@ -74,13 +74,13 @@ if [ $rp_found = yes ]; then
 
     # EPOLLEXCLUSIVE appeared in Linux 4.5, glibc 2.24
 
-    rp_feature="EPOLLEXCLUSIVE"
-    rp_feature_name="RP_HAVE_EPOLLEXCLUSIVE"
-    rp_feature_run=no
-    rp_feature_incs="#include <sys/epoll.h>"
-    rp_feature_path=
-    rp_feature_libs=
-    rp_feature_test="int efd = 0, fd = 0;
+    rap_feature="EPOLLEXCLUSIVE"
+    rap_feature_name="RAP_HAVE_EPOLLEXCLUSIVE"
+    rap_feature_run=no
+    rap_feature_incs="#include <sys/epoll.h>"
+    rap_feature_path=
+    rap_feature_libs=
+    rap_feature_test="int efd = 0, fd = 0;
                       struct epoll_event ee;
                       ee.events = EPOLLIN|EPOLLEXCLUSIVE;
                       ee.data.ptr = NULL;
@@ -91,15 +91,15 @@ fi
 
 # O_PATH and AT_EMPTY_PATH were introduced in 2.6.39, glibc 2.14
 
-rp_feature="O_PATH"
-rp_feature_name="RP_HAVE_O_PATH"
-rp_feature_run=no
-rp_feature_incs="#include <sys/types.h>
+rap_feature="O_PATH"
+rap_feature_name="RAP_HAVE_O_PATH"
+rap_feature_run=no
+rap_feature_incs="#include <sys/types.h>
                   #include <sys/stat.h>
                   #include <fcntl.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="int fd; struct stat sb;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="int fd; struct stat sb;
                   fd = openat(AT_FDCWD, \".\", O_PATH|O_DIRECTORY|O_NOFOLLOW);
                   if (fstatat(fd, \"\", &sb, AT_EMPTY_PATH) != 0) return 1"
 . auto/feature
@@ -108,20 +108,20 @@ rp_feature_test="int fd; struct stat sb;
 # sendfile()
 
 CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE"
-rp_feature="sendfile()"
-rp_feature_name="RP_HAVE_SENDFILE"
-rp_feature_run=yes
-rp_feature_incs="#include <sys/sendfile.h>
+rap_feature="sendfile()"
+rap_feature_name="RAP_HAVE_SENDFILE"
+rap_feature_run=yes
+rap_feature_incs="#include <sys/sendfile.h>
                   #include <errno.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="int s = 0, fd = 1;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="int s = 0, fd = 1;
                   ssize_t n; off_t off = 0;
                   n = sendfile(s, fd, &off, 1);
                   if (n == -1 && errno == ENOSYS) return 1"
 . auto/feature
 
-if [ $rp_found = yes ]; then
+if [ $rap_found = yes ]; then
     CORE_SRCS="$CORE_SRCS $LINUX_SENDFILE_SRCS"
 fi
 
@@ -129,56 +129,56 @@ fi
 # sendfile64()
 
 CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
-rp_feature="sendfile64()"
-rp_feature_name="RP_HAVE_SENDFILE64"
-rp_feature_run=yes
-rp_feature_incs="#include <sys/sendfile.h>
+rap_feature="sendfile64()"
+rap_feature_name="RAP_HAVE_SENDFILE64"
+rap_feature_run=yes
+rap_feature_incs="#include <sys/sendfile.h>
                   #include <errno.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="int s = 0, fd = 1;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="int s = 0, fd = 1;
                   ssize_t n; off_t off = 0;
                   n = sendfile(s, fd, &off, 1);
                   if (n == -1 && errno == ENOSYS) return 1"
 . auto/feature
 
 
-rp_include="sys/prctl.h"; . auto/include
+rap_include="sys/prctl.h"; . auto/include
 
 # prctl(PR_SET_DUMPABLE)
 
-rp_feature="prctl(PR_SET_DUMPABLE)"
-rp_feature_name="RP_HAVE_PR_SET_DUMPABLE"
-rp_feature_run=yes
-rp_feature_incs="#include <sys/prctl.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="if (prctl(PR_SET_DUMPABLE, 1, 0, 0, 0) == -1) return 1"
+rap_feature="prctl(PR_SET_DUMPABLE)"
+rap_feature_name="RAP_HAVE_PR_SET_DUMPABLE"
+rap_feature_run=yes
+rap_feature_incs="#include <sys/prctl.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="if (prctl(PR_SET_DUMPABLE, 1, 0, 0, 0) == -1) return 1"
 . auto/feature
 
 
 # prctl(PR_SET_KEEPCAPS)
 
-rp_feature="prctl(PR_SET_KEEPCAPS)"
-rp_feature_name="RP_HAVE_PR_SET_KEEPCAPS"
-rp_feature_run=yes
-rp_feature_incs="#include <sys/prctl.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="if (prctl(PR_SET_KEEPCAPS, 1, 0, 0, 0) == -1) return 1"
+rap_feature="prctl(PR_SET_KEEPCAPS)"
+rap_feature_name="RAP_HAVE_PR_SET_KEEPCAPS"
+rap_feature_run=yes
+rap_feature_incs="#include <sys/prctl.h>"
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="if (prctl(PR_SET_KEEPCAPS, 1, 0, 0, 0) == -1) return 1"
 . auto/feature
 
 
 # capabilities
 
-rp_feature="capabilities"
-rp_feature_name="RP_HAVE_CAPABILITIES"
-rp_feature_run=no
-rp_feature_incs="#include <linux/capability.h>
+rap_feature="capabilities"
+rap_feature_name="RAP_HAVE_CAPABILITIES"
+rap_feature_run=no
+rap_feature_incs="#include <linux/capability.h>
                   #include <sys/syscall.h>"
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test="struct __user_cap_data_struct    data;
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test="struct __user_cap_data_struct    data;
                   struct __user_cap_header_struct  header;
 
                   header.version = _LINUX_CAPABILITY_VERSION_1;
@@ -193,18 +193,18 @@ rp_feature_test="struct __user_cap_data_struct    data;
 
 # crypt_r()
 
-rp_feature="crypt_r()"
-rp_feature_name="RP_HAVE_GNU_CRYPT_R"
-rp_feature_run=no
-rp_feature_incs="#include <crypt.h>"
-rp_feature_path=
-rp_feature_libs=-lcrypt
-rp_feature_test="struct crypt_data  cd;
+rap_feature="crypt_r()"
+rap_feature_name="RAP_HAVE_GNU_CRYPT_R"
+rap_feature_run=no
+rap_feature_incs="#include <crypt.h>"
+rap_feature_path=
+rap_feature_libs=-lcrypt
+rap_feature_test="struct crypt_data  cd;
                   crypt_r(\"key\", \"salt\", &cd);"
 . auto/feature
 
 
-rp_include="sys/vfs.h";     . auto/include
+rap_include="sys/vfs.h";     . auto/include
 
 
 CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"

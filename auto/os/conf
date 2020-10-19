@@ -3,9 +3,9 @@
 # Copyright (C) Rap, Inc.
 
 
-echo "checking for $RP_SYSTEM specific features"
+echo "checking for $RAP_SYSTEM specific features"
 
-case "$RP_PLATFORM" in
+case "$RAP_PLATFORM" in
 
     FreeBSD:*)
         . auto/os/freebsd
@@ -28,16 +28,16 @@ case "$RP_PLATFORM" in
     ;;
 
     DragonFly:*)
-        have=RP_FREEBSD . auto/have_headers
+        have=RAP_FREEBSD . auto/have_headers
         CORE_INCS="$UNIX_INCS"
         CORE_DEPS="$UNIX_DEPS $FREEBSD_DEPS"
         CORE_SRCS="$UNIX_SRCS $FREEBSD_SRCS"
 
         echo " + sendfile() found"
-        have=RP_HAVE_SENDFILE . auto/have
+        have=RAP_HAVE_SENDFILE . auto/have
         CORE_SRCS="$CORE_SRCS $FREEBSD_SENDFILE_SRCS"
 
-        rp_spacer='
+        rap_spacer='
 '
     ;;
 
@@ -46,12 +46,12 @@ case "$RP_PLATFORM" in
         CORE_DEPS="$UNIX_DEPS $POSIX_DEPS"
         CORE_SRCS="$UNIX_SRCS"
 
-        RP_RPATH=YES
+        RAP_RPATH=YES
     ;;
 
     HP-UX:*)
         # HP/UX
-        have=RP_HPUX . auto/have_headers
+        have=RAP_HPUX . auto/have_headers
         CORE_INCS="$UNIX_INCS"
         CORE_DEPS="$UNIX_DEPS $POSIX_DEPS"
         CORE_SRCS="$UNIX_SRCS"
@@ -61,8 +61,8 @@ case "$RP_PLATFORM" in
 
     OSF1:*)
         # Tru64 UNIX
-        have=RP_TRU64 . auto/have_headers
-        have=RP_HAVE_STRERROR_R . auto/nohave
+        have=RAP_TRU64 . auto/have_headers
+        have=RAP_HAVE_STRERROR_R . auto/nohave
         CORE_INCS="$UNIX_INCS"
         CORE_DEPS="$UNIX_DEPS $POSIX_DEPS"
         CORE_SRCS="$UNIX_SRCS"
@@ -70,7 +70,7 @@ case "$RP_PLATFORM" in
 
     GNU:*)
         # GNU Hurd
-        have=RP_GNU_HURD . auto/have_headers
+        have=RAP_GNU_HURD . auto/have_headers
         CORE_INCS="$UNIX_INCS"
         CORE_DEPS="$UNIX_DEPS $POSIX_DEPS"
         CORE_SRCS="$UNIX_SRCS"
@@ -86,44 +86,44 @@ case "$RP_PLATFORM" in
 esac
 
 
-case "$RP_MACHINE" in
+case "$RAP_MACHINE" in
 
     i386 | i686 | i86pc)
-        have=RP_HAVE_NONALIGNED . auto/have
-        RP_MACH_CACHE_LINE=32
+        have=RAP_HAVE_NONALIGNED . auto/have
+        RAP_MACH_CACHE_LINE=32
     ;;
 
     amd64 | x86_64)
-        have=RP_HAVE_NONALIGNED . auto/have
-        RP_MACH_CACHE_LINE=64
+        have=RAP_HAVE_NONALIGNED . auto/have
+        RAP_MACH_CACHE_LINE=64
     ;;
 
     sun4u | sun4v | sparc | sparc64)
-        have=RP_ALIGNMENT value=16 . auto/define
+        have=RAP_ALIGNMENT value=16 . auto/define
         # TODO
-        RP_MACH_CACHE_LINE=64
+        RAP_MACH_CACHE_LINE=64
     ;;
 
     ia64 )
-        have=RP_ALIGNMENT value=16 . auto/define
+        have=RAP_ALIGNMENT value=16 . auto/define
         # TODO
-        RP_MACH_CACHE_LINE=64
+        RAP_MACH_CACHE_LINE=64
     ;;
 
     aarch64 )
-        have=RP_ALIGNMENT value=16 . auto/define
-        RP_MACH_CACHE_LINE=64
+        have=RAP_ALIGNMENT value=16 . auto/define
+        RAP_MACH_CACHE_LINE=64
     ;;
 
     *)
-        have=RP_ALIGNMENT value=16 . auto/define
-        RP_MACH_CACHE_LINE=32
+        have=RAP_ALIGNMENT value=16 . auto/define
+        RAP_MACH_CACHE_LINE=32
     ;;
 
 esac
 
-if test -z "$RP_CPU_CACHE_LINE"; then
-    RP_CPU_CACHE_LINE=$RP_MACH_CACHE_LINE
+if test -z "$RAP_CPU_CACHE_LINE"; then
+    RAP_CPU_CACHE_LINE=$RAP_MACH_CACHE_LINE
 fi
 
-have=RP_CPU_CACHE_LINE value=$RP_CPU_CACHE_LINE . auto/define
+have=RAP_CPU_CACHE_LINE value=$RAP_CPU_CACHE_LINE . auto/define

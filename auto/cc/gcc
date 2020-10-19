@@ -8,35 +8,35 @@
 #     4.0.0, 4.0.1, 4.1.0
 
 
-RP_GCC_VER=`$CC -v 2>&1 | grep 'gcc version' 2>&1 \
+RAP_GCC_VER=`$CC -v 2>&1 | grep 'gcc version' 2>&1 \
                          | sed -e 's/^.* version \(.*\)/\1/'`
 
-echo " + gcc version: $RP_GCC_VER"
+echo " + gcc version: $RAP_GCC_VER"
 
-have=RP_COMPILER value="\"gcc $RP_GCC_VER\"" . auto/define
+have=RAP_COMPILER value="\"gcc $RAP_GCC_VER\"" . auto/define
 
 
 # Solaris 7's /usr/ccs/bin/as does not support "-pipe"
 
 CC_TEST_FLAGS="-pipe"
 
-rp_feature="gcc -pipe switch"
-rp_feature_name=
-rp_feature_run=no
-rp_feature_incs=
-rp_feature_path=
-rp_feature_libs=
-rp_feature_test=
+rap_feature="gcc -pipe switch"
+rap_feature_name=
+rap_feature_run=no
+rap_feature_incs=
+rap_feature_path=
+rap_feature_libs=
+rap_feature_test=
 . auto/feature
 
 CC_TEST_FLAGS=
 
-if [ $rp_found = yes ]; then
+if [ $rap_found = yes ]; then
     PIPE="-pipe"
 fi
 
 
-case "$RP_MACHINE" in
+case "$RAP_MACHINE" in
 
     sun4u | sun4v | sparc | sparc64 )
         # "-mcpu=v9" enables the "casa" assembler instruction
@@ -48,9 +48,9 @@ esac
 
 # optimizations
 
-#RP_GCC_OPT="-O2"
-#RP_GCC_OPT="-Os"
-RP_GCC_OPT="-O"
+#RAP_GCC_OPT="-O2"
+#RAP_GCC_OPT="-Os"
+RAP_GCC_OPT="-O"
 
 #CFLAGS="$CFLAGS -fomit-frame-pointer"
 
@@ -58,45 +58,45 @@ case $CPU in
     pentium)
         # optimize for Pentium and Athlon
         CPU_OPT="-march=pentium"
-        RP_CPU_CACHE_LINE=32
+        RAP_CPU_CACHE_LINE=32
     ;;
 
     pentiumpro | pentium3)
         # optimize for Pentium Pro, Pentium II and Pentium III
         CPU_OPT="-march=pentiumpro"
-        RP_CPU_CACHE_LINE=32
+        RAP_CPU_CACHE_LINE=32
     ;;
 
     pentium4)
         # optimize for Pentium 4, gcc 3.x
         CPU_OPT="-march=pentium4"
-        RP_CPU_CACHE_LINE=128
+        RAP_CPU_CACHE_LINE=128
     ;;
 
     athlon)
         # optimize for Athlon, gcc 3.x
         CPU_OPT="-march=athlon"
-        RP_CPU_CACHE_LINE=64
+        RAP_CPU_CACHE_LINE=64
     ;;
 
     opteron)
         # optimize for Opteron, gcc 3.x
         CPU_OPT="-march=opteron"
-        RP_CPU_CACHE_LINE=64
+        RAP_CPU_CACHE_LINE=64
     ;;
 
     sparc32)
         # build 32-bit UltraSparc binary
         CPU_OPT="-m32"
         CORE_LINK="$CORE_LINK -m32"
-        RP_CPU_CACHE_LINE=64
+        RAP_CPU_CACHE_LINE=64
     ;;
 
     sparc64)
         # build 64-bit UltraSparc binary
         CPU_OPT="-m64"
         CORE_LINK="$CORE_LINK -m64"
-        RP_CPU_CACHE_LINE=64
+        RAP_CPU_CACHE_LINE=64
     ;;
 
     ppc64)
@@ -105,14 +105,14 @@ case $CPU in
         CPU_OPT="$CPU_OPT -falign-functions=32 -falign-labels=32"
         CPU_OPT="$CPU_OPT -falign-loops=32 -falign-jumps=32"
         CORE_LINK="$CORE_LINK -m64"
-        RP_CPU_CACHE_LINE=128
+        RAP_CPU_CACHE_LINE=128
     ;;
 
 esac
 
 CC_AUX_FLAGS="$CC_AUX_FLAGS $CPU_OPT"
 
-case "$RP_GCC_VER" in
+case "$RAP_GCC_VER" in
     2.7*)
         # batch build
         CPU_OPT=
@@ -138,14 +138,14 @@ fi
 # warnings
 
 # -W requires at least -O
-CFLAGS="$CFLAGS ${RP_GCC_OPT:--O} -W"
+CFLAGS="$CFLAGS ${RAP_GCC_OPT:--O} -W"
 
 CFLAGS="$CFLAGS -Wall -Wpointer-arith"
 #CFLAGS="$CFLAGS -Wconversion"
 #CFLAGS="$CFLAGS -Winline"
 #CFLAGS="$CFLAGS -Wmissing-prototypes"
 
-case "$RP_GCC_VER" in
+case "$RAP_GCC_VER" in
     2.*)
         # we have a lot of the unused function arguments
         CFLAGS="$CFLAGS -Wno-unused"
@@ -158,7 +158,7 @@ case "$RP_GCC_VER" in
         #CFLAGS="$CFLAGS -Wunreachable-code"
 
         # deprecated system OpenSSL library on OS X
-        if [ "$RP_SYSTEM" = "Darwin" ]; then
+        if [ "$RAP_SYSTEM" = "Darwin" ]; then
             CFLAGS="$CFLAGS -Wno-deprecated-declarations"
         fi
     ;;

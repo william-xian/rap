@@ -3,7 +3,7 @@
 # Copyright (C) Rap, Inc.
 
 
-cat << END >> $RP_AUTO_HEADERS_H
+cat << END >> $RAP_AUTO_HEADERS_H
 
 #ifndef $have
 #define $have  1

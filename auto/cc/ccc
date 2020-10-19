@@ -5,7 +5,7 @@
 
 # Compaq C V6.5-207
 
-rp_include_opt="-I"
+rap_include_opt="-I"
 
 # warnings
 

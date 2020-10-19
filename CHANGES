@@ -21,7 +21,7 @@ Changes with rap 1.17.9                                        03 Mar 2020
     *) Bugfix: a segmentation fault might occur in a worker process if OCSP
        stapling was used.
 
-    *) Bugfix: in the rp_http_mp4_module.
+    *) Bugfix: in the rap_http_mp4_module.
 
     *) Bugfix: rap used status code 494 instead of 400 if errors with code
        494 were redirected with the "error_page" directive.
@@ -63,7 +63,7 @@ Changes with rap 1.17.7                                        24 Dec 2019
     *) Bugfix: a timeout might occur while handling pipelined requests in an
        SSL connection; the bug had appeared in 1.17.5.
 
-    *) Bugfix: in the rp_http_dav_module.
+    *) Bugfix: in the rap_http_dav_module.
 
 
 Changes with rap 1.17.6                                        19 Nov 2019
@@ -154,9 +154,9 @@ Changes with rap 1.17.2                                        23 Jul 2019
        proxying WebSocket connections if the select, poll, or /dev/poll
        methods were used.
 
-    *) Bugfix: in the rp_http_xslt_filter_module.
+    *) Bugfix: in the rap_http_xslt_filter_module.
 
-    *) Bugfix: in the rp_http_ssi_filter_module.
+    *) Bugfix: in the rap_http_ssi_filter_module.
 
 
 Changes with rap 1.17.1                                        25 Jun 2019
@@ -257,7 +257,7 @@ Changes with rap 1.15.8                                        25 Dec 2018
 
     *) Bugfix: in rap/Windows.
 
-    *) Bugfix: in the rp_http_autoindex_module on 32-bit platforms.
+    *) Bugfix: in the rap_http_autoindex_module on 32-bit platforms.
 
 
 Changes with rap 1.15.7                                        27 Nov 2018
@@ -273,7 +273,7 @@ Changes with rap 1.15.7                                        27 Nov 2018
        $upstream_header_time variables.
 
     *) Bugfix: a segmentation fault might occur in a worker process if the
-       rp_http_mp4_module was used on 32-bit platforms.
+       rap_http_mp4_module was used on 32-bit platforms.
 
 
 Changes with rap 1.15.6                                        06 Nov 2018
@@ -282,7 +282,7 @@ Changes with rap 1.15.6                                        06 Nov 2018
        consumption (CVE-2018-16843) and CPU usage (CVE-2018-16844).
 
     *) Security: processing of a specially crafted mp4 file with the
-       rp_http_mp4_module might result in worker process memory disclosure
+       rap_http_mp4_module might result in worker process memory disclosure
        (CVE-2018-16845).
 
     *) Feature: the "proxy_socket_keepalive", "fastcgi_socket_keepalive",
@@ -308,7 +308,7 @@ Changes with rap 1.15.4                                        25 Sep 2018
 
     *) Feature: now the "ssl_early_data" directive can be used with OpenSSL.
 
-    *) Bugfix: in the rp_http_uwsgi_module.
+    *) Bugfix: in the rap_http_uwsgi_module.
        Thanks to Chris Caputo.
 
     *) Bugfix: connections with some gRPC backends might not be cached when
@@ -323,7 +323,7 @@ Changes with rap 1.15.4                                        25 Sep 2018
        directive.
 
     *) Bugfix: standard error pages and responses of the
-       rp_http_autoindex_module module used the "bgcolor" attribute, and
+       rap_http_autoindex_module module used the "bgcolor" attribute, and
        might be displayed incorrectly when using custom color settings in
        browsers.
        Thanks to Nova DasSarma.
@@ -343,14 +343,14 @@ Changes with rap 1.15.3                                        28 Aug 2018
     *) Feature: the "keepalive_timeout" and "keepalive_requests" directives
        in the "upstream" block.
 
-    *) Bugfix: the rp_http_dav_module did not truncate destination file
+    *) Bugfix: the rap_http_dav_module did not truncate destination file
        when copying a file over an existing one with the COPY method.
 
-    *) Bugfix: the rp_http_dav_module used zero access rights on the
+    *) Bugfix: the rap_http_dav_module used zero access rights on the
        destination file and did not preserve file modification time when
        moving a file between different file systems with the MOVE method.
 
-    *) Bugfix: the rp_http_dav_module used default access rights when
+    *) Bugfix: the rap_http_dav_module used default access rights when
        copying a file with the COPY method.
 
     *) Workaround: some clients might not work when using HTTP/2; the bug
@@ -362,7 +362,7 @@ Changes with rap 1.15.3                                        28 Aug 2018
 Changes with rap 1.15.2                                        24 Jul 2018
 
     *) Feature: the $ssl_preread_protocol variable in the
-       rp_stream_ssl_preread_module.
+       rap_stream_ssl_preread_module.
 
     *) Feature: now when using the "reset_timedout_connection" directive
        rap will reset connections being closed with the 444 code.
@@ -475,9 +475,9 @@ Changes with rap 1.13.10                                       20 Mar 2018
        Thanks to Johannes Baiter and Calin Don.
 
     *) Feature: the $ssl_preread_alpn_protocols variable in the
-       rp_stream_ssl_preread_module.
+       rap_stream_ssl_preread_module.
 
-    *) Feature: the rp_http_grpc_module.
+    *) Feature: the rap_http_grpc_module.
 
     *) Bugfix: in memory allocation error handling in the "geo" directive.
 
@@ -498,9 +498,9 @@ Changes with rap 1.13.9                                        20 Feb 2018
        "ssl_verify_client" directive was used and no SSL certificate was
        specified in a virtual server.
 
-    *) Bugfix: in the rp_http_v2_module.
+    *) Bugfix: in the rap_http_v2_module.
 
-    *) Bugfix: in the rp_http_dav_module.
+    *) Bugfix: in the rap_http_dav_module.
 
 
 Changes with rap 1.13.8                                        26 Dec 2017
@@ -520,7 +520,7 @@ Changes with rap 1.13.8                                        26 Dec 2017
        process with PID different from 1 after its parent process has
        finished.
 
-    *) Bugfix: the rp_http_autoindex_module incorrectly handled requests
+    *) Bugfix: the rap_http_autoindex_module incorrectly handled requests
        with bodies.
 
     *) Bugfix: in the "proxy_limit_rate" directive when used with the
@@ -549,7 +549,7 @@ Changes with rap 1.13.7                                        21 Nov 2017
        memory zone size was changed during a reconfiguration and the
        reconfiguration failed.
 
-    *) Bugfix: in the rp_http_fastcgi_module.
+    *) Bugfix: in the rap_http_fastcgi_module.
 
     *) Bugfix: rap returned the 500 error if parameters without variables
        were specified in the "xslt_stylesheet" directive.
@@ -566,7 +566,7 @@ Changes with rap 1.13.6                                        10 Oct 2017
     *) Bugfix: switching to the next upstream server in the stream module
        did not work when using the "ssl_preread" directive.
 
-    *) Bugfix: in the rp_http_v2_module.
+    *) Bugfix: in the rap_http_v2_module.
        Thanks to Piotr Sikora.
 
     *) Bugfix: rap did not support dates after the year 2038 on 32-bit
@@ -614,7 +614,7 @@ Changes with rap 1.13.5                                        05 Sep 2017
 
 Changes with rap 1.13.4                                        08 Aug 2017
 
-    *) Feature: the rp_http_mirror_module.
+    *) Feature: the rap_http_mirror_module.
 
     *) Bugfix: client connections might be dropped during configuration
        testing when using the "reuseport" parameter of the "listen"
@@ -656,7 +656,7 @@ Changes with rap 1.13.2                                        27 Jun 2017
     *) Bugfix: a segmentation fault might occur in a worker process when
        using SSI with many includes and proxy_pass with variables.
 
-    *) Bugfix: in the rp_http_v2_module.
+    *) Bugfix: in the rap_http_v2_module.
        Thanks to Piotr Sikora.
 
 
@@ -728,7 +728,7 @@ Changes with rap 1.11.13                                       04 Apr 2017
     *) Bugfix: requests might hang when using the "sendfile" and "aio_write"
        directives with subrequests.
 
-    *) Bugfix: in the rp_http_v2_module.
+    *) Bugfix: in the rap_http_v2_module.
        Thanks to Piotr Sikora.
 
     *) Bugfix: a segmentation fault might occur in a worker process when
@@ -738,7 +738,7 @@ Changes with rap 1.11.13                                       04 Apr 2017
        "sendfile_max_chunk", "limit_req" directives, or the $r->sleep()
        embedded perl method with subrequests.
 
-    *) Bugfix: in the rp_http_slice_module.
+    *) Bugfix: in the rap_http_slice_module.
 
 
 Changes with rap 1.11.12                                       24 Mar 2017
@@ -791,7 +791,7 @@ Changes with rap 1.11.10                                       14 Feb 2017
        when handling requests with the "Expect: 100-continue" request header
        line.
 
-    *) Bugfix: the rp_http_slice_module did not work in named locations.
+    *) Bugfix: the rap_http_slice_module did not work in named locations.
 
     *) Bugfix: a segmentation fault might occur in a worker process when
        using AIO after an "X-Accel-Redirect" redirection.
@@ -845,7 +845,7 @@ Changes with rap 1.11.8                                        27 Dec 2016
 
     *) Bugfix: recursion when evaluating variables was not limited.
 
-    *) Bugfix: in the rp_stream_ssl_preread_module.
+    *) Bugfix: in the rap_stream_ssl_preread_module.
 
     *) Bugfix: if a server in an upstream in the stream module failed, it
        was considered alive only when a test connection sent to it after
@@ -878,10 +878,10 @@ Changes with rap 1.11.7                                        13 Dec 2016
     *) Bugfix: a segmentation fault might occur in a worker process when
        using HTTP/2; the bug had appeared in 1.11.3.
 
-    *) Bugfix: in the rp_http_mp4_module.
+    *) Bugfix: in the rap_http_mp4_module.
        Thanks to Congcong Hu.
 
-    *) Bugfix: in the rp_http_perl_module.
+    *) Bugfix: in the rap_http_perl_module.
 
 
 Changes with rap 1.11.6                                        15 Nov 2016
@@ -898,13 +898,13 @@ Changes with rap 1.11.6                                        15 Nov 2016
     *) Feature: EXTERNAL authentication mechanism support in mail proxy.
        Thanks to Robert Norris.
 
-    *) Feature: WebP support in the rp_http_image_filter_module.
+    *) Feature: WebP support in the rap_http_image_filter_module.
 
     *) Feature: variables support in the "proxy_method" directive.
        Thanks to Dmitry Lazurkin.
 
     *) Feature: the "http2_max_requests" directive in the
-       rp_http_v2_module.
+       rap_http_v2_module.
 
     *) Feature: the "proxy_cache_max_range_offset",
        "fastcgi_cache_max_range_offset", "scgi_cache_max_range_offset", and
@@ -913,7 +913,7 @@ Changes with rap 1.11.6                                        15 Nov 2016
     *) Bugfix: graceful shutdown of old worker processes might require
        infinite time when using HTTP/2.
 
-    *) Bugfix: in the rp_http_mp4_module.
+    *) Bugfix: in the rap_http_mp4_module.
 
     *) Bugfix: "ignore long locked inactive cache entry" alerts might appear
        in logs when proxying WebSocket connections with caching enabled.
@@ -932,7 +932,7 @@ Changes with rap 1.11.5                                        11 Oct 2016
        will not reset number of failures of all servers as it previously
        did, but will wait for fail_timeout to expire.
 
-    *) Feature: the rp_stream_ssl_preread_module.
+    *) Feature: the rap_stream_ssl_preread_module.
 
     *) Feature: the "server" directive in the "upstream" context supports
        the "max_conns" parameter.
@@ -971,16 +971,16 @@ Changes with rap 1.11.4                                        13 Sep 2016
        $upstream_connect_time, $upstream_first_byte_time, and
        $upstream_session_time variables in the stream module.
 
-    *) Feature: the rp_stream_log_module.
+    *) Feature: the rap_stream_log_module.
 
     *) Feature: the "proxy_protocol" parameter of the "listen" directive,
        the $proxy_protocol_addr and $proxy_protocol_port variables in the
        stream module.
 
-    *) Feature: the rp_stream_realip_module.
+    *) Feature: the rap_stream_realip_module.
 
     *) Bugfix: rap could not be built with the stream module and the
-       rp_http_ssl_module, but without rp_stream_ssl_module; the bug had
+       rap_http_ssl_module, but without rap_stream_ssl_module; the bug had
        appeared in 1.11.3.
 
     *) Feature: the IP_BIND_ADDRESS_NO_PORT socket option was not used; the
@@ -998,11 +998,11 @@ Changes with rap 1.11.3                                        26 Jul 2016
 
     *) Feature: now rap uses EPOLLEXCLUSIVE on Linux.
 
-    *) Feature: the rp_stream_geo_module.
+    *) Feature: the rap_stream_geo_module.
 
-    *) Feature: the rp_stream_geoip_module.
+    *) Feature: the rap_stream_geoip_module.
 
-    *) Feature: the rp_stream_split_clients_module.
+    *) Feature: the rap_stream_split_clients_module.
 
     *) Feature: variables support in the "proxy_pass" and "proxy_ssl_name"
        directives in the stream module.
@@ -1020,9 +1020,9 @@ Changes with rap 1.11.2                                        05 Jul 2016
 
     *) Feature: variables support in the stream module.
 
-    *) Feature: the rp_stream_map_module.
+    *) Feature: the rap_stream_map_module.
 
-    *) Feature: the rp_stream_return_module.
+    *) Feature: the rap_stream_return_module.
 
     *) Feature: a port can be specified in the "proxy_bind", "fastcgi_bind",
        "memcached_bind", "scgi_bind", and "uwsgi_bind" directives.
@@ -1080,9 +1080,9 @@ Changes with rap 1.11.0                                        24 May 2016
     *) Feature: the $proxy_protocol_port variable.
 
     *) Feature: the $realip_remote_port variable in the
-       rp_http_realip_module.
+       rap_http_realip_module.
 
-    *) Feature: the rp_http_realip_module is now able to set the client
+    *) Feature: the rap_http_realip_module is now able to set the client
        port in addition to the address.
 
     *) Change: the "421 Misdirected Request" response now used when
@@ -1141,7 +1141,7 @@ Changes with rap 1.9.13                                        29 Mar 2016
        backend; the "non_idempotent" parameter of the "proxy_next_upstream"
        directive explicitly allows retrying such requests.
 
-    *) Feature: the rp_http_perl_module can be built dynamically.
+    *) Feature: the rap_http_perl_module can be built dynamically.
 
     *) Feature: UDP support in the stream module.
 
@@ -1171,7 +1171,7 @@ Changes with rap 1.9.13                                        29 Mar 2016
        "uwsgi_pass" directives when using variables.
        Thanks to Piotr Sikora.
 
-    *) Bugfix: in the rp_http_sub_filter_module.
+    *) Bugfix: in the rap_http_sub_filter_module.
 
     *) Bugfix: if an error occurred in a cached backend connection, the
        request was passed to the next server regardless of the
@@ -1208,7 +1208,7 @@ Changes with rap 1.9.12                                        24 Feb 2016
 
     *) Bugfix: socket leak when using HTTP/2.
 
-    *) Bugfix: in the rp_http_v2_module.
+    *) Bugfix: in the rap_http_v2_module.
 
 
 Changes with rap 1.9.11                                        09 Feb 2016
@@ -1220,7 +1220,7 @@ Changes with rap 1.9.11                                        09 Feb 2016
     *) Bugfix: the $request_length variable did not include size of request
        headers when using HTTP/2.
 
-    *) Bugfix: in the rp_http_v2_module.
+    *) Bugfix: in the rap_http_v2_module.
 
 
 Changes with rap 1.9.10                                        26 Jan 2016
@@ -1265,7 +1265,7 @@ Changes with rap 1.9.8                                         08 Dec 2015
 
     *) Feature: the "include" directive inside the "upstream" block.
 
-    *) Feature: the rp_http_slice_module.
+    *) Feature: the rap_http_slice_module.
 
     *) Bugfix: a segmentation fault might occur in a worker process when
        using LibreSSL; the bug had appeared in 1.9.6.
@@ -1280,18 +1280,18 @@ Changes with rap 1.9.7                                         17 Nov 2015
     *) Feature: the "proxy_cache_convert_head" directive.
 
     *) Feature: the $realip_remote_addr variable in the
-       rp_http_realip_module.
+       rap_http_realip_module.
 
     *) Bugfix: the "expires" directive might not work when using variables.
 
     *) Bugfix: a segmentation fault might occur in a worker process when
        using HTTP/2; the bug had appeared in 1.9.6.
 
-    *) Bugfix: if rap was built with the rp_http_v2_module it was
+    *) Bugfix: if rap was built with the rap_http_v2_module it was
        possible to use the HTTP/2 protocol even if the "http2" parameter of
        the "listen" directive was not specified.
 
-    *) Bugfix: in the rp_http_v2_module.
+    *) Bugfix: in the rap_http_v2_module.
 
 
 Changes with rap 1.9.6                                         27 Oct 2015
@@ -1322,7 +1322,7 @@ Changes with rap 1.9.6                                         27 Oct 2015
 
 Changes with rap 1.9.5                                         22 Sep 2015
 
-    *) Feature: the rp_http_v2_module (replaces rp_http_spdy_module).
+    *) Feature: the rap_http_v2_module (replaces rap_http_spdy_module).
        Thanks to Dropbox and Automattic for sponsoring this work.
 
     *) Change: now the "output_buffers" directive uses two buffers by
@@ -1461,7 +1461,7 @@ Changes with rap 1.9.0                                         28 Apr 2015
 
     *) Feature: the stream module.
 
-    *) Feature: byte ranges support in the rp_http_memcached_module.
+    *) Feature: byte ranges support in the rap_http_memcached_module.
        Thanks to Martin Mlynář.
 
     *) Feature: shared memory can now be used on Windows versions with
@@ -1491,7 +1491,7 @@ Changes with rap 1.7.12                                        07 Apr 2015
     *) Bugfix: in error handling when using the "ssl_stapling" directive.
        Thanks to Filipe da Silva.
 
-    *) Bugfix: in the rp_http_spdy_module.
+    *) Bugfix: in the rap_http_spdy_module.
 
 
 Changes with rap 1.7.11                                        24 Mar 2015
@@ -1636,7 +1636,7 @@ Changes with rap 1.7.8                                         02 Dec 2014
        backend response header line.
        Thanks to Piotr Sikora.
 
-    *) Bugfix: in the rp_http_spdy_module.
+    *) Bugfix: in the rap_http_spdy_module.
        Thanks to Piotr Sikora.
 
     *) Bugfix: in the "ssl_password_file" directive when using OpenSSL
@@ -1719,7 +1719,7 @@ Changes with rap 1.7.5                                         16 Sep 2014
 
     *) Bugfix: in the "if" parameter of the "access_log" directive.
 
-    *) Bugfix: in the rp_http_perl_module.
+    *) Bugfix: in the rap_http_perl_module.
        Thanks to Piotr Sikora.
 
     *) Bugfix: the "listen" directive of the mail proxy module did not allow
@@ -1731,7 +1731,7 @@ Changes with rap 1.7.5                                         16 Sep 2014
     *) Bugfix: requests might hang if resolver was used and a timeout
        occurred during a DNS request.
 
-    *) Bugfix: in the rp_http_spdy_module when using with AIO.
+    *) Bugfix: in the rap_http_spdy_module when using with AIO.
 
     *) Bugfix: a segmentation fault might occur in a worker process if the
        "set" directive was used to change the "$http_...", "$sent_http_...",
@@ -1756,7 +1756,7 @@ Changes with rap 1.7.4                                         05 Aug 2014
     *) Bugfix: requests might hang if resolver was used and a DNS server
        returned a malformed response; the bug had appeared in 1.5.8.
 
-    *) Bugfix: in the rp_http_spdy_module.
+    *) Bugfix: in the rap_http_spdy_module.
        Thanks to Piotr Sikora.
 
     *) Bugfix: the $uri variable might contain garbage when returning errors
@@ -1764,7 +1764,7 @@ Changes with rap 1.7.4                                         05 Aug 2014
        Thanks to Sergey Bobrov.
 
     *) Bugfix: in error handling in the "proxy_store" directive and the
-       rp_http_dav_module.
+       rap_http_dav_module.
        Thanks to Feng Gu.
 
     *) Bugfix: a segmentation fault might occur if logging of errors to
@@ -1795,7 +1795,7 @@ Changes with rap 1.7.3                                         08 Jul 2014
        logged at "info" level instead of "error" while connecting to
        backends.
 
-    *) Bugfix: in the rp_http_dav_module module in rap/Windows.
+    *) Bugfix: in the rap_http_dav_module module in rap/Windows.
 
     *) Bugfix: SPDY connections might be closed prematurely if caching was
        used.
@@ -1818,7 +1818,7 @@ Changes with rap 1.7.2                                         17 Jun 2014
 
     *) Bugfix: rap could not be built on OS X in some cases.
 
-    *) Bugfix: in the rp_http_spdy_module.
+    *) Bugfix: in the rap_http_spdy_module.
 
 
 Changes with rap 1.7.1                                         27 May 2014
@@ -1874,14 +1874,14 @@ Changes with rap 1.5.13                                        08 Apr 2014
        "variables_hash_max_size" and "types_hash_bucket_size" were changed
        to 1024 and 64 respectively.
 
-    *) Feature: the rp_http_mp4_module now supports the "end" argument.
+    *) Feature: the rap_http_mp4_module now supports the "end" argument.
 
-    *) Feature: byte ranges support in the rp_http_mp4_module and while
+    *) Feature: byte ranges support in the rap_http_mp4_module and while
        saving responses to cache.
 
-    *) Bugfix: alerts "rp_slab_alloc() failed: no memory" no longer logged
+    *) Bugfix: alerts "rap_slab_alloc() failed: no memory" no longer logged
        when using shared memory in the "ssl_session_cache" directive and in
-       the rp_http_limit_req_module.
+       the rap_http_limit_req_module.
 
     *) Bugfix: the "underscores_in_headers" directive did not allow
        underscore as a first character of a header.
@@ -1892,14 +1892,14 @@ Changes with rap 1.5.13                                        08 Apr 2014
     *) Bugfix: rap/Windows terminated abnormally if the
        "ssl_session_cache" directive was used with the "shared" parameter.
 
-    *) Bugfix: in the rp_http_spdy_module.
+    *) Bugfix: in the rap_http_spdy_module.
 
 
 Changes with rap 1.5.12                                        18 Mar 2014
 
     *) Security: a heap memory buffer overflow might occur in a worker
        process while handling a specially crafted request by
-       rp_http_spdy_module, potentially resulting in arbitrary code
+       rap_http_spdy_module, potentially resulting in arbitrary code
        execution (CVE-2014-0133).
        Thanks to Lucas Molas, researcher at Programa STIC, Fundación Dr.
        Manuel Sadosky, Buenos Aires, Argentina.
@@ -1915,7 +1915,7 @@ Changes with rap 1.5.11                                        04 Mar 2014
 
     *) Security: memory corruption might occur in a worker process on 32-bit
        platforms while handling a specially crafted request by
-       rp_http_spdy_module, potentially resulting in arbitrary code
+       rap_http_spdy_module, potentially resulting in arbitrary code
        execution (CVE-2014-0088); the bug had appeared in 1.5.10.
        Thanks to Lucas Molas, researcher at Programa STIC, Fundación Dr.
        Manuel Sadosky, Buenos Aires, Argentina.
@@ -1931,7 +1931,7 @@ Changes with rap 1.5.11                                        04 Mar 2014
        proxying WebSocket connections.
 
     *) Bugfix: a segmentation fault might occur in a worker process if the
-       rp_http_spdy_module was used on 32-bit platforms; the bug had
+       rap_http_spdy_module was used on 32-bit platforms; the bug had
        appeared in 1.5.10.
 
     *) Bugfix: the $upstream_status variable might contain wrong data if the
@@ -1948,10 +1948,10 @@ Changes with rap 1.5.11                                        04 Mar 2014
 
 Changes with rap 1.5.10                                        04 Feb 2014
 
-    *) Feature: the rp_http_spdy_module now uses SPDY 3.1 protocol.
+    *) Feature: the rap_http_spdy_module now uses SPDY 3.1 protocol.
        Thanks to Automattic and MaxCDN for sponsoring this work.
 
-    *) Feature: the rp_http_mp4_module now skips tracks too short for a
+    *) Feature: the rap_http_mp4_module now skips tracks too short for a
        seek requested.
 
     *) Bugfix: a segmentation fault might occur in a worker process if the
@@ -1959,7 +1959,7 @@ Changes with rap 1.5.10                                        04 Feb 2014
        1.5.9.
 
     *) Bugfix: the $date_local and $date_gmt variables used wrong format
-       outside of the rp_http_ssi_filter_module.
+       outside of the rap_http_ssi_filter_module.
 
     *) Bugfix: client connections might be immediately closed if deferred
        accept was used; the bug had appeared in 1.3.15.
@@ -1990,7 +1990,7 @@ Changes with rap 1.5.9                                         22 Jan 2014
     *) Bugfix: rap incorrectly handled escaped "?" character in the
        "include" SSI command.
 
-    *) Bugfix: the rp_http_dav_module did not unescape destination URI of
+    *) Bugfix: the rap_http_dav_module did not unescape destination URI of
        the COPY and MOVE methods.
 
     *) Bugfix: resolver did not understand domain names with a trailing dot.
@@ -2000,7 +2000,7 @@ Changes with rap 1.5.9                                         22 Jan 2014
        proxying; the bug had appeared in 1.3.9.
 
     *) Bugfix: a segmentation fault might occur in a worker process if the
-       rp_http_spdy_module was used.
+       rap_http_spdy_module was used.
 
     *) Bugfix: proxied WebSocket connections might hang right after
        handshake if the select, poll, or /dev/poll methods were used.
@@ -2016,7 +2016,7 @@ Changes with rap 1.5.8                                         17 Dec 2013
     *) Feature: the "listen" directive supports the "fastopen" parameter.
        Thanks to Mathew Rodley.
 
-    *) Feature: SSL support in the rp_http_uwsgi_module.
+    *) Feature: SSL support in the rap_http_uwsgi_module.
        Thanks to Roberto De Ioris.
 
     *) Feature: vim syntax highlighting scripts were added to contrib.
@@ -2031,7 +2031,7 @@ Changes with rap 1.5.8                                         17 Dec 2013
     *) Bugfix: the "setfib" parameter of the "listen" directive might not
        work.
 
-    *) Bugfix: in the rp_http_spdy_module.
+    *) Bugfix: in the rap_http_spdy_module.
 
 
 Changes with rap 1.5.7                                         19 Nov 2013
@@ -2067,9 +2067,9 @@ Changes with rap 1.5.7                                         19 Nov 2013
        directives were used.
        Thanks to Yichun Zhang.
 
-    *) Bugfix: in error handling in rp_http_gunzip_filter_module.
+    *) Bugfix: in error handling in rap_http_gunzip_filter_module.
 
-    *) Bugfix: responses might hang if the rp_http_spdy_module was used
+    *) Bugfix: responses might hang if the rap_http_spdy_module was used
        with the "auth_request" directive.
 
     *) Bugfix: memory leak in rap/Windows.
@@ -2088,7 +2088,7 @@ Changes with rap 1.5.6                                         01 Oct 2013
 
     *) Feature: the mail proxy supports SMTP pipelining.
 
-    *) Bugfix: in the rp_http_auth_basic_module when using "$apr1$"
+    *) Bugfix: in the rap_http_auth_basic_module when using "$apr1$"
        password encryption method.
        Thanks to Markus Linnala.
 
@@ -2101,7 +2101,7 @@ Changes with rap 1.5.6                                         01 Oct 2013
 
     *) Bugfix: in the mail proxy server.
 
-    *) Bugfix: in the rp_http_spdy_module.
+    *) Bugfix: in the rap_http_spdy_module.
 
 
 Changes with rap 1.5.5                                         17 Sep 2013
@@ -2135,7 +2135,7 @@ Changes with rap 1.5.4                                         27 Aug 2013
     *) Change: now the "image_filter" directive with the "size" parameter
        returns responses with the "application/json" MIME type.
 
-    *) Feature: the rp_http_auth_request_module.
+    *) Feature: the rap_http_auth_request_module.
 
     *) Bugfix: a segmentation fault might occur on start or during
        reconfiguration if the "try_files" directive was used with an empty
@@ -2152,9 +2152,9 @@ Changes with rap 1.5.4                                         27 Aug 2013
        handshake error happened during subrequest processing.
        Thanks to Aviram Cohen.
 
-    *) Bugfix: in the rp_http_autoindex_module.
+    *) Bugfix: in the rap_http_autoindex_module.
 
-    *) Bugfix: in the rp_http_spdy_module.
+    *) Bugfix: in the rap_http_spdy_module.
 
 
 Changes with rap 1.5.3                                         30 Jul 2013
@@ -2167,16 +2167,16 @@ Changes with rap 1.5.3                                         30 Jul 2013
        client, and then closes client connection.
 
     *) Bugfix: a segmentation fault might occur in a worker process if the
-       rp_http_spdy_module was used with the "client_body_in_file_only"
+       rap_http_spdy_module was used with the "client_body_in_file_only"
        directive.
 
     *) Bugfix: the "so_keepalive" parameter of the "listen" directive might
        be handled incorrectly on DragonFlyBSD.
        Thanks to Sepherosa Ziehau.
 
-    *) Bugfix: in the rp_http_xslt_filter_module.
+    *) Bugfix: in the rap_http_xslt_filter_module.
 
-    *) Bugfix: in the rp_http_sub_filter_module.
+    *) Bugfix: in the rap_http_sub_filter_module.
 
 
 Changes with rap 1.5.2                                         02 Jul 2013
@@ -2187,7 +2187,7 @@ Changes with rap 1.5.2                                         02 Jul 2013
        of the "Cookie" and "X-Forwarded-For" request header lines; the bug
        had appeared in 1.3.14.
 
-    *) Bugfix: in the rp_http_spdy_module.
+    *) Bugfix: in the rap_http_spdy_module.
        Thanks to Jim Radford.
 
     *) Bugfix: rap could not be built on Linux with x32 ABI.
@@ -2207,8 +2207,8 @@ Changes with rap 1.5.1                                         04 Jun 2013
     *) Feature: the "allow" and "deny" directives now support unix domain
        sockets.
 
-    *) Bugfix: rap could not be built with the rp_mail_ssl_module, but
-       without rp_http_ssl_module; the bug had appeared in 1.3.14.
+    *) Bugfix: rap could not be built with the rap_mail_ssl_module, but
+       without rap_http_ssl_module; the bug had appeared in 1.3.14.
 
     *) Bugfix: in the "proxy_set_body" directive.
        Thanks to Lanshun Zhou.
@@ -2242,10 +2242,10 @@ Changes with rap 1.5.0                                         07 May 2013
 
 Changes with rap 1.4.0                                         24 Apr 2013
 
-    *) Bugfix: rap could not be built with the rp_http_perl_module if the
+    *) Bugfix: rap could not be built with the rap_http_perl_module if the
        --with-openssl option was used; the bug had appeared in 1.3.16.
 
-    *) Bugfix: in a request body handling in the rp_http_perl_module; the
+    *) Bugfix: in a request body handling in the rap_http_perl_module; the
        bug had appeared in 1.3.9.
 
 
@@ -2269,7 +2269,7 @@ Changes with rap 1.3.15                                        26 Mar 2013
     *) Change: opening and closing a connection without sending any data in
        it is no longer logged to access_log with error code 400.
 
-    *) Feature: the rp_http_spdy_module.
+    *) Feature: the rap_http_spdy_module.
        Thanks to Automattic for sponsoring this work.
 
     *) Feature: the "limit_req_status" and "limit_conn_status" directives.
@@ -2279,7 +2279,7 @@ Changes with rap 1.3.15                                        26 Mar 2013
        Thanks to Ian Babrou.
 
     *) Feature: $connections_waiting variable in the
-       rp_http_stub_status_module.
+       rap_http_stub_status_module.
 
     *) Feature: the mail proxy module now supports IPv6 backends.
 
@@ -2300,10 +2300,10 @@ Changes with rap 1.3.15                                        26 Mar 2013
 Changes with rap 1.3.14                                        05 Mar 2013
 
     *) Feature: $connections_active, $connections_reading, and
-       $connections_writing variables in the rp_http_stub_status_module.
+       $connections_writing variables in the rap_http_stub_status_module.
 
     *) Feature: support of WebSocket connections in the
-       rp_http_uwsgi_module and rp_http_scgi_module.
+       rap_http_uwsgi_module and rap_http_scgi_module.
 
     *) Bugfix: in virtual servers handling with SNI.
 
@@ -2315,7 +2315,7 @@ Changes with rap 1.3.14                                        05 Mar 2013
     *) Bugfix: multiple X-Forwarded-For headers were handled incorrectly.
        Thanks to Neal Poole for sponsoring this work.
 
-    *) Bugfix: in the rp_http_mp4_module.
+    *) Bugfix: in the rap_http_mp4_module.
        Thanks to Gernot Vormayr.
 
 
@@ -2340,7 +2340,7 @@ Changes with rap 1.3.12                                        05 Feb 2013
        variables can now be used not only in the "log_format" directive.
        Thanks to Kiril Kalchev.
 
-    *) Feature: IPv6 support in the rp_http_geoip_module.
+    *) Feature: IPv6 support in the rap_http_geoip_module.
        Thanks to Gregor Kališnik.
 
     *) Bugfix: in the "proxy_method" directive.
@@ -2393,11 +2393,11 @@ Changes with rap 1.3.10                                        25 Dec 2012
 
     *) Feature: variables support in the "auth_basic" directive.
 
-    *) Bugfix: rap could not be built with the rp_http_perl_module in
+    *) Bugfix: rap could not be built with the rap_http_perl_module in
        some cases.
 
     *) Bugfix: a segmentation fault might occur in a worker process if the
-       rp_http_xslt_module was used.
+       rap_http_xslt_module was used.
 
     *) Bugfix: rap could not be built on MacOSX in some cases.
        Thanks to Piotr Sikora.
@@ -2438,7 +2438,7 @@ Changes with rap 1.3.9                                         27 Nov 2012
     *) Bugfix: cache manager and cache loader processes might not be able to
        start if more than 512 listen sockets were used.
 
-    *) Bugfix: in the rp_http_dav_module.
+    *) Bugfix: in the rap_http_dav_module.
 
 
 Changes with rap 1.3.8                                         30 Oct 2012
@@ -2455,7 +2455,7 @@ Changes with rap 1.3.8                                         30 Oct 2012
 
     *) Bugfix: "cache file ... has md5 collision" alert.
 
-    *) Bugfix: in the rp_http_gunzip_filter_module.
+    *) Bugfix: in the rap_http_gunzip_filter_module.
 
     *) Bugfix: in the "ssl_stapling" directive.
 
@@ -2475,7 +2475,7 @@ Changes with rap 1.3.7                                         02 Oct 2012
 
 Changes with rap 1.3.6                                         12 Sep 2012
 
-    *) Feature: the rp_http_gunzip_filter_module.
+    *) Feature: the rap_http_gunzip_filter_module.
 
     *) Feature: the "memcached_gzip_flag" directive.
 
@@ -2490,7 +2490,7 @@ Changes with rap 1.3.6                                         12 Sep 2012
 
 Changes with rap 1.3.5                                         21 Aug 2012
 
-    *) Change: the rp_http_mp4_module module no longer skips tracks in
+    *) Change: the rap_http_mp4_module module no longer skips tracks in
        formats other than H.264 and AAC.
 
     *) Bugfix: a segmentation fault might occur in a worker process if the
@@ -2563,9 +2563,9 @@ Changes with rap 1.3.2                                         26 Jun 2012
        shutdown if the "resolver" directive was used.
 
     *) Bugfix: a segmentation fault might occur in a worker process if the
-       rp_http_mp4_module was used.
+       rap_http_mp4_module was used.
 
-    *) Bugfix: in the rp_http_mp4_module.
+    *) Bugfix: in the rap_http_mp4_module.
 
     *) Bugfix: a segmentation fault might occur in a worker process if
        conflicting wildcard server names were used.
@@ -2598,14 +2598,14 @@ Changes with rap 1.3.1                                         05 Jun 2012
     *) Bugfix: a segmentation fault might occur in a worker process if the
        "image_filter" directive was used; the bug had appeared in 1.3.0.
 
-    *) Bugfix: rap could not be built with rp_cpp_test_module; the bug
+    *) Bugfix: rap could not be built with rap_cpp_test_module; the bug
        had appeared in 1.1.12.
 
     *) Bugfix: access to variables from SSI and embedded perl module might
        not work after reconfiguration.
        Thanks to Yichun Zhang.
 
-    *) Bugfix: in the rp_http_xslt_filter_module.
+    *) Bugfix: in the rap_http_xslt_filter_module.
        Thanks to Kuramoto Eiji.
 
     *) Bugfix: memory leak if $geoip_org variable was used.
@@ -2653,7 +2653,7 @@ Changes with rap 1.3.0                                         15 May 2012
     *) Bugfix: socket leak.
        Thanks to Yichun Zhang.
 
-    *) Bugfix: in the rp_http_fastcgi_module.
+    *) Bugfix: in the rap_http_fastcgi_module.
 
 
 Changes with rap 1.2.0                                         23 Apr 2012
@@ -2671,7 +2671,7 @@ Changes with rap 1.2.0                                         23 Apr 2012
 Changes with rap 1.1.19                                        12 Apr 2012
 
     *) Security: specially crafted mp4 file might allow to overwrite memory
-       locations in a worker process if the rp_http_mp4_module was used,
+       locations in a worker process if the rap_http_mp4_module was used,
        potentially resulting in arbitrary code execution (CVE-2012-2089).
        Thanks to Matthew Daley.
 
@@ -2689,7 +2689,7 @@ Changes with rap 1.1.19                                        12 Apr 2012
 
     *) Bugfix: timeouts might be handled incorrectly on Solaris/SPARC.
 
-    *) Bugfix: in the rp_http_mp4_module.
+    *) Bugfix: in the rap_http_mp4_module.
 
 
 Changes with rap 1.1.18                                        28 Mar 2012
@@ -2710,7 +2710,7 @@ Changes with rap 1.1.18                                        28 Mar 2012
     *) Bugfix: in configure tests.
        Thanks to Piotr Sikora.
 
-    *) Bugfix: in the rp_http_xslt_filter_module.
+    *) Bugfix: in the rap_http_xslt_filter_module.
 
     *) Bugfix: rap could not be built on Debian GNU/Hurd.
 
@@ -2724,7 +2724,7 @@ Changes with rap 1.1.17                                        15 Mar 2012
     *) Bugfix: in the embedded perl module if used from SSI.
        Thanks to Matthew Daley.
 
-    *) Bugfix: in the rp_http_uwsgi_module.
+    *) Bugfix: in the rap_http_uwsgi_module.
 
 
 Changes with rap 1.1.16                                        29 Feb 2012
@@ -2770,14 +2770,14 @@ Changes with rap 1.1.15                                        15 Feb 2012
        connection" instead of correct "upstream sent too big header" one.
        Thanks to Feibo Li.
 
-    *) Bugfix: rap could not be built with the rp_http_perl_module if the
+    *) Bugfix: rap could not be built with the rap_http_perl_module if the
        --with-openssl option was used.
 
     *) Bugfix: the number of internal redirects to named locations was not
        limited.
 
     *) Bugfix: calling $r->flush() multiple times might cause errors in the
-       rp_http_gzip_filter_module.
+       rap_http_gzip_filter_module.
 
     *) Bugfix: temporary files might be not removed if the "proxy_store"
        directive was used with SSI includes.
@@ -2827,7 +2827,7 @@ Changes with rap 1.1.13                                        16 Jan 2012
     *) Bugfix: rap could not be built on Solaris; the bug had appeared in
        1.1.12.
 
-    *) Bugfix: in the rp_http_mp4_module.
+    *) Bugfix: in the rap_http_mp4_module.
 
 
 Changes with rap 1.1.12                                        26 Dec 2011
@@ -2862,9 +2862,9 @@ Changes with rap 1.1.12                                        26 Dec 2011
        request after redirection with the "try_files" directive.
        Thanks to Lanshun Zhou.
 
-    *) Bugfix: in the rp_http_scgi_module.
+    *) Bugfix: in the rap_http_scgi_module.
 
-    *) Bugfix: in the rp_http_mp4_module.
+    *) Bugfix: in the rap_http_mp4_module.
 
     *) Bugfix: rap could not be built on Solaris; the bug had appeared in
        1.1.9.
@@ -2936,10 +2936,10 @@ Changes with rap 1.1.9                                         28 Nov 2011
     *) Bugfix: in the "epoll" event method.
        Thanks to Yichun Zhang.
 
-    *) Bugfix: in the rp_http_flv_module.
+    *) Bugfix: in the rap_http_flv_module.
        Thanks to Piotr Sikora.
 
-    *) Bugfix: in the rp_http_mp4_module.
+    *) Bugfix: in the rap_http_mp4_module.
 
     *) Bugfix: IPv6 addresses are now handled properly in a request line and
        in a "Host" request header line.
@@ -2954,8 +2954,8 @@ Changes with rap 1.1.9                                         28 Nov 2011
 
 Changes with rap 1.1.8                                         14 Nov 2011
 
-    *) Change: the rp_http_limit_zone_module was renamed to the
-       rp_http_limit_conn_module.
+    *) Change: the rap_http_limit_zone_module was renamed to the
+       rap_http_limit_conn_module.
 
     *) Change: the "limit_zone" directive was superseded by the
        "limit_conn_zone" directive with a new syntax.
@@ -2976,7 +2976,7 @@ Changes with rap 1.1.8                                         14 Nov 2011
        without caching if caching was enabled in another part of the
        configuration.
 
-    *) Bugfix: the module rp_http_mp4_module sent incorrect
+    *) Bugfix: the module rap_http_mp4_module sent incorrect
        "Content-Length" response header line if the "start" argument was
        used.
        Thanks to Piotr Sikora.
@@ -3022,7 +3022,7 @@ Changes with rap 1.1.6                                         17 Oct 2011
     *) Bugfix: some UTF-8 characters were processed incorrectly.
        Thanks to Alexey Kuts.
 
-    *) Bugfix: the rp_http_rewrite_module directives specified at "server"
+    *) Bugfix: the rap_http_rewrite_module directives specified at "server"
        level were executed twice if no matching locations were defined.
 
     *) Bugfix: a socket leak might occurred if "aio sendfile" was used.
@@ -3030,9 +3030,9 @@ Changes with rap 1.1.6                                         17 Oct 2011
     *) Bugfix: connections with fast clients might be closed after
        send_timeout if file AIO was used.
 
-    *) Bugfix: in the rp_http_autoindex_module.
+    *) Bugfix: in the rap_http_autoindex_module.
 
-    *) Bugfix: the module rp_http_mp4_module did not support seeking on
+    *) Bugfix: the module rap_http_mp4_module did not support seeking on
        32-bit platforms.
 
 
@@ -3045,12 +3045,12 @@ Changes with rap 1.1.5                                         05 Oct 2011
        "proxy_cache_bypass" directive was used.
        Thanks to John Ferlito.
 
-    *) Bugfix: in HTTP/1.1 support in the rp_http_proxy_module.
+    *) Bugfix: in HTTP/1.1 support in the rap_http_proxy_module.
 
     *) Bugfix: cached responses with an empty body were returned
        incorrectly; the bug had appeared in 0.8.31.
 
-    *) Bugfix: 201 responses of the rp_http_dav_module were incorrect; the
+    *) Bugfix: 201 responses of the rap_http_dav_module were incorrect; the
        bug had appeared in 0.8.32.
 
     *) Bugfix: in the "return" directive.
@@ -3061,7 +3061,7 @@ Changes with rap 1.1.5                                         05 Oct 2011
 
 Changes with rap 1.1.4                                         20 Sep 2011
 
-    *) Feature: the rp_http_upstream_keepalive module.
+    *) Feature: the rap_http_upstream_keepalive module.
 
     *) Feature: the "proxy_http_version" directive.
 
@@ -3077,13 +3077,13 @@ Changes with rap 1.1.4                                         20 Sep 2011
 
     *) Bugfix: reduced memory consumption for long-lived requests.
 
-    *) Bugfix: the module rp_http_mp4_module did not support 64-bit MP4
+    *) Bugfix: the module rap_http_mp4_module did not support 64-bit MP4
        "co64" atom.
 
 
 Changes with rap 1.1.3                                         14 Sep 2011
 
-    *) Feature: the module rp_http_mp4_module.
+    *) Feature: the module rap_http_mp4_module.
 
     *) Bugfix: in Linux AIO combined with open_file_cache.
 
@@ -3236,7 +3236,7 @@ Changes with rap 1.0.3                                         25 May 2011
     *) Feature: the "geoip_org" directive and $geoip_org variable.
        Thanks to Alexander Uskov, Arnaud Granal, and Denis F. Latypoff.
 
-    *) Feature: rp_http_geo_module and rp_http_geoip_module support IPv4
+    *) Feature: rap_http_geo_module and rap_http_geoip_module support IPv4
        addresses mapped to IPv6 addresses.
 
     *) Bugfix: a segmentation fault occurred in a worker process during
@@ -3409,7 +3409,7 @@ Changes with rap 0.9.0                                         29 Nov 2010
        "auth_basic" directive was used.
        Thanks to Michail Laletin.
 
-    *) Bugfix: compatibility with rp_http_eval_module; the bug had appeared
+    *) Bugfix: compatibility with rap_http_eval_module; the bug had appeared
        in 0.8.42.
 
 
@@ -3449,7 +3449,7 @@ Changes with rap 0.8.51                                        27 Sep 2010
 Changes with rap 0.8.50                                        02 Sep 2010
 
     *) Feature: the "secure_link", "secure_link_md5", and
-       "secure_link_expires" directives of the rp_http_secure_link_module.
+       "secure_link_expires" directives of the rap_http_secure_link_module.
 
     *) Feature: the -q switch.
        Thanks to Gena Makhomed.
@@ -3507,7 +3507,7 @@ Changes with rap 0.8.48                                        03 Aug 2010
        copying from URI to query string.
        Thanks to Daisuke Murase.
 
-    *) Bugfix: the rp_http_image_filter_module closed a connection, if an
+    *) Bugfix: the rap_http_image_filter_module closed a connection, if an
        image was larger than "image_filter_buffer" size.
 
 
@@ -3537,7 +3537,7 @@ Changes with rap 0.8.46                                        19 Jul 2010
 
 Changes with rap 0.8.45                                        13 Jul 2010
 
-    *) Feature: rp_http_xslt_filter improvements.
+    *) Feature: rap_http_xslt_filter improvements.
        Thanks to Laurence Rowe.
 
     *) Bugfix: SSI response might be truncated after include with
@@ -3588,7 +3588,7 @@ Changes with rap 0.8.42                                        21 Jun 2010
        request was matched exactly by a location given by a prefix string.
        The previous behavior has been introduced in 0.7.1.
 
-    *) Feature: the rp_http_scgi_module.
+    *) Feature: the rap_http_scgi_module.
        Thanks to Manlio Perillo.
 
     *) Feature: a text answer may be added to a "return" directive.
@@ -3614,7 +3614,7 @@ Changes with rap 0.8.40                                        07 Jun 2010
     *) Security: now rap/Windows ignores default file stream name.
        Thanks to Jose Antonio Vazquez Gonzalez.
 
-    *) Feature: the rp_http_uwsgi_module.
+    *) Feature: the rap_http_uwsgi_module.
        Thanks to Roberto De Ioris.
 
     *) Feature: a "fastcgi_param" directive with value starting with "HTTP_"
@@ -3659,7 +3659,7 @@ Changes with rap 0.8.38                                        24 May 2010
 
 Changes with rap 0.8.37                                        17 May 2010
 
-    *) Feature: the rp_http_split_clients_module.
+    *) Feature: the rap_http_split_clients_module.
 
     *) Feature: the "map" directive supports keys more than 255 characters.
 
@@ -3681,7 +3681,7 @@ Changes with rap 0.8.37                                        17 May 2010
 
 Changes with rap 0.8.36                                        22 Apr 2010
 
-    *) Bugfix: the rp_http_dav_module handled incorrectly the DELETE, COPY,
+    *) Bugfix: the rap_http_dav_module handled incorrectly the DELETE, COPY,
        and MOVE methods for symlinks.
 
     *) Bugfix: values of the $query_string, $arg_..., etc. variables cached
@@ -3720,7 +3720,7 @@ Changes with rap 0.8.35                                        01 Apr 2010
        incorrect.
        Thanks to Maxim Dounin.
 
-    *) Bugfix: rp_http_memcached_module might issue the error message
+    *) Bugfix: rap_http_memcached_module might issue the error message
        "memcached sent invalid trailer".
        Thanks to Maxim Dounin.
 
@@ -3791,7 +3791,7 @@ Changes with rap 0.8.33                                        01 Feb 2010
 
 Changes with rap 0.8.32                                        11 Jan 2010
 
-    *) Bugfix: UTF-8 encoding usage in the rp_http_autoindex_module.
+    *) Bugfix: UTF-8 encoding usage in the rap_http_autoindex_module.
        Thanks to Maxim Dounin.
 
     *) Bugfix: regular expression named captures worked for two names only.
@@ -3820,7 +3820,7 @@ Changes with rap 0.8.31                                        23 Dec 2009
        $geoip_longitude variables.
        Thanks to Arvind Sundararajan.
 
-    *) Feature: now the rp_http_image_filter_module deletes always EXIF and
+    *) Feature: now the rap_http_image_filter_module deletes always EXIF and
        other application specific data if the data consume more than 5% of a
        JPEG file.
 
@@ -3912,7 +3912,7 @@ Changes with rap 0.8.25                                        16 Nov 2009
     *) Change: now no message is written in an error log if a variable is
        not found by $r->variable() method.
 
-    *) Feature: the rp_http_degradation_module.
+    *) Feature: the rap_http_degradation_module.
 
     *) Feature: regular expression named captures.
 
@@ -3932,7 +3932,7 @@ Changes with rap 0.8.25                                        16 Nov 2009
 Changes with rap 0.8.24                                        11 Nov 2009
 
     *) Bugfix: rap always added "Content-Encoding: gzip" response header
-       line in 304 responses sent by rp_http_gzip_static_module.
+       line in 304 responses sent by rap_http_gzip_static_module.
 
     *) Bugfix: rap could not be built without the --with-debug option; the
        bug had appeared in 0.8.23.
@@ -4015,7 +4015,7 @@ Changes with rap 0.8.20                                        14 Oct 2009
 
     *) Change: now default SSL ciphers are "HIGH:!ADH:!MD5".
 
-    *) Bugfix: the rp_http_autoindex_module did not show the trailing slash
+    *) Bugfix: the rap_http_autoindex_module did not show the trailing slash
        in links to a directory; the bug had appeared in 0.7.15.
 
     *) Bugfix: rap did not close a log file set by the --error-log-path
@@ -4100,7 +4100,7 @@ Changes with rap 0.8.16                                        22 Sep 2009
        access_log only if error_log was set to "info" or "debug" level.
 
     *) Bugfix: in PNG alpha-channel support in the
-       rp_http_image_filter_module.
+       rap_http_image_filter_module.
 
     *) Bugfix: rap always added "Vary: Accept-Encoding" response header
        line, if both "gzip_static" and "gzip_vary" were on.
@@ -4123,7 +4123,7 @@ Changes with rap 0.8.15                                        14 Sep 2009
        were defined, then the name .sub.domain.tld was matched by
        .domain.tld.
 
-    *) Bugfix: in transparency support in the rp_http_image_filter_module.
+    *) Bugfix: in transparency support in the rap_http_image_filter_module.
 
     *) Bugfix: in file AIO.
 
@@ -4241,7 +4241,7 @@ Changes with rap 0.8.7                                         27 Jul 2009
 
 Changes with rap 0.8.6                                         20 Jul 2009
 
-    *) Feature: the rp_http_geoip_module.
+    *) Feature: the rap_http_geoip_module.
 
     *) Bugfix: XSLT filter may fail with message "not well formed XML
        document" for valid XML document.
@@ -4265,9 +4265,9 @@ Changes with rap 0.8.5                                         13 Jul 2009
     *) Bugfix: a 500 error code was returned for invalid login/password
        while HTTP Basic authentication on Windows.
 
-    *) Bugfix: rp_http_perl_module responses did not work in subrequests.
+    *) Bugfix: rap_http_perl_module responses did not work in subrequests.
 
-    *) Bugfix: in rp_http_limit_req_module.
+    *) Bugfix: in rap_http_limit_req_module.
        Thanks to Maxim Dounin.
 
 
@@ -4314,7 +4314,7 @@ Changes with rap 0.8.1                                         08 Jun 2009
        hidden while caching if no "proxy_hide_header/fastcgi_hide_header"
        directives were used with any parameters.
 
-    *) Bugfix: the rp_http_image_filter_module did not support GIF87a
+    *) Bugfix: the rap_http_image_filter_module did not support GIF87a
        format.
        Thanks to Denis Ilyinyh.
 
@@ -4355,11 +4355,11 @@ Changes with rap 0.7.59                                        25 May 2009
     *) Bugfix: the SSL modules might not built on Solaris and Linux;
        the bug had appeared in 0.7.56.
 
-    *) Bugfix: rp_http_xslt_filter_module responses were not handled by
+    *) Bugfix: rap_http_xslt_filter_module responses were not handled by
        SSI, charset, and gzip filters.
 
     *) Bugfix: a "charset" directive did not set a charset to
-       rp_http_gzip_static_module responses.
+       rap_http_gzip_static_module responses.
 
 
 Changes with rap 0.7.58                                        18 May 2009
@@ -4372,7 +4372,7 @@ Changes with rap 0.7.58                                        18 May 2009
 
     *) Feature: the $request_body variable.
 
-    *) Bugfix: in rp_http_autoindex_module in file name links having a ":"
+    *) Bugfix: in rap_http_autoindex_module in file name links having a ":"
        symbol in the name.
 
     *) Bugfix: "make upgrade" procedure did not work; the bug had appeared
@@ -4383,7 +4383,7 @@ Changes with rap 0.7.58                                        18 May 2009
 Changes with rap 0.7.57                                        12 May 2009
 
     *) Bugfix: a floating-point fault occurred in worker process, if the
-       rp_http_image_filter_module errors were redirected to named
+       rap_http_image_filter_module errors were redirected to named
        location; the bug had appeared in 0.7.56.
 
 
@@ -4392,7 +4392,7 @@ Changes with rap 0.7.56                                        11 May 2009
     *) Feature: rap/Windows supports IPv6 in a "listen" directive of the
        HTTP module.
 
-    *) Bugfix: in rp_http_image_filter_module.
+    *) Bugfix: in rap_http_image_filter_module.
 
 
 Changes with rap 0.7.55                                        06 May 2009
@@ -4409,7 +4409,7 @@ Changes with rap 0.7.55                                        06 May 2009
        "debug_connection" directive was used; the bug had appeared in
        0.7.54.
 
-    *) Bugfix: fix rp_http_image_filter_module building errors.
+    *) Bugfix: fix rap_http_image_filter_module building errors.
 
     *) Bugfix: the files bigger than 2G could not be transferred using
        $r->sendfile.
@@ -4418,7 +4418,7 @@ Changes with rap 0.7.55                                        06 May 2009
 
 Changes with rap 0.7.54                                        01 May 2009
 
-    *) Feature: the rp_http_image_filter_module.
+    *) Feature: the rap_http_image_filter_module.
 
     *) Feature: the "proxy_ignore_headers" and "fastcgi_ignore_headers"
        directives.
@@ -4489,7 +4489,7 @@ Changes with rap 0.7.52                                        20 Apr 2009
     *) Bugfix: now the "Set-Cookie" and "P3P" header lines are hidden in
        cacheable responses.
 
-    *) Bugfix: if rap was built with the rp_http_perl_module and with a
+    *) Bugfix: if rap was built with the rap_http_perl_module and with a
        perl which supports threads, then during a master process exit the
        message "panic: MUTEX_LOCK" might be issued.
 
@@ -4584,7 +4584,7 @@ Changes with rap 0.7.45                                        30 Mar 2009
     *) Feature: the "max_size" parameter of the "proxy_cache_path"
        directive.
 
-    *) Feature: the rp_http_fastcgi_module preliminary cache support.
+    *) Feature: the rap_http_fastcgi_module preliminary cache support.
 
     *) Feature: now on shared memory allocation errors directive and zone
        names are logged.
@@ -4603,7 +4603,7 @@ Changes with rap 0.7.45                                        30 Mar 2009
 
 Changes with rap 0.7.44                                        23 Mar 2009
 
-    *) Feature: the rp_http_proxy_module preliminary cache support.
+    *) Feature: the rap_http_proxy_module preliminary cache support.
 
     *) Feature: the --with-pcre option in the configure.
 
@@ -4673,7 +4673,7 @@ Changes with rap 0.7.40                                        09 Mar 2009
     *) Feature: the "server_name" directive supports captures in regular
        expressions.
 
-    *) Workaround: the rp_http_autoindex_module did not show the trailing
+    *) Workaround: the rap_http_autoindex_module did not show the trailing
        slash in directories on XFS filesystem; the issue had appeared in
        0.7.15.
        Thanks to Dmitry Kuzmenko.
@@ -4789,7 +4789,7 @@ Changes with rap 0.7.31                                        19 Jan 2009
 
     *) Bugfixes in geo ranges.
 
-    *) Bugfix: in a miss case rp_http_memcached_module returned the "END"
+    *) Bugfix: in a miss case rap_http_memcached_module returned the "END"
        line as response body instead of default 404 page body; the bug had
        appeared in 0.7.18.
        Thanks to Maxim Dounin.
@@ -4816,13 +4816,13 @@ Changes with rap 0.7.29                                        24 Dec 2008
     *) Bugfix: a "100 Continue" response was issued for HTTP/1.0 requests;
        Thanks to Maxim Dounin.
 
-    *) Bugfix: in memory allocation in the rp_http_gzip_filter_module on
+    *) Bugfix: in memory allocation in the rap_http_gzip_filter_module on
        Cygwin.
 
 
 Changes with rap 0.7.28                                        22 Dec 2008
 
-    *) Change: in memory allocation in the rp_http_gzip_filter_module.
+    *) Change: in memory allocation in the rap_http_gzip_filter_module.
 
     *) Change: the default "gzip_buffers" directive values have been changed
        to 32 4k or 16 8k from 4 4k/8k.
@@ -4907,9 +4907,9 @@ Changes with rap 0.7.22                                        20 Nov 2008
 
 Changes with rap 0.7.21                                        11 Nov 2008
 
-    *) Changes in the rp_http_limit_req_module.
+    *) Changes in the rap_http_limit_req_module.
 
-    *) Feature: the EXSLT support in the rp_http_xslt_module.
+    *) Feature: the EXSLT support in the rap_http_xslt_module.
        Thanks to Denis F. Latypoff.
 
     *) Workaround: compatibility with glibc 2.3.
@@ -4921,9 +4921,9 @@ Changes with rap 0.7.21                                        11 Nov 2008
 
 Changes with rap 0.7.20                                        10 Nov 2008
 
-    *) Changes in the rp_http_gzip_filter_module.
+    *) Changes in the rap_http_gzip_filter_module.
 
-    *) Feature: the rp_http_limit_req_module.
+    *) Feature: the rap_http_limit_req_module.
 
     *) Bugfix: worker processes might exit on a SIGBUS signal on sparc and
        ppc platforms; the bug had appeared in 0.7.3.
@@ -4935,7 +4935,7 @@ Changes with rap 0.7.20                                        10 Nov 2008
     *) Bugfix: in HTTPS mode requests might fail with the "bad write retry"
        error.
 
-    *) Bugfix: the rp_http_secure_link_module did not work inside
+    *) Bugfix: the rap_http_secure_link_module did not work inside
        locations, whose names are less than 3 characters.
 
     *) Bugfix: $server_addr variable might have no value.
@@ -4951,7 +4951,7 @@ Changes with rap 0.7.18                                        13 Oct 2008
     *) Change: the "underscores_in_headers" directive; now rap does not
        allows underscores in a client request header line names.
 
-    *) Feature: the rp_http_secure_link_module.
+    *) Feature: the rap_http_secure_link_module.
 
     *) Feature: the "real_ip_header" directive supports any header.
 
@@ -4983,7 +4983,7 @@ Changes with rap 0.7.17                                        15 Sep 2008
     *) Bugfix: the "access_log" with variables did not work on Linux; the
        bug had appeared in 0.7.7.
 
-    *) Bugfix: the rp_http_charset_module did not understand quoted charset
+    *) Bugfix: the rap_http_charset_module did not understand quoted charset
        name received from backend.
 
 
@@ -4995,7 +4995,7 @@ Changes with rap 0.7.16                                        08 Sep 2008
 
 Changes with rap 0.7.15                                        08 Sep 2008
 
-    *) Feature: the rp_http_random_index_module.
+    *) Feature: the rap_http_random_index_module.
 
     *) Feature: the "directio" directive has been optimized for file
        requests starting from arbitrary position.
@@ -5056,7 +5056,7 @@ Changes with rap 0.7.12                                        26 Aug 2008
 
 Changes with rap 0.7.11                                        18 Aug 2008
 
-    *) Change: now rp_http_charset_module does not work by default with
+    *) Change: now rap_http_charset_module does not work by default with
        text/css MIME type.
 
     *) Feature: now rap returns the 405 status code for POST method
@@ -5081,13 +5081,13 @@ Changes with rap 0.7.10                                        13 Aug 2008
 
     *) Bugfix: of recursive error_page for 500 status code.
 
-    *) Bugfix: now the rp_http_realip_module sets address not for whole
+    *) Bugfix: now the rap_http_realip_module sets address not for whole
        keepalive connection, but for each request passed via the connection.
 
 
 Changes with rap 0.7.9                                         12 Aug 2008
 
-    *) Change: now rp_http_charset_module works by default with following
+    *) Change: now rap_http_charset_module works by default with following
        MIME types: text/html, text/css, text/xml, text/plain,
        text/vnd.wap.wml, application/x-javascript, and application/rss+xml.
 
@@ -5096,11 +5096,11 @@ Changes with rap 0.7.9                                         12 Aug 2008
     *) Feature: now the "gzip_types", "ssi_types", and "sub_filter_types"
        directives use hash.
 
-    *) Feature: the rp_cpp_test_module.
+    *) Feature: the rap_cpp_test_module.
 
     *) Feature: the "expires" directive supports daily time.
 
-    *) Feature: the rp_http_xslt_module improvements and bug fixing.
+    *) Feature: the rap_http_xslt_module improvements and bug fixing.
        Thanks to Denis F. Latypoff and Maxim Dounin.
 
     *) Bugfix: the "log_not_found" directive did not work for index files
@@ -5117,7 +5117,7 @@ Changes with rap 0.7.9                                         12 Aug 2008
 
 Changes with rap 0.7.8                                         04 Aug 2008
 
-    *) Feature: the rp_http_xslt_module.
+    *) Feature: the rap_http_xslt_module.
 
     *) Feature: the "$arg_..." variables.
 
@@ -5156,7 +5156,7 @@ Changes with rap 0.7.7                                         30 Jul 2008
     *) Bugfix: mail proxy SSL connections hanged, if select, poll, or
        /dev/poll methods were used.
 
-    *) Bugfix: UTF-8 encoding usage in the rp_http_autoindex_module.
+    *) Bugfix: UTF-8 encoding usage in the rap_http_autoindex_module.
 
 
 Changes with rap 0.7.6                                         07 Jul 2008
@@ -5164,7 +5164,7 @@ Changes with rap 0.7.6                                         07 Jul 2008
     *) Bugfix: now if variables are used in the "access_log" directive a
        request root existence is always tested.
 
-    *) Bugfix: the rp_http_flv_module did not support several values in a
+    *) Bugfix: the rap_http_flv_module did not support several values in a
        query string.
 
 
@@ -5307,9 +5307,9 @@ Changes with rap 0.6.30                                        29 Apr 2008
 
 Changes with rap 0.6.29                                        18 Mar 2008
 
-    *) Feature: the rp_google_perftools_module.
+    *) Feature: the rap_google_perftools_module.
 
-    *) Bugfix: the rp_http_perl_module could not be built on 64-bit
+    *) Bugfix: the rap_http_perl_module could not be built on 64-bit
        platforms; the bug had appeared in 0.6.27.
 
 
@@ -5412,8 +5412,8 @@ Changes with rap 0.6.25                                        08 Jan 2008
 
     *) Bugfix: the COPY and MOVE methods did not work with single files.
 
-    *) Bugfix: the rp_http_gzip_static_module did not allow the
-       rp_http_dav_module to work; the bug had appeared in 0.6.23.
+    *) Bugfix: the rap_http_gzip_static_module did not allow the
+       rap_http_dav_module to work; the bug had appeared in 0.6.23.
 
     *) Bugfix: socket leak in HTTPS mode if deferred accept was used.
        Thanks to Ben Maurer.
@@ -5438,7 +5438,7 @@ Changes with rap 0.6.23                                        27 Dec 2007
 
     *) Feature: the "open_file_cache_min_uses" directive.
 
-    *) Feature: the rp_http_gzip_static_module.
+    *) Feature: the rap_http_gzip_static_module.
 
     *) Feature: the "gzip_disable" directive.
 
@@ -5470,16 +5470,16 @@ Changes with rap 0.6.23                                        27 Dec 2007
 
 Changes with rap 0.6.22                                        19 Dec 2007
 
-    *) Change: now all rp_http_perl_module methods return values copied to
+    *) Change: now all rap_http_perl_module methods return values copied to
        perl's allocated memory.
 
-    *) Bugfix: if rap was built with rp_http_perl_module, the perl before
+    *) Bugfix: if rap was built with rap_http_perl_module, the perl before
        5.8.6 was used, and perl supported threads, then during
        reconfiguration the master process aborted; the bug had appeared in
        0.5.9.
        Thanks to Boris Zhmurov.
 
-    *) Bugfix: the rp_http_perl_module methods may get invalid values of
+    *) Bugfix: the rap_http_perl_module methods may get invalid values of
        the regex captures.
 
     *) Bugfix: a segmentation fault occurred in worker process, if the
@@ -5539,7 +5539,7 @@ Changes with rap 0.6.19                                        27 Nov 2007
 
 Changes with rap 0.6.18                                        27 Nov 2007
 
-    *) Change: now the rp_http_userid_module adds start time microseconds
+    *) Change: now the rap_http_userid_module adds start time microseconds
        to the cookie field contains a pid value.
 
     *) Change: now the full request line instead of URI only is written to
@@ -5633,13 +5633,13 @@ Changes with rap 0.6.14                                        15 Oct 2007
 
     *) Bugfix: a segmentation fault occurred in worker process if
        $date_local and $date_gmt were used outside the
-       rp_http_ssi_filter_module.
+       rap_http_ssi_filter_module.
 
     *) Bugfix: a segmentation fault might occur in worker process if debug
        log was enabled.
        Thanks to Andrei Nigmatulin.
 
-    *) Bugfix: rp_http_memcached_module did not set
+    *) Bugfix: rap_http_memcached_module did not set
        $upstream_response_time.
        Thanks to Maxim Dounin.
 
@@ -5670,7 +5670,7 @@ Changes with rap 0.6.12                                        21 Sep 2007
        and --without-mail_smtp_module configuration parameters.
 
     *) Feature: the "smtp_greeting_delay" and "smtp_client_buffer"
-       directives of the rp_mail_smtp_module.
+       directives of the rap_mail_smtp_module.
 
     *) Bugfix: the trailing wildcards did not work; the bug had appeared in
        0.6.9.
@@ -5766,7 +5766,7 @@ Changes with rap 0.6.7                                         15 Aug 2007
     *) Feature: the "server" directive in the "upstream" context supports
        the "backup" parameter.
 
-    *) Feature: the rp_http_perl_module supports the
+    *) Feature: the rap_http_perl_module supports the
        $r->discard_request_body.
 
     *) Feature: the "add_header Last-Modified ..." directive changes the
@@ -5890,7 +5890,7 @@ Changes with rap 0.6.1                                         17 Jun 2007
     *) Bugfix: large SSI inclusions buffered in temporary files were
        truncated.
 
-    *) Bugfix: the perl $$ variable value in rp_http_perl_module was equal
+    *) Bugfix: the perl $$ variable value in rap_http_perl_module was equal
        to the master process identification number.
 
 
@@ -5918,7 +5918,7 @@ Changes with rap 0.5.24                                        06 Jun 2007
 
 Changes with rap 0.5.23                                        04 Jun 2007
 
-    *) Feature: the rp_http_ssl_module supports Server Name Indication TLS
+    *) Feature: the rap_http_ssl_module supports Server Name Indication TLS
        extension.
 
     *) Feature: the "fastcgi_catch_stderr" directive.
@@ -5927,7 +5927,7 @@ Changes with rap 0.5.23                                        04 Jun 2007
     *) Bugfix: a segmentation fault occurred in master process if two
        virtual servers should bind() to the overlapping ports.
 
-    *) Bugfix: if rap was built with rp_http_perl_module and perl
+    *) Bugfix: if rap was built with rap_http_perl_module and perl
        supported threads, then during second reconfiguration the error
        messages "panic: MUTEX_LOCK" and "perl_parse() failed" were issued.
 
@@ -5974,7 +5974,7 @@ Changes with rap 0.5.20                                        07 May 2007
        Studio.
        Thanks to Andrei Nigmatulin.
 
-    *) Bugfix: the rp_http_perl_module could not be built by Solaris make.
+    *) Bugfix: the rap_http_perl_module could not be built by Solaris make.
        Thanks to Andrei Nigmatulin.
 
 
@@ -5982,7 +5982,7 @@ Changes with rap 0.5.19                                        24 Apr 2007
 
     *) Change: now the $request_time variable has millisecond precision.
 
-    *) Change: the method $r->rflush of rp_http_perl_module was renamed to
+    *) Change: the method $r->rflush of rap_http_perl_module was renamed to
        the $r->flush.
 
     *) Feature: the $upstream_addr variable.
@@ -6000,7 +6000,7 @@ Changes with rap 0.5.19                                        24 Apr 2007
 
 Changes with rap 0.5.18                                        19 Apr 2007
 
-    *) Feature: the rp_http_sub_filter_module.
+    *) Feature: the rap_http_sub_filter_module.
 
     *) Feature: the "$upstream_http_..." variables.
 
@@ -6009,7 +6009,7 @@ Changes with rap 0.5.18                                        19 Apr 2007
 
     *) Bugfix: a segmentation fault occurred in master process after first
        reconfiguration and receiving any signal if rap was built with
-       rp_http_perl_module and perl did not support multiplicity; the bug
+       rap_http_perl_module and perl did not support multiplicity; the bug
        had appeared in 0.5.9.
 
     *) Bugfix: if perl did not support multiplicity, then after
@@ -6090,7 +6090,7 @@ Changes with rap 0.5.13                                        19 Feb 2007
 
     *) Feature: the COPY and MOVE methods.
 
-    *) Bugfix: the rp_http_realip_module set garbage for requests passed
+    *) Bugfix: the rap_http_realip_module set garbage for requests passed
        via keep-alive connection.
 
     *) Bugfix: rap did not work on big-endian 64-bit Linux.
@@ -6119,7 +6119,7 @@ Changes with rap 0.5.12                                        12 Feb 2007
     *) Bugfix: a segmentation fault might occur in worker process if the
        $fastcgi_script_name variable was logged.
 
-    *) Bugfix: rp_http_perl_module could not be built on Solaris.
+    *) Bugfix: rap_http_perl_module could not be built on Solaris.
 
 
 Changes with rap 0.5.11                                        05 Feb 2007
@@ -6152,7 +6152,7 @@ Changes with rap 0.5.10                                        26 Jan 2007
 
 Changes with rap 0.5.9                                         25 Jan 2007
 
-    *) Change: now the rp_http_memcached_module uses the $memcached_key
+    *) Change: now the rap_http_memcached_module uses the $memcached_key
        variable value as a key.
 
     *) Feature: the $memcached_key variable.
@@ -6218,15 +6218,15 @@ Changes with rap 0.5.7                                         15 Jan 2007
 
 Changes with rap 0.5.6                                         09 Jan 2007
 
-    *) Change: now the rp_http_index_module ignores all methods except the
+    *) Change: now the rap_http_index_module ignores all methods except the
        GET, HEAD, and POST methods.
 
-    *) Feature: the rp_http_limit_zone_module.
+    *) Feature: the rap_http_limit_zone_module.
 
     *) Feature: the $binary_remote_addr variable.
 
     *) Feature: the "ssl_session_cache" directives of the
-       rp_http_ssl_module and rp_imap_ssl_module.
+       rap_http_ssl_module and rap_imap_ssl_module.
 
     *) Feature: the DELETE method supports recursive removal.
 
@@ -6257,7 +6257,7 @@ Changes with rap 0.5.4                                         15 Dec 2006
     *) Feature: the "perl" directive may be used inside the "limit_except"
        block.
 
-    *) Bugfix: the rp_http_dav_module required the "Date" request header
+    *) Bugfix: the rap_http_dav_module required the "Date" request header
        line for the DELETE method.
 
     *) Bugfix: if one only parameter was used in the "dav_access" directive,
@@ -6269,7 +6269,7 @@ Changes with rap 0.5.4                                         15 Dec 2006
 
 Changes with rap 0.5.3                                         13 Dec 2006
 
-    *) Feature: the rp_http_perl_module supports the $r->status,
+    *) Feature: the rap_http_perl_module supports the $r->status,
        $r->log_error, and $r->sleep methods.
 
     *) Feature: the $r->variable method supports variables that do not exist
@@ -6305,7 +6305,7 @@ Changes with rap 0.5.1                                         11 Dec 2006
        unix domain sockets, then these directives used first described
        socket; the bug had appeared in 0.5.0.
 
-    *) Bugfix: rp_http_auth_basic_module ignored the user if it was in the
+    *) Bugfix: rap_http_auth_basic_module ignored the user if it was in the
        last line in the password file and there was no the carriage return,
        the line feed, or the ":" symbol after the password.
 
@@ -6343,10 +6343,10 @@ Changes with rap 0.4.14                                        27 Nov 2006
     *) Feature: now configure detects system PCRE library on FreeBSD, Linux,
        and NetBSD.
 
-    *) Bugfix: rp_http_perl_module did not work with perl built with the
+    *) Bugfix: rap_http_perl_module did not work with perl built with the
        threads support; the bug had appeared in 0.3.38.
 
-    *) Bugfix: rp_http_perl_module did not work if perl was called
+    *) Bugfix: rap_http_perl_module did not work if perl was called
        recursively.
 
     *) Bugfix: rap ignored a host name in a request line.
@@ -6378,7 +6378,7 @@ Changes with rap 0.4.13                                        15 Nov 2006
     *) Bugfix: a large request body did not receive if the epoll method and
        the deferred accept() were used.
 
-    *) Bugfix: a charset could not be set for rp_http_autoindex_module
+    *) Bugfix: a charset could not be set for rap_http_autoindex_module
        responses; the bug had appeared in 0.3.50.
 
     *) Bugfix: the "[alert] zero size buf" error when FastCGI server was
@@ -6393,7 +6393,7 @@ Changes with rap 0.4.13                                        15 Nov 2006
 
 Changes with rap 0.4.12                                        31 Oct 2006
 
-    *) Feature: the rp_http_perl_module supports the $r->variable method.
+    *) Feature: the rap_http_perl_module supports the $r->variable method.
 
     *) Bugfix: if a big static file was included using SSI in a response,
        then the response may be transferred incomplete.
@@ -6405,7 +6405,7 @@ Changes with rap 0.4.11                                        25 Oct 2006
 
     *) Feature: the POP3 proxy supports the AUTH LOGIN PLAIN and CRAM-MD5.
 
-    *) Feature: the rp_http_perl_module supports the $r->allow_ranges
+    *) Feature: the rap_http_perl_module supports the $r->allow_ranges
        method.
 
     *) Bugfix: if the APOP was enabled in the POP3 proxy, then the USER/PASS
@@ -6423,7 +6423,7 @@ Changes with rap 0.4.10                                        23 Oct 2006
     *) Bugfix: a segmentation fault might occur if the $server_addr variable
        was used in the "map" directive.
 
-    *) Bugfix: the rp_http_flv_module did not support the byte ranges for
+    *) Bugfix: the rap_http_flv_module did not support the byte ranges for
        full responses; the bug had appeared in 0.4.7.
 
     *) Bugfix: rap could not be built on Debian amd64; the bug had
@@ -6434,7 +6434,7 @@ Changes with rap 0.4.9                                         13 Oct 2006
 
     *) Feature: the "set" parameter in the "include" SSI command.
 
-    *) Feature: the rp_http_perl_module now tests the rap.pm module
+    *) Feature: the rap_http_perl_module now tests the rap.pm module
        version.
 
 
@@ -6444,14 +6444,14 @@ Changes with rap 0.4.8                                         11 Oct 2006
        command with a "wait" parameter, then the "wait" parameter might not
        work.
 
-    *) Bugfix: the rp_http_flv_module added the FLV header to the full
+    *) Bugfix: the rap_http_flv_module added the FLV header to the full
        responses.
        Thanks to Alexey Kovyrin.
 
 
 Changes with rap 0.4.7                                         10 Oct 2006
 
-    *) Feature: the rp_http_flv_module.
+    *) Feature: the rap_http_flv_module.
 
     *) Feature: the $request_body_file variable.
 
@@ -6480,7 +6480,7 @@ Changes with rap 0.4.6                                         06 Oct 2006
        $r->headers_out("Content-Length", ...) method.
 
     *) Bugfix: after redirecting error by an "error_page" directive any
-       rp_http_rewrite_module directive returned this error code; the bug
+       rap_http_rewrite_module directive returned this error code; the bug
        had appeared in 0.4.4.
 
 
@@ -6516,7 +6516,7 @@ Changes with rap 0.4.3                                         26 Sep 2006
 
     *) Feature: the Solaris 10 event ports support.
 
-    *) Feature: the rp_http_browser_module.
+    *) Feature: the rap_http_browser_module.
 
     *) Bugfix: a segmentation fault may occur while redirecting the 400
        error to the proxied server using a "proxy_pass" directive.
@@ -6553,12 +6553,12 @@ Changes with rap 0.4.0                                         30 Aug 2006
        from the init module phase to the HTTP postconfiguration phase.
 
     *) Change: now the request body is not read beforehand for the
-       rp_http_perl_module: it's required to start the reading using the
+       rap_http_perl_module: it's required to start the reading using the
        $r->has_request_body method.
 
-    *) Feature: the rp_http_perl_module supports the DECLINED return code.
+    *) Feature: the rap_http_perl_module supports the DECLINED return code.
 
-    *) Feature: the rp_http_dav_module supports the incoming "Date" header
+    *) Feature: the rap_http_dav_module supports the incoming "Date" header
        line for the PUT method.
 
     *) Feature: the "ssi" directive is available inside the "if" block.
@@ -6655,7 +6655,7 @@ Changes with rap 0.3.55                                        28 Jul 2006
     *) Bugfix: if the request contained "//" or "/./" and escaped symbols
        after them, then the proxied request was sent unescaped.
 
-    *) Bugfix: the $r->header_in("Cookie") of the rp_http_perl_module now
+    *) Bugfix: the $r->header_in("Cookie") of the rap_http_perl_module now
        returns all "Cookie" header lines.
 
     *) Bugfix: a segmentation fault occurred if
@@ -6712,14 +6712,14 @@ Changes with rap 0.3.53                                        07 Jul 2006
 
 Changes with rap 0.3.52                                        03 Jul 2006
 
-    *) Change: the rp_http_index_module behavior for the "POST /" requests
+    *) Change: the rap_http_index_module behavior for the "POST /" requests
        is reverted to the 0.3.40 version state: the module now does not
        return the 405 error.
 
     *) Bugfix: the worker process may got caught in an endless loop if the
        limit rate was used; the bug had appeared in 0.3.37.
 
-    *) Bugfix: rp_http_charset_module logged "unknown charset" alert, even
+    *) Bugfix: rap_http_charset_module logged "unknown charset" alert, even
        if the recoding was not needed; the bug had appeared in 0.3.50.
 
     *) Bugfix: if a code response of the PUT request was 409, then a
@@ -6738,7 +6738,7 @@ Changes with rap 0.3.50                                        28 Jun 2006
        directives was renamed to the "proxy_intercept_errors" and
        "fastcgi_intercept_errors" directives.
 
-    *) Feature: the rp_http_charset_module supports the recoding from the
+    *) Feature: the rap_http_charset_module supports the recoding from the
        single byte encodings to the UTF-8 encoding and back.
 
     *) Feature: the "X-Accel-Charset" response header line is supported in
@@ -6765,7 +6765,7 @@ Changes with rap 0.3.49                                        31 May 2006
 
 Changes with rap 0.3.48                                        29 May 2006
 
-    *) Change: now the rp_http_charset_module works for subrequests, if the
+    *) Change: now the rap_http_charset_module works for subrequests, if the
        response has no "Content-Type" header line.
 
     *) Bugfix: if the "proxy_pass" directive has no URI part, then the
@@ -6777,7 +6777,7 @@ Changes with rap 0.3.48                                        29 May 2006
        redirects only and if the method is not HEAD; the bug had appeared in
        0.3.42.
 
-    *) Bugfix: the rp_http_perl_module could not be built, if the perl was
+    *) Bugfix: the rap_http_perl_module could not be built, if the perl was
        built with the threads support; the bug had appeared in 0.3.46.
 
 
@@ -6801,7 +6801,7 @@ Changes with rap 0.3.46                                        11 May 2006
        proxy mode.
 
     *) Bugfix: the reconfiguration bug and memory leaks in the
-       rp_http_perl_module.
+       rap_http_perl_module.
 
 
 Changes with rap 0.3.45                                        06 May 2006
@@ -6872,7 +6872,7 @@ Changes with rap 0.3.41                                        21 Apr 2006
 
 Changes with rap 0.3.40                                        19 Apr 2006
 
-    *) Feature: the rp_http_dav_module supports the MKCOL method.
+    *) Feature: the rap_http_dav_module supports the MKCOL method.
 
     *) Feature: the "create_full_put_path" directive.
 
@@ -6901,12 +6901,12 @@ Changes with rap 0.3.39                                        17 Apr 2006
 
 Changes with rap 0.3.38                                        14 Apr 2006
 
-    *) Feature: the rp_http_dav_module.
+    *) Feature: the rap_http_dav_module.
 
-    *) Change: the rp_http_perl_module optimizations.
+    *) Change: the rap_http_perl_module optimizations.
        Thanks to Sergey Skvortsov.
 
-    *) Feature: the rp_http_perl_module supports the $r->request_body_file
+    *) Feature: the rap_http_perl_module supports the $r->request_body_file
        method.
 
     *) Feature: the "client_body_in_file_only" directive.
@@ -6931,15 +6931,15 @@ Changes with rap 0.3.37                                        07 Apr 2006
     *) Feature: the "if" directive supports the "!~", "!~*", "-f", and "!-f"
        operators.
 
-    *) Feature: the rp_http_perl_module supports the $r->request_body
+    *) Feature: the rap_http_perl_module supports the $r->request_body
        method.
 
-    *) Bugfix: in the rp_http_addition_filter_module.
+    *) Bugfix: in the rap_http_addition_filter_module.
 
 
 Changes with rap 0.3.36                                        05 Apr 2006
 
-    *) Feature: the rp_http_addition_filter_module.
+    *) Feature: the rap_http_addition_filter_module.
 
     *) Feature: the "proxy_pass" and "fastcgi_pass" directives may be used
        inside the "if" block.
@@ -6949,16 +6949,16 @@ Changes with rap 0.3.36                                        05 Apr 2006
 
     *) Feature: the "$request_completion" variable.
 
-    *) Feature: the rp_http_perl_module supports the $r->request_method and
+    *) Feature: the rap_http_perl_module supports the $r->request_method and
        $r->remote_addr.
 
-    *) Feature: the rp_http_ssi_module supports the "elif" command.
+    *) Feature: the rap_http_ssi_module supports the "elif" command.
 
     *) Bugfix: the "\/" string in the expression of the "if" command of the
-       rp_http_ssi_module was treated incorrectly.
+       rap_http_ssi_module was treated incorrectly.
 
     *) Bugfix: in the regular expressions in the "if" command of the
-       rp_http_ssi_module.
+       rap_http_ssi_module.
 
     *) Bugfix: if the relative path was specified in the
        "client_body_temp_path", "proxy_temp_path", "fastcgi_temp_path", and
@@ -6985,7 +6985,7 @@ Changes with rap 0.3.33                                        15 Mar 2006
     *) Feature: the "http_503" parameter of the "proxy_next_upstream" or
        "fastcgi_next_upstream" directives.
 
-    *) Bugfix: rp_http_perl_module did not work with inlined in the
+    *) Bugfix: rap_http_perl_module did not work with inlined in the
        configuration code, if it was not started with the "sub" word.
 
     *) Bugfix: in the "post_action" directive.
@@ -7026,8 +7026,8 @@ Changes with rap 0.3.30                                        22 Feb 2006
     *) Change: the ECONNABORTED error log level was changed to "error" from
        "crit".
 
-    *) Bugfix: the rp_http_perl_module could not be build without the
-       rp_http_ssi_filter_module.
+    *) Bugfix: the rap_http_perl_module could not be build without the
+       rap_http_ssi_filter_module.
 
     *) Bugfix: rap could not be built on i386 platform, if the PIC was
        used; the bug had appeared in 0.3.27.
@@ -7134,16 +7134,16 @@ Changes with rap 0.3.23                                        24 Jan 2006
     *) Bugfix: in using of the variables in the "path" and "alias"
        directives.
 
-    *) Bugfix: the rp_http_perl_module was incorrectly built on Linux and
+    *) Bugfix: the rap_http_perl_module was incorrectly built on Linux and
        Solaris.
 
 
 Changes with rap 0.3.22                                        17 Jan 2006
 
-    *) Feature: the rp_http_perl_module supports the $r->args and
+    *) Feature: the rap_http_perl_module supports the $r->args and
        $r->unescape methods.
 
-    *) Feature: the method $r->query_string of rp_http_perl_module was
+    *) Feature: the method $r->query_string of rap_http_perl_module was
        canceled.
 
     *) Bugfix: segmentation fault was occurred if the "none" or "blocked"
@@ -7153,7 +7153,7 @@ Changes with rap 0.3.22                                        17 Jan 2006
 
 Changes with rap 0.3.21                                        16 Jan 2006
 
-    *) Feature: the rp_http_perl_module.
+    *) Feature: the rap_http_perl_module.
 
     *) Change: the "valid_referers" directive allows the referrers without
        URI part.
@@ -7163,7 +7163,7 @@ Changes with rap 0.3.20                                        11 Jan 2006
 
     *) Bugfix: in SSI handling.
 
-    *) Bugfix: the rp_http_memcached_module did not support the keys in the
+    *) Bugfix: the rap_http_memcached_module did not support the keys in the
        "/usr?args" form.
 
 
@@ -7196,7 +7196,7 @@ Changes with rap 0.3.18                                        26 Dec 2005
        without the URI part.
 
     *) Bugfix: some ".domain.tld" names incorrectly processed by the
-       rp_http_map_module.
+       rap_http_map_module.
 
     *) Bugfix: segmentation fault was occurred if configuration file did not
        exist; the bug had appeared in 0.3.12.
@@ -7224,7 +7224,7 @@ Changes with rap 0.3.17                                        18 Dec 2005
 
 Changes with rap 0.3.16                                        16 Dec 2005
 
-    *) Feature: the rp_http_map_module.
+    *) Feature: the rap_http_map_module.
 
     *) Feature: the "types_hash_max_size" and "types_hash_bucket_size"
        directives.
@@ -7282,9 +7282,9 @@ Changes with rap 0.3.13                                        05 Dec 2005
 
 Changes with rap 0.3.12                                        26 Nov 2005
 
-    *) Security: if rap was built with the rp_http_realip_module and the
+    *) Security: if rap was built with the rap_http_realip_module and the
        "satisfy_any on" directive was used, then access and authorization
-       directives did not work. The rp_http_realip_module was not built and
+       directives did not work. The rap_http_realip_module was not built and
        is not built by default.
 
     *) Change: the "$time_gmt" variable name was changed to "$time_local".
@@ -7293,7 +7293,7 @@ Changes with rap 0.3.12                                        26 Nov 2005
        "fastcgi_header_buffer_size" directives was renamed to the
        "proxy_buffer_size" and "fastcgi_buffer_size" directives.
 
-    *) Feature: the rp_http_memcached_module.
+    *) Feature: the rap_http_memcached_module.
 
     *) Feature: the "proxy_buffering" directive.
 
@@ -7327,8 +7327,8 @@ Changes with rap 0.3.11                                        15 Nov 2005
 Changes with rap 0.3.10                                        15 Nov 2005
 
     *) Change: the "valid_referers" directive and the "$invalid_referer"
-       variable were moved to the new rp_http_referer_module from the
-       rp_http_rewrite_module.
+       variable were moved to the new rap_http_referer_module from the
+       rap_http_rewrite_module.
 
     *) Change: the "$apache_bytes_sent" variable name was changed to
        "$body_bytes_sent".
@@ -7343,7 +7343,7 @@ Changes with rap 0.3.10                                        15 Nov 2005
 
     *) Feature: the "post_action" directive.
 
-    *) Feature: the rp_http_empty_gif_module.
+    *) Feature: the rap_http_empty_gif_module.
 
     *) Feature: the "worker_cpu_affinity" directive for Linux.
 
@@ -7373,14 +7373,14 @@ Changes with rap 0.3.8                                         09 Nov 2005
        "Authorization" header line as valid one.
 
     *) Feature: the "ssl_session_timeout" directives of the
-       rp_http_ssl_module and rp_imap_ssl_module.
+       rap_http_ssl_module and rap_imap_ssl_module.
 
     *) Feature: the "auth_http_header" directive of the
-       rp_imap_auth_http_module.
+       rap_imap_auth_http_module.
 
     *) Feature: the "add_header" directive.
 
-    *) Feature: the rp_http_realip_module.
+    *) Feature: the rap_http_realip_module.
 
     *) Feature: the new variables to use in the "log_format" directive:
        $bytes_sent, $apache_bytes_sent, $status, $time_gmt, $uri,
@@ -7489,7 +7489,7 @@ Changes with rap 0.3.3                                         19 Oct 2005
     *) Bugfix: the SSL certificate and key file paths could not be relative.
 
     *) Bugfix: the "ssl_prefer_server_ciphers" directive did not work in the
-       rp_imap_ssl_module.
+       rap_imap_ssl_module.
 
     *) Bugfix: the "ssl_protocols" directive allowed to specify the single
        protocol only.
@@ -7535,10 +7535,10 @@ Changes with rap 0.2.6                                         05 Oct 2005
        in proxied subrequests.
 
     *) Bugfix: if the URI was changed in the "if" block and request did not
-       found new configuration, then the rp_http_rewrite_module rules ran
+       found new configuration, then the rap_http_rewrite_module rules ran
        again.
 
-    *) Bugfix: if the "set" directive set the rp_http_geo_module variable
+    *) Bugfix: if the "set" directive set the rap_http_geo_module variable
        in some configuration part, the this variable was not available in
        other configuration parts and the "using uninitialized variable"
        error was occurred; the bug had appeared in 0.2.2.
@@ -7546,21 +7546,21 @@ Changes with rap 0.2.6                                         05 Oct 2005
 
 Changes with rap 0.2.5                                         04 Oct 2005
 
-    *) Change: the duplicate value of the rp_http_geo_module variable now
+    *) Change: the duplicate value of the rap_http_geo_module variable now
        causes the warning and changes old value.
 
-    *) Feature: the rp_http_ssi_module supports the "set" command.
+    *) Feature: the rap_http_ssi_module supports the "set" command.
 
-    *) Feature: the rp_http_ssi_module supports the "file" parameter in the
+    *) Feature: the rap_http_ssi_module supports the "file" parameter in the
        "include" command.
 
-    *) Feature: the rp_http_ssi_module supports the variable value
+    *) Feature: the rap_http_ssi_module supports the variable value
        substitutions in expressions of the "if" command.
 
 
 Changes with rap 0.2.4                                         03 Oct 2005
 
-    *) Feature: the rp_http_ssi_module supports "$var=text", "$var!=text",
+    *) Feature: the rap_http_ssi_module supports "$var=text", "$var!=text",
        "$var=/text/", and "$var!=/text/" expressions in the "if" command.
 
     *) Bugfix: in proxying location without trailing slash; the bug had
@@ -7578,18 +7578,18 @@ Changes with rap 0.2.3                                         30 Sep 2005
 
 Changes with rap 0.2.2                                         30 Sep 2005
 
-    *) Feature: the "config errmsg" command of the rp_http_ssi_module.
+    *) Feature: the "config errmsg" command of the rap_http_ssi_module.
 
-    *) Change: the rp_http_geo_module variables can be overridden by the
+    *) Change: the rap_http_geo_module variables can be overridden by the
        "set" directive.
 
     *) Feature: the "ssl_protocols" and "ssl_prefer_server_ciphers"
-       directives of the rp_http_ssl_module and rp_imap_ssl_module.
+       directives of the rap_http_ssl_module and rap_imap_ssl_module.
 
-    *) Bugfix: the rp_http_autoindex_module did not show correctly the long
+    *) Bugfix: the rap_http_autoindex_module did not show correctly the long
        file names;
 
-    *) Bugfix: the rp_http_autoindex_module now do not show the files
+    *) Bugfix: the rap_http_autoindex_module now do not show the files
        starting by dot.
 
     *) Bugfix: if the SSL handshake failed then another connection may be
@@ -7624,7 +7624,7 @@ Changes with rap 0.2.0                                         23 Sep 2005
 
     *) Feature: the "satisfy_any" directive.
 
-    *) Change: the rp_http_access_module and rp_http_auth_basic_module do
+    *) Change: the rap_http_access_module and rap_http_auth_basic_module do
        not run for subrequests.
 
     *) Feature: the "worker_rlimit_nofile" and "worker_rlimit_sigpending"
@@ -7648,7 +7648,7 @@ Changes with rap 0.2.0                                         23 Sep 2005
 Changes with rap 0.1.45                                        08 Sep 2005
 
     *) Change: the "ssl_engine" directive was canceled in the
-       rp_http_ssl_module and now is introduced at global level.
+       rap_http_ssl_module and now is introduced at global level.
 
     *) Bugfix: the responses with SSI subrequests did not transferred via
        SSL connection.
@@ -7660,7 +7660,7 @@ Changes with rap 0.1.44                                        06 Sep 2005
 
     *) Feature: the IMAP/POP3 proxy supports SSL.
 
-    *) Feature: the "proxy_timeout" directive of the rp_imap_proxy_module.
+    *) Feature: the "proxy_timeout" directive of the rap_imap_proxy_module.
 
     *) Feature: the "userid_mark" directive.
 
@@ -7687,8 +7687,8 @@ Changes with rap 0.1.43                                        30 Aug 2005
 Changes with rap 0.1.42                                        23 Aug 2005
 
     *) Bugfix: if the request URI had a zero length after the processing in
-       the rp_http_proxy_module, then the segmentation fault or bus error
-       occurred in the rp_http_proxy_module.
+       the rap_http_proxy_module, then the segmentation fault or bus error
+       occurred in the rap_http_proxy_module.
 
     *) Bugfix: the "limit_rate" directive did not work inside the "if"
        block; the bug had appeared in 0.1.38.
@@ -7720,34 +7720,34 @@ Changes with rap 0.1.40                                        22 Jul 2005
 
 Changes with rap 0.1.39                                        14 Jul 2005
 
-    *) The changes in the rp_http_charset_module: the "default_charset"
+    *) The changes in the rap_http_charset_module: the "default_charset"
        directive was canceled; the "charset" directive sets the response
        charset; the "source_charset" directive sets the source charset only.
 
     *) Bugfix: the backend "WWW-Authenticate" header line did not
        transferred while the 401 response code redirecting.
 
-    *) Bugfix: the rp_http_proxy_module and rp_http_fastcgi_module may
+    *) Bugfix: the rap_http_proxy_module and rap_http_fastcgi_module may
        close a connection before anything was transferred to a client; the
        bug had appeared in 0.1.38.
 
     *) Workaround: the Linux glibc crypt_r() initialization bug.
 
-    *) Bugfix: the rp_http_ssi_module did not support the relative URI in
+    *) Bugfix: the rap_http_ssi_module did not support the relative URI in
        the "include virtual" command.
 
     *) Bugfix: if the backend response had the "Location" header line and
        rap should not rewrite this line, then the 500 code response body
        was transferred; the bug had appeared in 0.1.29.
 
-    *) Bugfix: some directives of the rp_http_proxy_module and
-       rp_http_fastcgi_module were not inherited from the server to the
+    *) Bugfix: some directives of the rap_http_proxy_module and
+       rap_http_fastcgi_module were not inherited from the server to the
        location level; the bug had appeared in 0.1.29.
 
-    *) Bugfix: the rp_http_ssl_module did not support the certificate
+    *) Bugfix: the rap_http_ssl_module did not support the certificate
        chain.
 
-    *) Bugfix: the rp_http_autoindex_module did not show correctly the long
+    *) Bugfix: the rap_http_autoindex_module did not show correctly the long
        file names; the bug had appeared in 0.1.38.
 
     *) Bugfixes in IMAP/POP3 proxy in interaction with a backend at the
@@ -7783,7 +7783,7 @@ Changes with rap 0.1.38                                        08 Jul 2005
 
     *) Feature: the "autoindex_exact_size" directive.
 
-    *) Bugfix: the rp_http_autoindex_module did not support the long file
+    *) Bugfix: the rap_http_autoindex_module did not support the long file
        names in UTF-8.
 
     *) Feature: the IMAP/POP3 proxy.
@@ -7817,7 +7817,7 @@ Changes with rap 0.1.36                                        15 Jun 2005
 
     *) Feature: the Linux TCP_DEFER_ACCEPT support.
 
-    *) Bugfix: the rp_http_autoindex_module did not support the file names
+    *) Bugfix: the rap_http_autoindex_module did not support the file names
        in UTF-8.
 
     *) Bugfix: the new log file can be rotated by the -USR1 signal only if
@@ -7921,13 +7921,13 @@ Changes with rap 0.1.30                                        14 May 2005
 
 Changes with rap 0.1.29                                        12 May 2005
 
-    *) Feature: the rp_http_ssi_module supports "include virtual" command.
+    *) Feature: the rap_http_ssi_module supports "include virtual" command.
 
-    *) Feature: the rp_http_ssi_module supports the condition command like
+    *) Feature: the rap_http_ssi_module supports the condition command like
        'if expr="$NAME"' and "else" and "endif" commands. Only one nested
        level is supported.
 
-    *) Feature: the rp_http_ssi_module supports the DATE_LOCAL and DATE_GMT
+    *) Feature: the rap_http_ssi_module supports the DATE_LOCAL and DATE_GMT
        variables and "config timefmt" command.
 
     *) Feature: the "ssi_ignore_recycled_buffers" directive.
@@ -7935,7 +7935,7 @@ Changes with rap 0.1.29                                        12 May 2005
     *) Bugfix: the "echo" command did not show the default value for the
        empty QUERY_STRING variable.
 
-    *) Change: the rp_http_proxy_module was rewritten.
+    *) Change: the rap_http_proxy_module was rewritten.
 
     *) Feature: the "proxy_redirect", "proxy_pass_request_headers",
        "proxy_pass_request_body", and "proxy_method" directives.
@@ -7999,7 +7999,7 @@ Changes with rap 0.1.29                                        12 May 2005
     *) Bugfix: rap did not take into account trailing dot in "Host" header
        line.
 
-    *) Bugfix: the rp_http_auth_module did not work under Linux.
+    *) Bugfix: the rap_http_auth_module did not work under Linux.
 
     *) Bugfix: the rewrite directive worked incorrectly, if the arguments
        were in a request.
@@ -8029,7 +8029,7 @@ Changes with rap 0.1.27                                        28 Mar 2005
        canceled.
 
     *) Bugfix: rap could not be built on FreeBSD and Linux, if the
-       --without-rp_http_auth_basic_module configuration parameter was
+       --without-rap_http_auth_basic_module configuration parameter was
        used.
 
 
@@ -8040,7 +8040,7 @@ Changes with rap 0.1.26                                        22 Mar 2005
 
     *) Change: the server name is also logged in error log.
 
-    *) Feature: the rp_http_auth_basic_module module and the auth_basic and
+    *) Feature: the rap_http_auth_basic_module module and the auth_basic and
        auth_basic_user_file directives.
 
 
@@ -8052,14 +8052,14 @@ Changes with rap 0.1.25                                        19 Mar 2005
        kern.ipc.somaxconn value is too big.
 
     *) Bugfix: if a request was internally redirected by the
-       rp_http_index_module module to the rp_http_proxy_module or
-       rp_http_fastcgi_module modules, then the index file was not closed
+       rap_http_index_module module to the rap_http_proxy_module or
+       rap_http_fastcgi_module modules, then the index file was not closed
        after request completion.
 
     *) Feature: the "proxy_pass" can be used in location with regular
        expression.
 
-    *) Feature: the rp_http_rewrite_filter_module module supports the
+    *) Feature: the rap_http_rewrite_filter_module module supports the
        condition like "if ($HTTP_USER_AGENT ~ MSIE)".
 
     *) Bugfix: rap started too slow if the large number of addresses and
@@ -8080,14 +8080,14 @@ Changes with rap 0.1.25                                        19 Mar 2005
 
 Changes with rap 0.1.24                                        04 Mar 2005
 
-    *) Feature: the rp_http_ssi_filter_module supports the QUERY_STRING and
+    *) Feature: the rap_http_ssi_filter_module supports the QUERY_STRING and
        DOCUMENT_URI variables.
 
-    *) Bugfix: the rp_http_autoindex_module may some times return the 404
+    *) Bugfix: the rap_http_autoindex_module may some times return the 404
        response for existent directory, if this directory was used in
        "alias" directive.
 
-    *) Bugfix: the rp_http_ssi_filter_module ran incorrectly for large
+    *) Bugfix: the rap_http_ssi_filter_module ran incorrectly for large
        responses.
 
     *) Bugfix: the lack of the "Referer" header line was always accounted as
@@ -8096,7 +8096,7 @@ Changes with rap 0.1.24                                        04 Mar 2005
 
 Changes with rap 0.1.23                                        01 Mar 2005
 
-    *) Feature: the rp_http_ssi_filter_module and the ssi,
+    *) Feature: the rap_http_ssi_filter_module and the ssi,
        ssi_silent_errors, and ssi_min_file_chunk directives. The 'echo
        var="HTTP_..." default=""' and 'echo var="REMOTE_ADDR"' commands are
        supported.
@@ -8110,7 +8110,7 @@ Changes with rap 0.1.23                                        01 Mar 2005
     *) Bugfix: rap could not be built on platforms different from i386,
        amd64, sparc, and ppc; the bug had appeared in 0.1.22.
 
-    *) Bugfix: the rp_http_autoindex_module now shows the information not
+    *) Bugfix: the rap_http_autoindex_module now shows the information not
        about the symlink, but about file or directory it points to.
 
     *) Bugfix: the %apache_length parameter logged the negative length of
@@ -8119,7 +8119,7 @@ Changes with rap 0.1.23                                        01 Mar 2005
 
 Changes with rap 0.1.22                                        22 Feb 2005
 
-    *) Bugfix: the rp_http_stub_status_module showed incorrect handled
+    *) Bugfix: the rap_http_stub_status_module showed incorrect handled
        connections statistics if the proxying or FastCGI server were used.
 
     *) Bugfix: the installation paths were incorrectly quoted on Linux and
@@ -8128,7 +8128,7 @@ Changes with rap 0.1.22                                        22 Feb 2005
 
 Changes with rap 0.1.21                                        22 Feb 2005
 
-    *) Bugfix: the rp_http_stub_status_module showed incorrect statistics
+    *) Bugfix: the rap_http_stub_status_module showed incorrect statistics
        if "rtsig" method was used or if several worker process ran on SMP.
 
     *) Bugfix: rap could not be built by the icc compiler on Linux or if
@@ -8169,9 +8169,9 @@ Changes with rap 0.1.18                                        09 Feb 2005
        with URI by an "&" rather than a "?".
 
     *) Bugfix: the lines without trailing ";" in the file being included by
-       the rp_http_geo_module were silently ignored.
+       the rap_http_geo_module were silently ignored.
 
-    *) Feature: the rp_http_stub_status_module.
+    *) Feature: the rap_http_stub_status_module.
 
     *) Bugfix: the unknown log format in the access_log directive caused the
        segmentation fault.
@@ -8188,12 +8188,12 @@ Changes with rap 0.1.18                                        09 Feb 2005
 
 Changes with rap 0.1.17                                        03 Feb 2005
 
-    *) Change: the rp_http_rewrite_module was rewritten from the scratch.
+    *) Change: the rap_http_rewrite_module was rewritten from the scratch.
        Now it is possible to redirect, to return the error codes, to check
        the variables and referrers. The directives can be used inside
        locations. The redirect directive was canceled.
 
-    *) Feature: the rp_http_geo_module.
+    *) Feature: the rap_http_geo_module.
 
     *) Feature: the proxy_set_x_var and fastcgi_set_var directives.
 
@@ -8222,7 +8222,7 @@ Changes with rap 0.1.16                                        25 Jan 2005
     *) Bugfix: the "Connection: keep-alive" header were issued, even if the
        keepalive_timeout directive forbade the keep-alive use.
 
-    *) Bugfix: the errors in the rp_http_fastcgi_module caused the
+    *) Bugfix: the errors in the rap_http_fastcgi_module caused the
        segmentation faults.
 
     *) Bugfix: the compressed response encrypted by SSL may not transferred
@@ -8251,7 +8251,7 @@ Changes with rap 0.1.15                                        19 Jan 2005
     *) Bugfix: the FastCGI's parameter REQUEST_URI is now passed with the
        arguments and in the original state.
 
-    *) Bugfix: the rp_http_rewrite_module module was required to be built
+    *) Bugfix: the rap_http_rewrite_module module was required to be built
        to use the regular expressions in locations.
 
     *) Bugfix: the directive "proxy_preserve_host on" adds port 80 to the
@@ -8274,7 +8274,7 @@ Changes with rap 0.1.14                                        18 Jan 2005
        request body is specified by directive client_body_temp_path, by
        default it is <prefix>/client_body_temp.
 
-    *) Feature: the rp_http_fastcgi_module and the directives:
+    *) Feature: the rap_http_fastcgi_module and the directives:
        fastcgi_pass, fastcgi_root, fastcgi_index, fastcgi_params,
        fastcgi_connect_timeout, fastcgi_send_timeout, fastcgi_read_timeout,
        fastcgi_send_lowat, fastcgi_header_buffer_size, fastcgi_buffers,
@@ -8292,7 +8292,7 @@ Changes with rap 0.1.14                                        18 Jan 2005
        string start.
 
     *) Feature: the unix domain sockets support in the
-       rp_http_proxy_module.
+       rap_http_proxy_module.
 
     *) Feature: the ssl_engine and ssl_ciphers directives.
        Thanks to Sergey Skvortsov for SSL-accelerator.
@@ -8333,10 +8333,10 @@ Changes with rap 0.1.11                                        02 Dec 2004
     *) Bugfix: rap did not call initgroups().
        Thanks to Andrew Sitnikov and Andrei Nigmatulin.
 
-    *) Change: now the rp_http_autoindex_module shows the file size in the
+    *) Change: now the rap_http_autoindex_module shows the file size in the
        bytes.
 
-    *) Bugfix: the rp_http_autoindex_module returned the 500 error if the
+    *) Bugfix: the rap_http_autoindex_module returned the 500 error if the
        broken symlink was in a directory.
 
     *) Bugfix: the files bigger than 4G could not be transferred using
@@ -8391,7 +8391,7 @@ Changes with rap 0.1.9                                         25 Nov 2004
 
 Changes with rap 0.1.8                                         20 Nov 2004
 
-    *) Bugfix: in the rp_http_autoindex_module if the long file names were
+    *) Bugfix: in the rap_http_autoindex_module if the long file names were
        in the listing.
 
     *) Feature: the "^~" modifier in the location directive.
@@ -8428,7 +8428,7 @@ Changes with rap 0.1.5                                         11 Nov 2004
 
     *) Bugfix: on-line upgrade did not work on Linux.
 
-    *) Bugfix: the rp_http_autoindex_module module did not escape the
+    *) Bugfix: the rap_http_autoindex_module module did not escape the
        spaces, the quotes, and the percent signs in the directory listing.
 
     *) Change: the decrease of the copy operations.
@@ -8438,12 +8438,12 @@ Changes with rap 0.1.5                                         11 Nov 2004
 
 Changes with rap 0.1.4                                         26 Oct 2004
 
-    *) Bugfix: in the rp_http_autoindex_module.
+    *) Bugfix: in the rap_http_autoindex_module.
 
 
 Changes with rap 0.1.3                                         25 Oct 2004
 
-    *) Feature: the rp_http_autoindex_module and the autoindex directive.
+    *) Feature: the rap_http_autoindex_module and the autoindex directive.
 
     *) Feature: the proxy_set_x_url directive.
 
@@ -8488,7 +8488,7 @@ Changes with rap 0.1.1                                         11 Oct 2004
 
     *) Bugfix: the "Location" header rewrite bug fixed while the proxying.
 
-    *) Bugfix: the rp_http_chunked_module module may get caught in an
+    *) Bugfix: the rap_http_chunked_module module may get caught in an
        endless loop.
 
     *) Bugfix: the /dev/poll module bugs fixed.

@@ -7,9 +7,9 @@ case "$CC" in
 
     cl)
 
-        cat << END                                            >> $RP_MAKEFILE
+        cat << END                                            >> $RAP_MAKEFILE
 
-$OPENSSL/openssl/include/openssl/ssl.h:	$RP_MAKEFILE
+$OPENSSL/openssl/include/openssl/ssl.h:	$RAP_MAKEFILE
 	\$(MAKE) -f auto/lib/openssl/makefile.msvc			\
 		OPENSSL="$OPENSSL" OPENSSL_OPT="$OPENSSL_OPT"
 
@@ -19,22 +19,22 @@ END
 
     bcc32)
 
-        rp_opt=`echo "-DOPENSSL=\"$OPENSSL\" -DOPENSSL_OPT=\"$OPENSSL_OPT\"" \
-            | sed -e "s/\//$rp_regex_dirsep/g"`
+        rap_opt=`echo "-DOPENSSL=\"$OPENSSL\" -DOPENSSL_OPT=\"$OPENSSL_OPT\"" \
+            | sed -e "s/\//$rap_regex_dirsep/g"`
 
-        cat << END                                            >> $RP_MAKEFILE
+        cat << END                                            >> $RAP_MAKEFILE
 
 `echo "$OPENSSL\\openssl\\lib\\libeay32.lib:				\
 	$OPENSSL\\openssl\\include\\openssl\\ssl.h"			\
-	| sed -e "s/\//$rp_regex_dirsep/g"`
+	| sed -e "s/\//$rap_regex_dirsep/g"`
 
 `echo "$OPENSSL\\openssl\\lib\\ssleay32.lib:				\
 	$OPENSSL\\openssl\\include\\openssl\\ssl.h"			\
-	| sed -e "s/\//$rp_regex_dirsep/g"`
+	| sed -e "s/\//$rap_regex_dirsep/g"`
 
-`echo "$OPENSSL\\openssl\\include\\openssl\\ssl.h:	$RP_MAKEFILE"	\
-	| sed -e "s/\//$rp_regex_dirsep/g"`
-	\$(MAKE) -f auto/lib/openssl/makefile.bcc $rp_opt
+`echo "$OPENSSL\\openssl\\include\\openssl\\ssl.h:	$RAP_MAKEFILE"	\
+	| sed -e "s/\//$rap_regex_dirsep/g"`
+	\$(MAKE) -f auto/lib/openssl/makefile.bcc $rap_opt
 
 END
 
@@ -42,16 +42,16 @@ END
 
     *)
         case $OPENSSL in
-            /*) rp_prefix="$OPENSSL/.openssl" ;;
-            *)  rp_prefix="$PWD/$OPENSSL/.openssl" ;;
+            /*) rap_prefix="$OPENSSL/.openssl" ;;
+            *)  rap_prefix="$PWD/$OPENSSL/.openssl" ;;
         esac
 
-        cat << END                                            >> $RP_MAKEFILE
+        cat << END                                            >> $RAP_MAKEFILE
 
-$OPENSSL/.openssl/include/openssl/ssl.h:	$RP_MAKEFILE
+$OPENSSL/.openssl/include/openssl/ssl.h:	$RAP_MAKEFILE
 	cd $OPENSSL \\
 	&& if [ -f Makefile ]; then \$(MAKE) clean; fi \\
-	&& ./config --prefix=$rp_prefix no-shared no-threads $OPENSSL_OPT \\
+	&& ./config --prefix=$rap_prefix no-shared no-threads $OPENSSL_OPT \\
 	&& \$(MAKE) \\
 	&& \$(MAKE) install_sw LIBDIR=lib
 
