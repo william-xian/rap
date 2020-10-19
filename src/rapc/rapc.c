@@ -1,5 +1,7 @@
 #include "rapc.h"
 
+#define VECTOR_SIZE 3*100
+
 enum token_type_t {
 	NONE,
 	STRING,
@@ -25,6 +27,13 @@ typedef struct
 	short class_no;
 	token_t content;
 	token_t name;
+} field_t;
+
+typedef struct 
+{
+	short class_no;
+	token_t content;
+	token_t name;
 	token_t args[16];
 	token_t returns[16];
 	token_t expresses[1024];
@@ -37,7 +46,6 @@ typedef struct
 	token_t name;
 	token_t defGenericType;
 	token_t supers[16];
-	token_t fields[128];
 } class_t;
 
 
@@ -54,6 +62,7 @@ typedef struct {
 	token_t comments[1024];
 	token_t strings[1024];
 	class_t classes[32];
+	field_t fields[128];
 	function_t functions[512];
 } source_t;
 
@@ -62,27 +71,31 @@ pcre *pComma;
 int errno;
 const char *error;
 
-
 void printRange(char *str,ushort start, ushort end) {
-	log_d("启动")
 	char buf[8196];
 	strncpy(buf,&str[start],end - start);
 	buf[end-start+1] = '\0';
 	printf("%s\n", buf);
 }
 
+
 int source_parse(source_t *src) {
 	log_d("启动")
 	int rc;
-	int ovector[3*3];
-	rc = pcre_exec(rBacket, NULL, src->content,src->filesize,0,0,ovector,3);
-	if(rc < 0) {
-		log_i("匹配个数：%d", rc)
+	int ovector[VECTOR_SIZE];
+	pcre_extra *rsBacket = pcre_study(rBacket,PCRE_MULTILINE|PCRE_EXTRA, &error);
+	int start = 0;
+	
+	while(start < src->filesize) {
+		rc = pcre_exec(rBacket, NULL, src->content, src->filesize, start, 0, ovector, VECTOR_SIZE);
+		if(rc >= 0) {
+			printRange(src->content, ovector[0], ovector[1]);
+			start = ovector[1];
+		}else {
+			break;
+		}
 	}
-	log_i("匹配个数：%d", rc)
-	for(int i = 0; i < rc; i+=3) {
-		printRange(src->content, ovector[i],ovector[i+1]);
-	}
+
 	return 0;
 }
 
@@ -112,18 +125,19 @@ int source_init(source_t *src, char *filename) {
 	assert(rBacket != NULL);
 	assert(pComma != NULL);
 
-	pcre_free(rBacket);
-	pcre_free(pComma);
+
 	strcpy(src->filename,filename);
 	src->filename[strlen(filename)] = '\0';
 	src->package.type = NONE;
 	source_load(src);
 	
 	source_parse(src);
+	
+	pcre_free(rBacket);
+	pcre_free(pComma);
 
-	printf("content:%s\n", src->content);
+	printf(">>>>>>>>>>> %s >>>>>>>>>>>\n%s\n<<<<<<<<<<< %s <<<<<<<<<<<\n", src->filename, src->content, src->filename);
 }
-
 
 int main(int argc,char* argv[]){
 	log_d("启动")
@@ -131,5 +145,3 @@ int main(int argc,char* argv[]){
 	source_init(&src, argv[1]);
 	return 0;
 }
-
-
